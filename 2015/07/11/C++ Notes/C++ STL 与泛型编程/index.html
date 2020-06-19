@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#fff">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fff">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Courier new:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"weirdoart.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"swoopIn","post_header":"slideDownBigIn","post_body":"slideDownBigIn","coll_header":"slideLeftBigIn","sidebar":"perspectiveUpIn"}}};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ STL 泛型编程">
+<meta property="og:url" content="https://weirdoart.github.io/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="無為 | Weirdo Art">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdoart.github.io/uploads/paw4.png">
+<meta property="article:published_time" content="2015-07-10T18:05:12.000Z">
+<meta property="article:modified_time" content="2020-06-19T08:55:56.057Z">
+<meta property="article:author" content="Wu Wei">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta property="article:tag" content="STL">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://weirdoart.github.io/uploads/paw4.png">
+
+<link rel="canonical" href="https://weirdoart.github.io/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++ STL 泛型编程 | 無為 | Weirdo Art</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="無為 | Weirdo Art" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">無為 | Weirdo Art</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://weirdoart.github.io/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/buckets/images/avatar.jpg">
+      <meta itemprop="name" content="Wu Wei">
+      <meta itemprop="description" content="次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="無為 | Weirdo Art">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ STL 泛型编程
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-07-11 02:05:12" itemprop="dateCreated datePublished" datetime="2015-07-11T02:05:12+08:00">2015-07-11</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-19 16:55:56" itemprop="dateModified" datetime="2020-06-19T16:55:56+08:00">2020-06-19</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" class="post-meta-item leancloud_visitors" data-flag-title="C++ STL 泛型编程" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/uploads/paw4.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h2><ul>
+<li>STL 标准库</li>
+<li>STL 源码剖析</li>
+</ul>
+<h2 id="Generic-Programming（GP，泛型编程）"><a href="#Generic-Programming（GP，泛型编程）" class="headerlink" title="Generic Programming（GP，泛型编程）"></a>Generic Programming（GP，泛型编程）</h2><h2 id="STL-六大组件关系"><a href="#STL-六大组件关系" class="headerlink" title="STL 六大组件关系"></a>STL 六大组件关系</h2><h2 id="容器（Containers）"><a href="#容器（Containers）" class="headerlink" title="容器（Containers）"></a>容器（Containers）</h2><h3 id="array"><a href="#array" class="headerlink" title="array"></a>array</h3><h4 id="Member-types"><a href="#Member-types" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>size_type</li>
+<li>difference_type<h4 id="Member-functions"><a href="#Member-functions" class="headerlink" title="Member functions"></a>Member functions</h4><h5 id="Iterators"><a href="#Iterators" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity"><a href="#Capacity" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>size</li>
+<li>max_size</li>
+<li>empty<h5 id="Element-access"><a href="#Element-access" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at</li>
+<li>front</li>
+<li>back</li>
+<li>data<h5 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>fill</li>
+<li>swap<h5 id="Allocator"><a href="#Allocator" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads"><a href="#Non-member-function-overloads" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>get (array)</li>
+<li>relational operators (array)<h4 id="Template-specializations"><a href="#Template-specializations" class="headerlink" title="Template specializations"></a>Template specializations</h4></li>
+<li>tuple_element<array></li>
+<li>tuple_size<array></details>
+</li>
+</ul>
+<hr>
+<h3 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h3><h4 id="Member-types-1"><a href="#Member-types-1" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-1"><a href="#Member-functions-1" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-1"><a href="#Iterators-1" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-1"><a href="#Capacity-1" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>size</li>
+<li>max_size</li>
+<li>resize</li>
+<li>capacity</li>
+<li>empty</li>
+<li>reserve</li>
+<li>shrink_to_fit<h5 id="Element-access-1"><a href="#Element-access-1" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at</li>
+<li>front</li>
+<li>back</li>
+<li>data<h5 id="Modifiers-1"><a href="#Modifiers-1" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>push_back</li>
+<li>pop_back</li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_back<h5 id="Allocator-1"><a href="#Allocator-1" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-1"><a href="#Non-member-function-overloads-1" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap<h4 id="Template-specializations-1"><a href="#Template-specializations-1" class="headerlink" title="Template specializations"></a>Template specializations</h4></li>
+<li>vector<bool></details>
+</li>
+</ul>
+<hr>
+<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><h4 id="Member-types-2"><a href="#Member-types-2" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-2"><a href="#Member-functions-2" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-2"><a href="#Iterators-2" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-2"><a href="#Capacity-2" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-access-2"><a href="#Element-access-2" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>front</li>
+<li>back<h5 id="Modifiers-2"><a href="#Modifiers-2" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>emplace_front</li>
+<li>push_front</li>
+<li>pop_front</li>
+<li>emplace_back</li>
+<li>push_back</li>
+<li>pop_back</li>
+<li>emplace</li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>resize</li>
+<li>clear<h5 id="Operations"><a href="#Operations" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>splice</li>
+<li>remove</li>
+<li>remove_if</li>
+<li>unique</li>
+<li>merge</li>
+<li>sort</li>
+<li>reverse<h5 id="Observers"><a href="#Observers" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-2"><a href="#Non-member-function-overloads-2" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators (list)</li>
+<li>swap (list)</details>
+</li>
+</ul>
+<hr>
+<h3 id="forward-list"><a href="#forward-list" class="headerlink" title="forward_list"></a>forward_list</h3><h4 id="Member-types-3"><a href="#Member-types-3" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-3"><a href="#Member-functions-3" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-3"><a href="#Iterators-3" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>before_begin</li>
+<li>begin</li>
+<li>end</li>
+<li>cbefore_begin</li>
+<li>cbegin</li>
+<li>cend<h5 id="Capacity-3"><a href="#Capacity-3" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>max_size<h5 id="Element-access-3"><a href="#Element-access-3" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>front<h5 id="Modifiers-3"><a href="#Modifiers-3" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>emplace_front</li>
+<li>push_front</li>
+<li>pop_front</li>
+<li>emplace_after</li>
+<li>insert_after</li>
+<li>erase_after</li>
+<li>swap</li>
+<li>resize</li>
+<li>clear<h5 id="Operations-1"><a href="#Operations-1" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>splice_after</li>
+<li>remove</li>
+<li>remove_if</li>
+<li>unique</li>
+<li>merge</li>
+<li>sort</li>
+<li>reverse<h5 id="Observers-1"><a href="#Observers-1" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-3"><a href="#Non-member-function-overloads-3" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators (forward_list)</li>
+<li>swap (forward_list)</details>
+</li>
+</ul>
+<hr>
+<h3 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h3><h4 id="Member-types-4"><a href="#Member-types-4" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-4"><a href="#Member-functions-4" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator[]<h5 id="Iterators-4"><a href="#Iterators-4" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-4"><a href="#Capacity-4" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>size</li>
+<li>max_size</li>
+<li>resize</li>
+<li>empty</li>
+<li>shrink_to_fit<h5 id="Element-access-4"><a href="#Element-access-4" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at</li>
+<li>front</li>
+<li>back<h5 id="Modifiers-4"><a href="#Modifiers-4" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>push_back</li>
+<li>push_front</li>
+<li>pop_back</li>
+<li>pop_front</li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_front</li>
+<li>emplace_back<h5 id="Allocator-2"><a href="#Allocator-2" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-4"><a href="#Non-member-function-overloads-4" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap</details>
+</li>
+</ul>
+<hr>
+<h3 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h3><h4 id="Member-types-5"><a href="#Member-types-5" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>container_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>size_type<h4 id="Member-functions-5"><a href="#Member-functions-5" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>empty</li>
+<li>size</li>
+<li>front</li>
+<li>back</li>
+<li>push</li>
+<li>emplace</li>
+<li>pop</li>
+<li>swap<h4 id="Non-member-function-overloads-5"><a href="#Non-member-function-overloads-5" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap (queue)<h4 id="Non-member-class-specializations"><a href="#Non-member-class-specializations" class="headerlink" title="Non-member class specializations"></a>Non-member class specializations</h4>user_allocator<queue></li>
+</ul>
+</details>
+---
+
+<h3 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h3><details><summary>stack API list</summary>
+
+<h4 id="Member-types-6"><a href="#Member-types-6" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>container_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>size_type<h4 id="Member-functions-6"><a href="#Member-functions-6" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>empty</li>
+<li>size</li>
+<li>top</li>
+<li>push</li>
+<li>emplace</li>
+<li>pop</li>
+<li>swap<h4 id="Non-member-function-overloads-6"><a href="#Non-member-function-overloads-6" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap (stack)<h4 id="Non-member-class-specializations-1"><a href="#Non-member-class-specializations-1" class="headerlink" title="Non-member class specializations"></a>Non-member class specializations</h4>user_allocator<stack></li>
+</ul>
+</details>
+---
+
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><h4 id="Member-types-7"><a href="#Member-types-7" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>mapped_type</li>
+<li>value_type</li>
+<li>key_compare</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-7"><a href="#Member-functions-7" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-5"><a href="#Iterators-5" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-5"><a href="#Capacity-5" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-access-5"><a href="#Element-access-5" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at<h5 id="Modifiers-5"><a href="#Modifiers-5" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_hint<h5 id="Observers-2"><a href="#Observers-2" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>key_comp</li>
+<li>value_comp<h5 id="Operations-2"><a href="#Operations-2" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>lower_bound</li>
+<li>upper_bound</li>
+<li>equal_range<h5 id="Allocator-3"><a href="#Allocator-3" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator</details>
+</li>
+</ul>
+<hr>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><h4 id="Member-types-8"><a href="#Member-types-8" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>value_type</li>
+<li>key_compare</li>
+<li>value_compare</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-8"><a href="#Member-functions-8" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-6"><a href="#Iterators-6" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-6"><a href="#Capacity-6" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Modifiers-6"><a href="#Modifiers-6" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_hint<h5 id="Observers-3"><a href="#Observers-3" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>key_comp</li>
+<li>value_comp<h5 id="Operations-3"><a href="#Operations-3" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>lower_bound</li>
+<li>upper_bound</li>
+<li>equal_range<h5 id="Allocator-4"><a href="#Allocator-4" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator</details>
+</li>
+</ul>
+<hr>
+<h3 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h3><h4 id="Member-types-9"><a href="#Member-types-9" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>mapped_type</li>
+<li>value_type</li>
+<li>hasher</li>
+<li>key_equal</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>local_iterator</li>
+<li>const_local_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-9"><a href="#Member-functions-9" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-7"><a href="#Iterators-7" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>cbegin</li>
+<li>cend<h5 id="Capacity-7"><a href="#Capacity-7" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-access-6"><a href="#Element-access-6" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at<h5 id="Element-lookup"><a href="#Element-lookup" class="headerlink" title="Element lookup:"></a>Element lookup:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>equal_range<h5 id="Modifiers-7"><a href="#Modifiers-7" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>emplace</li>
+<li>emplace_hint</li>
+<li>insert</li>
+<li>erase</li>
+<li>clear</li>
+<li>swap<h5 id="Buckets"><a href="#Buckets" class="headerlink" title="Buckets"></a>Buckets</h5></li>
+<li>bucket_count</li>
+<li>max_bucket_count</li>
+<li>bucket_size</li>
+<li>bucket<h5 id="Hash-policy"><a href="#Hash-policy" class="headerlink" title="Hash policy"></a>Hash policy</h5></li>
+<li>load_factor</li>
+<li>max_load_factor</li>
+<li>rehash</li>
+<li>reserve<h5 id="Observers-4"><a href="#Observers-4" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>hash_function</li>
+<li>key_eq</li>
+<li>get_allocator<h4 id="Non-member-function-overloads-7"><a href="#Non-member-function-overloads-7" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>operators (unordered_map)</li>
+<li>swap (unordered_map)</details>
+</li>
+</ul>
+<hr>
+<h3 id="unordered-set"><a href="#unordered-set" class="headerlink" title="unordered_set"></a>unordered_set</h3><h4 id="Member-types-10"><a href="#Member-types-10" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>value_type</li>
+<li>hasher</li>
+<li>key_equal</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>local_iterator</li>
+<li>const_local_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-10"><a href="#Member-functions-10" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-8"><a href="#Iterators-8" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>cbegin</li>
+<li>cend<h5 id="Capacity-8"><a href="#Capacity-8" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-lookup-1"><a href="#Element-lookup-1" class="headerlink" title="Element lookup:"></a>Element lookup:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>equal_range<h5 id="Modifiers-8"><a href="#Modifiers-8" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>emplace</li>
+<li>emplace_hint</li>
+<li>insert</li>
+<li>erase</li>
+<li>clear</li>
+<li>swap<h5 id="Buckets-1"><a href="#Buckets-1" class="headerlink" title="Buckets"></a>Buckets</h5></li>
+<li>bucket_count</li>
+<li>max_bucket_count</li>
+<li>bucket_size</li>
+<li>bucket<h5 id="Hash-policy-1"><a href="#Hash-policy-1" class="headerlink" title="Hash policy"></a>Hash policy</h5></li>
+<li>load_factor</li>
+<li>max_load_factor</li>
+<li>rehash</li>
+<li>reserve<h5 id="Observers-5"><a href="#Observers-5" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>hash_function</li>
+<li>key_eq</li>
+<li>get_allocator<h4 id="Non-member-function-overloads-8"><a href="#Non-member-function-overloads-8" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>operators (unordered_set)</li>
+<li>swap (unordered_set)</details>
+</li>
+</ul>
+<hr>
+<h2 id="迭代器（Iterators）"><a href="#迭代器（Iterators）" class="headerlink" title="迭代器（Iterators）"></a>迭代器（Iterators）</h2><h2 id="算法（Algorithms）"><a href="#算法（Algorithms）" class="headerlink" title="算法（Algorithms）"></a>算法（Algorithms）</h2><h2 id="仿函数（Functors）"><a href="#仿函数（Functors）" class="headerlink" title="仿函数（Functors）"></a>仿函数（Functors）</h2><h2 id="适配器（Adapters）"><a href="#适配器（Adapters）" class="headerlink" title="适配器（Adapters）"></a>适配器（Adapters）</h2><h2 id="分配器（Allocator）"><a href="#分配器（Allocator）" class="headerlink" title="分配器（Allocator）"></a>分配器（Allocator）</h2>
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-C/" rel="tag"># C/C++</a>
+              <a href="/tags/STL/" rel="tag"># STL</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/" rel="prev" title="Google glog 使用详解">
+      <i class="fa fa-chevron-left"></i> Google glog 使用详解
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2016/03/18/Linux%20Notes/Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/" rel="next" title="Linux 系统编程">
+      Linux 系统编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#推荐书籍"><span class="nav-number">1.</span> <span class="nav-text">推荐书籍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generic-Programming（GP，泛型编程）"><span class="nav-number">2.</span> <span class="nav-text">Generic Programming（GP，泛型编程）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#STL-六大组件关系"><span class="nav-number">3.</span> <span class="nav-text">STL 六大组件关系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器（Containers）"><span class="nav-number">4.</span> <span class="nav-text">容器（Containers）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#array"><span class="nav-number">4.1.</span> <span class="nav-text">array</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types"><span class="nav-number">4.1.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions"><span class="nav-number">4.1.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators"><span class="nav-number">4.1.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity"><span class="nav-number">4.1.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access"><span class="nav-number">4.1.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers"><span class="nav-number">4.1.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Allocator"><span class="nav-number">4.1.2.5.</span> <span class="nav-text">Allocator:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads"><span class="nav-number">4.1.3.</span> <span class="nav-text">Non-member function overloads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Template-specializations"><span class="nav-number">4.1.4.</span> <span class="nav-text">Template specializations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#vector"><span class="nav-number">4.2.</span> <span class="nav-text">vector</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-1"><span class="nav-number">4.2.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-1"><span class="nav-number">4.2.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-1"><span class="nav-number">4.2.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-1"><span class="nav-number">4.2.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access-1"><span class="nav-number">4.2.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-1"><span class="nav-number">4.2.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Allocator-1"><span class="nav-number">4.2.2.5.</span> <span class="nav-text">Allocator:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-1"><span class="nav-number">4.2.3.</span> <span class="nav-text">Non-member function overloads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Template-specializations-1"><span class="nav-number">4.2.4.</span> <span class="nav-text">Template specializations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#list"><span class="nav-number">4.3.</span> <span class="nav-text">list</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-2"><span class="nav-number">4.3.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-2"><span class="nav-number">4.3.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-2"><span class="nav-number">4.3.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-2"><span class="nav-number">4.3.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access-2"><span class="nav-number">4.3.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-2"><span class="nav-number">4.3.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Operations"><span class="nav-number">4.3.2.5.</span> <span class="nav-text">Operations:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Observers"><span class="nav-number">4.3.2.6.</span> <span class="nav-text">Observers:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-2"><span class="nav-number">4.3.3.</span> <span class="nav-text">Non-member function overloads</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#forward-list"><span class="nav-number">4.4.</span> <span class="nav-text">forward_list</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-3"><span class="nav-number">4.4.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-3"><span class="nav-number">4.4.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-3"><span class="nav-number">4.4.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-3"><span class="nav-number">4.4.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access-3"><span class="nav-number">4.4.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-3"><span class="nav-number">4.4.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Operations-1"><span class="nav-number">4.4.2.5.</span> <span class="nav-text">Operations:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Observers-1"><span class="nav-number">4.4.2.6.</span> <span class="nav-text">Observers:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-3"><span class="nav-number">4.4.3.</span> <span class="nav-text">Non-member function overloads</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#deque"><span class="nav-number">4.5.</span> <span class="nav-text">deque</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-4"><span class="nav-number">4.5.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-4"><span class="nav-number">4.5.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-4"><span class="nav-number">4.5.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-4"><span class="nav-number">4.5.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access-4"><span class="nav-number">4.5.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-4"><span class="nav-number">4.5.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Allocator-2"><span class="nav-number">4.5.2.5.</span> <span class="nav-text">Allocator:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-4"><span class="nav-number">4.5.3.</span> <span class="nav-text">Non-member function overloads</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#queue"><span class="nav-number">4.6.</span> <span class="nav-text">queue</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-5"><span class="nav-number">4.6.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-5"><span class="nav-number">4.6.2.</span> <span class="nav-text">Member functions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-5"><span class="nav-number">4.6.3.</span> <span class="nav-text">Non-member function overloads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-class-specializations"><span class="nav-number">4.6.4.</span> <span class="nav-text">Non-member class specializations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#stack"><span class="nav-number">4.7.</span> <span class="nav-text">stack</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-6"><span class="nav-number">4.7.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-6"><span class="nav-number">4.7.2.</span> <span class="nav-text">Member functions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-6"><span class="nav-number">4.7.3.</span> <span class="nav-text">Non-member function overloads</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-class-specializations-1"><span class="nav-number">4.7.4.</span> <span class="nav-text">Non-member class specializations</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#map"><span class="nav-number">4.8.</span> <span class="nav-text">map</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-7"><span class="nav-number">4.8.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-7"><span class="nav-number">4.8.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-5"><span class="nav-number">4.8.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-5"><span class="nav-number">4.8.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access-5"><span class="nav-number">4.8.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-5"><span class="nav-number">4.8.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Observers-2"><span class="nav-number">4.8.2.5.</span> <span class="nav-text">Observers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Operations-2"><span class="nav-number">4.8.2.6.</span> <span class="nav-text">Operations:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Allocator-3"><span class="nav-number">4.8.2.7.</span> <span class="nav-text">Allocator:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#set"><span class="nav-number">4.9.</span> <span class="nav-text">set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-8"><span class="nav-number">4.9.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-8"><span class="nav-number">4.9.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-6"><span class="nav-number">4.9.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-6"><span class="nav-number">4.9.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-6"><span class="nav-number">4.9.2.3.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Observers-3"><span class="nav-number">4.9.2.4.</span> <span class="nav-text">Observers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Operations-3"><span class="nav-number">4.9.2.5.</span> <span class="nav-text">Operations:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Allocator-4"><span class="nav-number">4.9.2.6.</span> <span class="nav-text">Allocator:</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-map"><span class="nav-number">4.10.</span> <span class="nav-text">unordered_map</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-9"><span class="nav-number">4.10.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-9"><span class="nav-number">4.10.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-7"><span class="nav-number">4.10.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-7"><span class="nav-number">4.10.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-access-6"><span class="nav-number">4.10.2.3.</span> <span class="nav-text">Element access:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-lookup"><span class="nav-number">4.10.2.4.</span> <span class="nav-text">Element lookup:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-7"><span class="nav-number">4.10.2.5.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Buckets"><span class="nav-number">4.10.2.6.</span> <span class="nav-text">Buckets</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Hash-policy"><span class="nav-number">4.10.2.7.</span> <span class="nav-text">Hash policy</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Observers-4"><span class="nav-number">4.10.2.8.</span> <span class="nav-text">Observers:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-7"><span class="nav-number">4.10.3.</span> <span class="nav-text">Non-member function overloads</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#unordered-set"><span class="nav-number">4.11.</span> <span class="nav-text">unordered_set</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-types-10"><span class="nav-number">4.11.1.</span> <span class="nav-text">Member types</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Member-functions-10"><span class="nav-number">4.11.2.</span> <span class="nav-text">Member functions</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Iterators-8"><span class="nav-number">4.11.2.1.</span> <span class="nav-text">Iterators:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Capacity-8"><span class="nav-number">4.11.2.2.</span> <span class="nav-text">Capacity:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Element-lookup-1"><span class="nav-number">4.11.2.3.</span> <span class="nav-text">Element lookup:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Modifiers-8"><span class="nav-number">4.11.2.4.</span> <span class="nav-text">Modifiers:</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Buckets-1"><span class="nav-number">4.11.2.5.</span> <span class="nav-text">Buckets</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Hash-policy-1"><span class="nav-number">4.11.2.6.</span> <span class="nav-text">Hash policy</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#Observers-5"><span class="nav-number">4.11.2.7.</span> <span class="nav-text">Observers:</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Non-member-function-overloads-8"><span class="nav-number">4.11.3.</span> <span class="nav-text">Non-member function overloads</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#迭代器（Iterators）"><span class="nav-number">5.</span> <span class="nav-text">迭代器（Iterators）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法（Algorithms）"><span class="nav-number">6.</span> <span class="nav-text">算法（Algorithms）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#仿函数（Functors）"><span class="nav-number">7.</span> <span class="nav-text">仿函数（Functors）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#适配器（Adapters）"><span class="nav-number">8.</span> <span class="nav-text">适配器（Adapters）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分配器（Allocator）"><span class="nav-number">9.</span> <span class="nav-text">分配器（Allocator）</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Wei"
+      src="/buckets/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Wu Wei</p>
+  <div class="site-description" itemprop="description">次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WeirdoArt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wuwei.gt@gmail.com" title="E-Mail → mailto:wuwei.gt@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/WeirdoArt" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/WeirdoArt" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/WeirdoArt" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i></a>
+      </span>
+  </div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Wei</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+<script>
+  (function() {
+    function leancloudSelector(url) {
+      url = encodeURI(url);
+      return document.getElementById(url).querySelector('.leancloud-visitors-count');
+    }
+
+    function addCount(Counter) {
+      var visitors = document.querySelector('.leancloud_visitors');
+      var url = decodeURI(visitors.id);
+      var title = visitors.dataset.flagTitle;
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          if (results.length > 0) {
+            var counter = results[0];
+            leancloudSelector(url).innerText = counter.time + 1;
+            Counter('put', '/classes/Counter/' + counter.objectId, { time: { '__op': 'Increment', 'amount': 1 } })
+              .catch(error => {
+                console.error('Failed to save visitor count', error);
+              });
+          } else {
+              leancloudSelector(url).innerText = 'Counter not initialized! More info at console err msg.';
+              console.error('ATTENTION! LeanCloud counter has security bug, see how to solve it here: https://github.com/theme-next/hexo-leancloud-counter-security. \n However, you can still use LeanCloud without security, by setting `security` option to `false`.');
+            
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    function showTime(Counter) {
+      var visitors = document.querySelectorAll('.leancloud_visitors');
+      var entries = [...visitors].map(element => {
+        return decodeURI(element.id);
+      });
+
+      Counter('get', '/classes/Counter?where=' + encodeURIComponent(JSON.stringify({ url: { '$in': entries } })))
+        .then(response => response.json())
+        .then(({ results }) => {
+          for (let url of entries) {
+            let target = results.find(item => item.url === url);
+            leancloudSelector(url).innerText = target ? target.time : 0;
+          }
+        })
+        .catch(error => {
+          console.error('LeanCloud Counter Error', error);
+        });
+    }
+
+    let { app_id, app_key, server_url } = {"enable":true,"app_id":"YxiGSR99HGE8leEITaJPyoas-gzGzoHsz","app_key":"t0miHPs6L3t3AsmbcmDQHf29","server_url":"https://yxigsr99.lc-cn-n1-shared.com","security":true};
+    function fetchData(api_server) {
+      var Counter = (method, url, data) => {
+        return fetch(`${api_server}/1.1${url}`, {
+          method,
+          headers: {
+            'X-LC-Id'     : app_id,
+            'X-LC-Key'    : app_key,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+      };
+      if (CONFIG.page.isPost) {
+        if (CONFIG.hostname !== location.hostname) return;
+        addCount(Counter);
+      } else if (document.querySelectorAll('.post-title-link').length >= 1) {
+        showTime(Counter);
+      }
+    }
+
+    let api_server = app_id.slice(-9) !== '-MdYXbMMI' ? server_url : `https://${app_id.slice(0, 8).toLowerCase()}.api.lncldglobal.com`;
+
+    if (api_server) {
+      fetchData(api_server);
+    } else {
+      fetch('https://app-router.leancloud.cn/2/route?appId=' + app_id)
+        .then(response => response.json())
+        .then(({ api_server }) => {
+          fetchData('https://' + api_server);
+        });
+    }
+  })();
+</script>
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'MCudlPSDdytvFwqK133Fd7Jc-gzGzoHsz',
+      appKey     : 'pamfC1mrqvgzufLSDXSjKAmh',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : false,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : false,
+      serverURLs : ''
+    });
+  }, window.Valine);
+});
+</script>
+
+</body>
+</html>
