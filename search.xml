@@ -1,0 +1,1177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title>C++ 2.0 并发编程</title>
+    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
+<a id="more"></a>
+
+<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
+<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
+<table>
+<thead>
+<tr>
+<th align="right"><thread></th>
+<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">default (1)</td>
+<td><code>thread() noexcept;</code></td>
+</tr>
+<tr>
+<td align="right">initialization (2)</td>
+<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
+</tr>
+<tr>
+<td align="right">copy [deleted] (3)</td>
+<td><code>thread( const thread&amp; ) = delete;</code></td>
+</tr>
+<tr>
+<td align="right">move (4)</td>
+<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>(1).默认构造函数</strong></p>
+<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
+<p><strong>(2).初始化构造函数</strong></p>
+<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
+<p><strong>(3).拷贝构造函数</strong></p>
+<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
+<p><strong>(4).移动构造函数</strong></p>
+<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
+</blockquote>
+<p><em>示例：</em></p>
+<ul>
+<li><p>普通函数</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可调用对象</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>并发编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dynamic Programming</title>
+    <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
+<a id="more"></a>
+
+<p align="right"><font size="4">—— (DP, Dynamic Programming)</font></p>
+
+<h1 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h1><p>曾几何时，听到很多同学说“动态规划很难”，“不是搞算法的一般人根本学不会”。。。导致很久很久我对这个算法是望而却步，迟迟没敢上手！但即使作为一名算法渣还真就不信这个邪！于是下定决心啃下来！！！其实只要下功夫，没有什么是能难得倒你的，有句话叫做“你把时间花在哪里，岁月就会在哪里留下记号！”，与你共勉！😄😄😄</p>
+<p>另外提一下，DP在国外算是入门级算法，包括DFS、BFS等，从某个角度来看，DP像是在执行DFS的sort过程，下文将会提到。</p>
+<p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
+<h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
+<p>ok！以一个简单的例子开始！</p>
+<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><p>$$<br>f_n =<br>\left {<br>\begin{array}{c}<br>f_1=f_2=1 \<br>f_n-_1+f_n-_2<br>\end{array}<br>\right.<br>$$</p>
+<blockquote>
+<p> 测试程序：</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-无脑递归（Naive-recursive-algorithm）"><a href="#1-无脑递归（Naive-recursive-algorithm）" class="headerlink" title="1. 无脑递归（Naive recursive algorithm）"></a>1. 无脑递归（Naive recursive algorithm）</h3><p><font color=#44FF><em>recursion：</em>递归存在的最大问题在于递归过程中会出现大量“重叠子问题”（overlap subproblem）</font></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Recursive</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n²)</p>
+<p>空间复杂度：O(1)</p>
+</blockquote>
+<h3 id="2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><a href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）" class="headerlink" title="2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）"></a>2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</h3><blockquote>
+<p><font color=#FFBB>DP ≈ *”careful brute force”* ———— 仔细的蛮力</font></p>
+<p><font color=#CAEF0F>DP ≈ <em>recursion + memoization + guessing</em></font></p>
+</blockquote>
+<p>这种方式是在递归过程中将每个子问题的结果保存起来，在以后遇到相同子问题时直接拿去用，而不用去重复调用产生没必要的开销。事实上此方法只是阻止了“重复计算”，而未阻止“重复调用”。此方法依然会执行函数的递归调用，也就必然会产生函数调用的额外开销。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo; <span class="comment">// 内部递归调用，此变量必须是外部变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">CarefulBruteForce</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo.<span class="built_in">find</span>(n) != memo.<span class="built_in">end</span>()) &#123; <span class="comment">// <span class="doctag">NOTE:</span> 1 # guessing</span></span><br><span class="line">        <span class="keyword">return</span> memo[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        f = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 看似递归，实际上忽略了递归“计算”（<span class="doctag">NOTE:</span> 1）</span></span><br><span class="line">        f = CarefulBruteForce(n - <span class="number">1</span>) + CarefulBruteForce(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    memo[n] = f;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="3-Bottom-up-（自下而上）-——-DP-完全体"><a href="#3-Bottom-up-（自下而上）-——-DP-完全体" class="headerlink" title="3. Bottom-up （自下而上） —— DP 完全体"></a>3. Bottom-up （自下而上） —— DP 完全体</h3><blockquote>
+<p><font color=#F211FF>DP ≈ <em>subproblems + “reuse”</em> ———— 解决问题将其拆分为*<u>子问题</u><em>，然后将</em><u>解决方案</u><em>重复用于</em><u>子问题</u>*</font></p>
+</blockquote>
+<p>自下而上的方案是真正意义上去除递归的方式，摒弃了函数内部的递归调用；回顾程序代码运行逻辑，程序在运行时代码是逐行顺序执行，在遇到函数调用时会进入被调函数内部继续执行代码，完成后返回主调函数，其本质就是一个栈的操作过程。事实上编译器在遇到函数调用的时候会为函数开辟内存空间（也就是分配栈），目的是为了保存寄存器指针等（恢复现场用）。去除递归调用以后就没有了函数切换的开销，我们知道 —— 函数切换的开销也是影响程序性能的问题之一，所以我们一般会将 DP 写成循环的方式。</p>
+<p>那么什么叫自下而上？其实自下而上我认为是正向思考的过程，反而递归才是反向思考的过程。就这道题来说，如果是递归，它的逻辑过程是从后往前计算，而此处则是从前往后计算。要求第N个斐波那契数，那N应该为<strong>上</strong>，而斐波那契数从1开始，所以1为<strong>下</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BottomUp_dp</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            f = memo[i - <span class="number">1</span>] + memo[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        memo[i] = f;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="4-初步总结"><a href="#4-初步总结" class="headerlink" title="4. 初步总结"></a>4. 初步总结</h3><h2 id="例二：Shortest-paths"><a href="#例二：Shortest-paths" class="headerlink" title="例二：Shortest paths"></a>例二：Shortest paths</h2><h2 id="例三：文本对齐"><a href="#例三：文本对齐" class="headerlink" title="例三：文本对齐"></a>例三：文本对齐</h2><h2 id="例四：21点"><a href="#例四：21点" class="headerlink" title="例四：21点"></a>例四：21点</h2><h2 id="例五：括号"><a href="#例五：括号" class="headerlink" title="例五：括号"></a>例五：括号</h2><h2 id="例六：编辑距离"><a href="#例六：编辑距离" class="headerlink" title="例六：编辑距离"></a>例六：编辑距离</h2><h2 id="例七：背包"><a href="#例七：背包" class="headerlink" title="例七：背包"></a>例七：背包</h2><h2 id="例八：钢琴-吉他指法"><a href="#例八：钢琴-吉他指法" class="headerlink" title="例八：钢琴/吉他指法"></a>例八：钢琴/吉他指法</h2><h2 id="例九：俄罗斯方块"><a href="#例九：俄罗斯方块" class="headerlink" title="例九：俄罗斯方块"></a>例九：俄罗斯方块</h2><h2 id="例十：超级马里奥兄弟"><a href="#例十：超级马里奥兄弟" class="headerlink" title="例十：超级马里奥兄弟"></a>例十：超级马里奥兄弟</h2><h2 id="例十一：Longest-common-subsequece"><a href="#例十一：Longest-common-subsequece" class="headerlink" title="例十一：Longest common subsequece"></a>例十一：Longest common subsequece</h2><h1 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h1><h1 id="动态规划解题套路"><a href="#动态规划解题套路" class="headerlink" title="动态规划解题套路"></a>动态规划解题套路</h1><h2 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h2><h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>建议大家不要看中文作者写的技术书籍，以及中文培训机构的视频，不是崇洋媚外，因为即便中文作者技术很好，也未必能表达清楚技术观点。我认为学习技术需要有一个思维转化过程，你看中文作者写的书你会感觉东一头西一头的瞎扯，貌似全是重点，但又毫无重点，因为他根本讲不清楚原理；技术源于国外，所以建议大家多关注国外的教材，你看老外写的书，很容易会被作者带入他的思维里，你会不由自主跟着他的思维一步步掌握核心关键点。最后说一下中文培训机构，大多数培训机构都是总结好了和盘托出，关键部分一笔带过，他们不会明白“授人以鱼不如授人以渔”的道理。</p>
+<p>关于 DP 的参考资料有很多，我比较倾向 “看书 + 视频教程” 的方式结合学习，因为本人算法基础比较菜，直接上手看《算法导论》+ 《算法》有些吃力，以下是我在学习 DP 过程中的一些参考资源。</p>
+<hr>
+<ul>
+<li>视频教程</li>
+</ul>
+<p><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/" target="_blank" rel="noopener" title="MIT 公开课">MIT 算法简介课程-2011年秋季 - p19~p22</a> —— 免费（B站上有中文翻译版本，但是翻译质量只能呵呵了。。。）</p>
+<p><a href=""p15"">MIT 算法导论课程 - p15</a> —— 免费（《算法导论》作者授课，权威性不言而喻）</p>
+<p><a href="https://www.coursera.org/learn/algorithmic-toolbox/home/welcome" target="_blank" rel="noopener" title="Coursera 数据结构与算法">Coursera 数据结构与算法 - 第5周~第六周</a> —— 免费试用一周，之后会收取相关费用，不过有一些策略可以越过收费，自己研究</p>
+<p><a href="https://www.coursera.org/learn/algorithms-greedy" target="_blank" rel="noopener" title="Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划">Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划</a> —— 免费试用7天</p>
+<ul>
+<li>书籍推荐</li>
+</ul>
+<p>《算法导论》第三版</p>
+<p>《算法》第四版</p>
+<h1 id="轻松一刻"><a href="#轻松一刻" class="headerlink" title="轻松一刻"></a>轻松一刻</h1><video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
+      <source id="mp4" src="https://media.githubusercontent.com/media/WinnieVivi/test/master/WishYouWereHere.mp4" type="video/mp4">
+      </video>
+
+<h3 id="star"><a href="#star" class="headerlink" title="star"></a>star</h3><iframe
+style="margin-left: 2px; margin-bottom:-5px;"
+frameborder="0" scrolling="0" width="100px" height="20px"
+src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.io&type=star&count=true" >
+</iframe>
+]]></content>
+      <categories>
+        <category>Algorithm-beginner</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 2.0 新特性</title>
+    <url>/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a3.png" alt=""></p>
+<a id="more"></a>
+
+<p align="right">———— C++ 11/14          </p>
+
+<p>本文是基于侯捷老师的《C++11/14 新标准》课程所做的总结。非常感谢侯捷老师，我看过他很多课程和他的书籍，他是我在C++这条道路上的启蒙老师，是他让我真正的学会C++这门语言。侯捷老师的课程有很多，比如《C++ 面向对象高级开发》、《C++内存管理》、《C++ STL 与泛型编程》《C++ Startup 揭密：C++ 程序的生前和死后》……；当然侯捷老师的书籍也很多，例如《STL 源码剖析》，译作也很多，像 effective 那一系列的。如下：</p>
+<p>![侯捷老师课程列表](C:\Users\Administrator\Desktop\C++ Notes\images\1591459395(1).jpg)</p>
+<p>在此特别说明一下个人观点：我特别不喜欢看中文作者写的书，即使本人英文水平有限；我相信有很多像我一样的同学会有跟我一样的想法，因为中文作者写的书大多自己都表达不清楚，你看他写的书籍你常常会感觉在看天书，当然我说的是部分中文作者或者说是大部分。这不是崇洋媚外，如果你经常看老外写的书籍，你会很轻松的被作者带入他的思维模式，你会不由自主的跟着他的节奏和思维去掐到技术关键点。一些中文作者写的书完全是在误人子弟！看了都想吐…恶心！！！</p>
+<p>给大家推荐一个翻译器，一个比 google 做的还好的翻译机，国内的什么有道啦，百度翻译啦。。。纯属扯淡，你应该远离这些垃圾软件。</p>
+<p>OK，以下是总结！</p>
+<h1 id="C-Standard-的演化"><a href="#C-Standard-的演化" class="headerlink" title="C++ Standard 的演化"></a>C++ Standard 的演化</h1><ul>
+<li><font color=#FF0000><strong>C++ 98（1.0）</strong></font></li>
+<li>C++ 03（TR1, Technical Report 1）</li>
+<li><font color=#FF0000><strong>C++ 11（2.0）</strong></font></li>
+<li>C++ 14（对于11的小的补充）</li>
+<li>C++ 17</li>
+<li>C++ 20（协程支持等特性）</li>
+</ul>
+<p>由于C++从C++ 11版本开始算是一个里程碑式的更新，所以可以认为C++进入2.0时代。关于C++2.0的新特性可以分为语言部分和标准库部分。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><ul>
+<li><a href="http://www.stroustrup.com/C++11FAQ.html" target="_blank" rel="noopener" title="C++ 11 新标准完整列表">由 C++ 之父 Bjarne Stroustrup 撰写并维护的C++ 11 新标准的完整列表</a></li>
+<li><a href="http://www.cplusplus.com" target="_blank" rel="noopener" title="C++ 权威指南">C++ 权威指南</a></li>
+<li><a href="https://en.cppreference.com" target="_blank" rel="noopener" title="C++ 参考指南">C++ 参考指南</a></li>
+<li><a href="http://gcc.gnu.org" target="_blank" rel="noopener" title="GCC 官方参考">GCC 官方参考</a></li>
+</ul>
+<h2 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h2><ul>
+<li>The C++ Standard Library (Second Edition)</li>
+<li>C++ Primer (Fifth Edition)</li>
+<li>The C++ Programming Language (Fourth Edition)</li>
+<li><font color=#FF0000><strong>Effective Modern C++ (Scott Meyers)</strong></font></li>
+</ul>
+<h1 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h1><h2 id="第一步，确认支持C-11：macro-——-cplusplus"><a href="#第一步，确认支持C-11：macro-——-cplusplus" class="headerlink" title="第一步，确认支持C++ 11：macro ——__cplusplus"></a>第一步，确认支持C++ 11：macro ——<code>__cplusplus</code></h2><p>在C++ 2.0之前（C++ 98），<code>__cplusplus</code> 被定义为199711L，C++ 11开始，它将被设置为大于199711L（201103L）<br>这个宏可以用来判断编译器所支持C++标准的版本</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; __cplusplus &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 验证编译器所支持的C++版本</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Variadic-Templates（可变参数模板）"><a href="#Variadic-Templates（可变参数模板）" class="headerlink" title="Variadic Templates（可变参数模板）"></a>Variadic Templates（可变参数模板）</h2><h3 id="语法定义"><a href="#语法定义" class="headerlink" title="语法定义"></a>语法定义</h3><h3 id="应用方向"><a href="#应用方向" class="headerlink" title="应用方向"></a>应用方向</h3><ul>
+<li>函数的递归调用</li>
+</ul>
+<ul>
+<li>类的递归继承</li>
+</ul>
+<h2 id="Initializer-lists（初始化列表）"><a href="#Initializer-lists（初始化列表）" class="headerlink" title="Initializer lists（初始化列表）"></a>Initializer lists（初始化列表）</h2><h2 id="Range－based-for-statement（基于范围的-for-语句）"><a href="#Range－based-for-statement（基于范围的-for-语句）" class="headerlink" title="Range－based for statement（基于范围的 for 语句）"></a>Range－based for statement（基于范围的 for 语句）</h2><blockquote>
+<p>官方解释：</p>
+<p>range for语句允许你在一个 “范围 “中进行迭代，它是任何你可以迭代的东西，就像一个由 <code>begin()</code> 和 <code>end()</code> 定义的STL序列。所有标准的容器都可以作为一个范围，<code>std::string</code> 、初始化器列表、数组以及任何你定义了 <code>begin()</code> 和 <code>end()</code> 的东西都可以作为一个范围，例如一个 <code>istream</code>。</p>
+</blockquote>
+<ul>
+<li>语法规则</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ( decl : coll ) &#123;</span><br><span class="line">	statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于：</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=coll.<span class="built_in">begin</span>(), _end=coll.<span class="built_in">end</span>(); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=<span class="built_in">begin</span>(coll), _end=<span class="built_in">end</span>(coll); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i : &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合 auto 用法</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> elem : vec) &#123; <span class="comment">// 简化代码 --&gt; vector&lt;int&gt;::iterator iter</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> 注意要执行的操作是否是需要“写”</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; elem : vec) &#123;</span><br><span class="line">    elem *= <span class="number">3</span>; <span class="comment">// 如果需要改变值，上面的接收变量需要传引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Control-of-defaults-default-and-delete"><a href="#Control-of-defaults-default-and-delete" class="headerlink" title="Control of defaults: default and delete"></a>Control of defaults: default and delete</h2><h1 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h1><h2 id="Rvalue-reference"><a href="#Rvalue-reference" class="headerlink" title="Rvalue reference"></a>Rvalue reference</h2><blockquote>
+<p>左值：</p>
+<p>右值：</p>
+</blockquote>
+<h3 id="Rvalue-reference-and-Move-Semantics"><a href="#Rvalue-reference-and-Move-Semantics" class="headerlink" title="Rvalue reference and Move Semantics"></a>Rvalue reference and Move Semantics</h3><h3 id="Perfect-Forwarding"><a href="#Perfect-Forwarding" class="headerlink" title="Perfect Forwarding"></a>Perfect Forwarding</h3><hr>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C++ 11/14</tag>
+        <tag>C++ 2.0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ STL 泛型编程</title>
+    <url>/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw4.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="推荐书籍"><a href="#推荐书籍" class="headerlink" title="推荐书籍"></a>推荐书籍</h2><ul>
+<li>STL 标准库</li>
+<li>STL 源码剖析</li>
+</ul>
+<h2 id="Generic-Programming（GP，泛型编程）"><a href="#Generic-Programming（GP，泛型编程）" class="headerlink" title="Generic Programming（GP，泛型编程）"></a>Generic Programming（GP，泛型编程）</h2><h2 id="STL-六大组件关系"><a href="#STL-六大组件关系" class="headerlink" title="STL 六大组件关系"></a>STL 六大组件关系</h2><h2 id="容器（Containers）"><a href="#容器（Containers）" class="headerlink" title="容器（Containers）"></a>容器（Containers）</h2><h3 id="array"><a href="#array" class="headerlink" title="array"></a>array</h3><h4 id="Member-types"><a href="#Member-types" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>size_type</li>
+<li>difference_type<h4 id="Member-functions"><a href="#Member-functions" class="headerlink" title="Member functions"></a>Member functions</h4><h5 id="Iterators"><a href="#Iterators" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity"><a href="#Capacity" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>size</li>
+<li>max_size</li>
+<li>empty<h5 id="Element-access"><a href="#Element-access" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at</li>
+<li>front</li>
+<li>back</li>
+<li>data<h5 id="Modifiers"><a href="#Modifiers" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>fill</li>
+<li>swap<h5 id="Allocator"><a href="#Allocator" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads"><a href="#Non-member-function-overloads" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>get (array)</li>
+<li>relational operators (array)<h4 id="Template-specializations"><a href="#Template-specializations" class="headerlink" title="Template specializations"></a>Template specializations</h4></li>
+<li>tuple_element<array></li>
+<li>tuple_size<array></details>
+</li>
+</ul>
+<hr>
+<h3 id="vector"><a href="#vector" class="headerlink" title="vector"></a>vector</h3><h4 id="Member-types-1"><a href="#Member-types-1" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-1"><a href="#Member-functions-1" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-1"><a href="#Iterators-1" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-1"><a href="#Capacity-1" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>size</li>
+<li>max_size</li>
+<li>resize</li>
+<li>capacity</li>
+<li>empty</li>
+<li>reserve</li>
+<li>shrink_to_fit<h5 id="Element-access-1"><a href="#Element-access-1" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at</li>
+<li>front</li>
+<li>back</li>
+<li>data<h5 id="Modifiers-1"><a href="#Modifiers-1" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>push_back</li>
+<li>pop_back</li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_back<h5 id="Allocator-1"><a href="#Allocator-1" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-1"><a href="#Non-member-function-overloads-1" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap<h4 id="Template-specializations-1"><a href="#Template-specializations-1" class="headerlink" title="Template specializations"></a>Template specializations</h4></li>
+<li>vector<bool></details>
+</li>
+</ul>
+<hr>
+<h3 id="list"><a href="#list" class="headerlink" title="list"></a>list</h3><h4 id="Member-types-2"><a href="#Member-types-2" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-2"><a href="#Member-functions-2" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-2"><a href="#Iterators-2" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-2"><a href="#Capacity-2" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-access-2"><a href="#Element-access-2" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>front</li>
+<li>back<h5 id="Modifiers-2"><a href="#Modifiers-2" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>emplace_front</li>
+<li>push_front</li>
+<li>pop_front</li>
+<li>emplace_back</li>
+<li>push_back</li>
+<li>pop_back</li>
+<li>emplace</li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>resize</li>
+<li>clear<h5 id="Operations"><a href="#Operations" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>splice</li>
+<li>remove</li>
+<li>remove_if</li>
+<li>unique</li>
+<li>merge</li>
+<li>sort</li>
+<li>reverse<h5 id="Observers"><a href="#Observers" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-2"><a href="#Non-member-function-overloads-2" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators (list)</li>
+<li>swap (list)</details>
+</li>
+</ul>
+<hr>
+<h3 id="forward-list"><a href="#forward-list" class="headerlink" title="forward_list"></a>forward_list</h3><h4 id="Member-types-3"><a href="#Member-types-3" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-3"><a href="#Member-functions-3" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-3"><a href="#Iterators-3" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>before_begin</li>
+<li>begin</li>
+<li>end</li>
+<li>cbefore_begin</li>
+<li>cbegin</li>
+<li>cend<h5 id="Capacity-3"><a href="#Capacity-3" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>max_size<h5 id="Element-access-3"><a href="#Element-access-3" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>front<h5 id="Modifiers-3"><a href="#Modifiers-3" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>emplace_front</li>
+<li>push_front</li>
+<li>pop_front</li>
+<li>emplace_after</li>
+<li>insert_after</li>
+<li>erase_after</li>
+<li>swap</li>
+<li>resize</li>
+<li>clear<h5 id="Operations-1"><a href="#Operations-1" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>splice_after</li>
+<li>remove</li>
+<li>remove_if</li>
+<li>unique</li>
+<li>merge</li>
+<li>sort</li>
+<li>reverse<h5 id="Observers-1"><a href="#Observers-1" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-3"><a href="#Non-member-function-overloads-3" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators (forward_list)</li>
+<li>swap (forward_list)</details>
+</li>
+</ul>
+<hr>
+<h3 id="deque"><a href="#deque" class="headerlink" title="deque"></a>deque</h3><h4 id="Member-types-4"><a href="#Member-types-4" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-4"><a href="#Member-functions-4" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator[]<h5 id="Iterators-4"><a href="#Iterators-4" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-4"><a href="#Capacity-4" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>size</li>
+<li>max_size</li>
+<li>resize</li>
+<li>empty</li>
+<li>shrink_to_fit<h5 id="Element-access-4"><a href="#Element-access-4" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at</li>
+<li>front</li>
+<li>back<h5 id="Modifiers-4"><a href="#Modifiers-4" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>assign</li>
+<li>push_back</li>
+<li>push_front</li>
+<li>pop_back</li>
+<li>pop_front</li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_front</li>
+<li>emplace_back<h5 id="Allocator-2"><a href="#Allocator-2" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator<h4 id="Non-member-function-overloads-4"><a href="#Non-member-function-overloads-4" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap</details>
+</li>
+</ul>
+<hr>
+<h3 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h3><h4 id="Member-types-5"><a href="#Member-types-5" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>container_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>size_type<h4 id="Member-functions-5"><a href="#Member-functions-5" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>empty</li>
+<li>size</li>
+<li>front</li>
+<li>back</li>
+<li>push</li>
+<li>emplace</li>
+<li>pop</li>
+<li>swap<h4 id="Non-member-function-overloads-5"><a href="#Non-member-function-overloads-5" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap (queue)<h4 id="Non-member-class-specializations"><a href="#Non-member-class-specializations" class="headerlink" title="Non-member class specializations"></a>Non-member class specializations</h4>user_allocator<queue></li>
+</ul>
+</details>
+---
+
+<h3 id="stack"><a href="#stack" class="headerlink" title="stack"></a>stack</h3><details><summary>stack API list</summary>
+
+<h4 id="Member-types-6"><a href="#Member-types-6" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>value_type</li>
+<li>container_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>size_type<h4 id="Member-functions-6"><a href="#Member-functions-6" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>empty</li>
+<li>size</li>
+<li>top</li>
+<li>push</li>
+<li>emplace</li>
+<li>pop</li>
+<li>swap<h4 id="Non-member-function-overloads-6"><a href="#Non-member-function-overloads-6" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>relational operators</li>
+<li>swap (stack)<h4 id="Non-member-class-specializations-1"><a href="#Non-member-class-specializations-1" class="headerlink" title="Non-member class specializations"></a>Non-member class specializations</h4>user_allocator<stack></li>
+</ul>
+</details>
+---
+
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><h4 id="Member-types-7"><a href="#Member-types-7" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>mapped_type</li>
+<li>value_type</li>
+<li>key_compare</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-7"><a href="#Member-functions-7" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-5"><a href="#Iterators-5" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-5"><a href="#Capacity-5" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-access-5"><a href="#Element-access-5" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at<h5 id="Modifiers-5"><a href="#Modifiers-5" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_hint<h5 id="Observers-2"><a href="#Observers-2" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>key_comp</li>
+<li>value_comp<h5 id="Operations-2"><a href="#Operations-2" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>lower_bound</li>
+<li>upper_bound</li>
+<li>equal_range<h5 id="Allocator-3"><a href="#Allocator-3" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator</details>
+</li>
+</ul>
+<hr>
+<h3 id="set"><a href="#set" class="headerlink" title="set"></a>set</h3><h4 id="Member-types-8"><a href="#Member-types-8" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>value_type</li>
+<li>key_compare</li>
+<li>value_compare</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>reverse_iterator</li>
+<li>const_reverse_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-8"><a href="#Member-functions-8" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-6"><a href="#Iterators-6" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>rbegin</li>
+<li>rend</li>
+<li>cbegin</li>
+<li>cend</li>
+<li>crbegin</li>
+<li>crend<h5 id="Capacity-6"><a href="#Capacity-6" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Modifiers-6"><a href="#Modifiers-6" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>insert</li>
+<li>erase</li>
+<li>swap</li>
+<li>clear</li>
+<li>emplace</li>
+<li>emplace_hint<h5 id="Observers-3"><a href="#Observers-3" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>key_comp</li>
+<li>value_comp<h5 id="Operations-3"><a href="#Operations-3" class="headerlink" title="Operations:"></a>Operations:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>lower_bound</li>
+<li>upper_bound</li>
+<li>equal_range<h5 id="Allocator-4"><a href="#Allocator-4" class="headerlink" title="Allocator:"></a>Allocator:</h5></li>
+<li>get_allocator</details>
+</li>
+</ul>
+<hr>
+<h3 id="unordered-map"><a href="#unordered-map" class="headerlink" title="unordered_map"></a>unordered_map</h3><h4 id="Member-types-9"><a href="#Member-types-9" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>mapped_type</li>
+<li>value_type</li>
+<li>hasher</li>
+<li>key_equal</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>local_iterator</li>
+<li>const_local_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-9"><a href="#Member-functions-9" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-7"><a href="#Iterators-7" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>cbegin</li>
+<li>cend<h5 id="Capacity-7"><a href="#Capacity-7" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-access-6"><a href="#Element-access-6" class="headerlink" title="Element access:"></a>Element access:</h5></li>
+<li>operator[]</li>
+<li>at<h5 id="Element-lookup"><a href="#Element-lookup" class="headerlink" title="Element lookup:"></a>Element lookup:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>equal_range<h5 id="Modifiers-7"><a href="#Modifiers-7" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>emplace</li>
+<li>emplace_hint</li>
+<li>insert</li>
+<li>erase</li>
+<li>clear</li>
+<li>swap<h5 id="Buckets"><a href="#Buckets" class="headerlink" title="Buckets"></a>Buckets</h5></li>
+<li>bucket_count</li>
+<li>max_bucket_count</li>
+<li>bucket_size</li>
+<li>bucket<h5 id="Hash-policy"><a href="#Hash-policy" class="headerlink" title="Hash policy"></a>Hash policy</h5></li>
+<li>load_factor</li>
+<li>max_load_factor</li>
+<li>rehash</li>
+<li>reserve<h5 id="Observers-4"><a href="#Observers-4" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>hash_function</li>
+<li>key_eq</li>
+<li>get_allocator<h4 id="Non-member-function-overloads-7"><a href="#Non-member-function-overloads-7" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>operators (unordered_map)</li>
+<li>swap (unordered_map)</details>
+</li>
+</ul>
+<hr>
+<h3 id="unordered-set"><a href="#unordered-set" class="headerlink" title="unordered_set"></a>unordered_set</h3><h4 id="Member-types-10"><a href="#Member-types-10" class="headerlink" title="Member types"></a>Member types</h4><ul>
+<li>key_type</li>
+<li>value_type</li>
+<li>hasher</li>
+<li>key_equal</li>
+<li>allocator_type</li>
+<li>reference</li>
+<li>const_reference</li>
+<li>pointer</li>
+<li>const_pointer</li>
+<li>iterator</li>
+<li>const_iterator</li>
+<li>local_iterator</li>
+<li>const_local_iterator</li>
+<li>difference_type</li>
+<li>size_type<h4 id="Member-functions-10"><a href="#Member-functions-10" class="headerlink" title="Member functions"></a>Member functions</h4></li>
+<li>constructor</li>
+<li>destructor</li>
+<li>operator=<h5 id="Iterators-8"><a href="#Iterators-8" class="headerlink" title="Iterators:"></a>Iterators:</h5></li>
+<li>begin</li>
+<li>end</li>
+<li>cbegin</li>
+<li>cend<h5 id="Capacity-8"><a href="#Capacity-8" class="headerlink" title="Capacity:"></a>Capacity:</h5></li>
+<li>empty</li>
+<li>size</li>
+<li>max_size<h5 id="Element-lookup-1"><a href="#Element-lookup-1" class="headerlink" title="Element lookup:"></a>Element lookup:</h5></li>
+<li>find</li>
+<li>count</li>
+<li>equal_range<h5 id="Modifiers-8"><a href="#Modifiers-8" class="headerlink" title="Modifiers:"></a>Modifiers:</h5></li>
+<li>emplace</li>
+<li>emplace_hint</li>
+<li>insert</li>
+<li>erase</li>
+<li>clear</li>
+<li>swap<h5 id="Buckets-1"><a href="#Buckets-1" class="headerlink" title="Buckets"></a>Buckets</h5></li>
+<li>bucket_count</li>
+<li>max_bucket_count</li>
+<li>bucket_size</li>
+<li>bucket<h5 id="Hash-policy-1"><a href="#Hash-policy-1" class="headerlink" title="Hash policy"></a>Hash policy</h5></li>
+<li>load_factor</li>
+<li>max_load_factor</li>
+<li>rehash</li>
+<li>reserve<h5 id="Observers-5"><a href="#Observers-5" class="headerlink" title="Observers:"></a>Observers:</h5></li>
+<li>hash_function</li>
+<li>key_eq</li>
+<li>get_allocator<h4 id="Non-member-function-overloads-8"><a href="#Non-member-function-overloads-8" class="headerlink" title="Non-member function overloads"></a>Non-member function overloads</h4></li>
+<li>operators (unordered_set)</li>
+<li>swap (unordered_set)</details>
+</li>
+</ul>
+<hr>
+<h2 id="迭代器（Iterators）"><a href="#迭代器（Iterators）" class="headerlink" title="迭代器（Iterators）"></a>迭代器（Iterators）</h2><h2 id="算法（Algorithms）"><a href="#算法（Algorithms）" class="headerlink" title="算法（Algorithms）"></a>算法（Algorithms）</h2><h2 id="仿函数（Functors）"><a href="#仿函数（Functors）" class="headerlink" title="仿函数（Functors）"></a>仿函数（Functors）</h2><h2 id="适配器（Adapters）"><a href="#适配器（Adapters）" class="headerlink" title="适配器（Adapters）"></a>适配器（Adapters）</h2><h2 id="分配器（Allocator）"><a href="#分配器（Allocator）" class="headerlink" title="分配器（Allocator）"></a>分配器（Allocator）</h2>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>STL</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 内存管理</title>
+    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
+<a id="more"></a>
+
+<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
+
+<p align="center"><font color=#2F2AC4 size="5">万丈高楼平地起</font></p>
+<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
+
+<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 基础入门总结</title>
+    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
+<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
+</blockquote>
+<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
+<li><p><code>class</code> 的声明： </p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>return by reference</code> 语法分析：</p>
+<blockquote>
+<p>传递者无需知道接收者是以reference形式接收</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 面向对象程序设计</title>
+    <url>/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p><img src="/buckets/images/tjhttp.jpg" alt=""></p>
+<a id="more"></a>
+
+<h2 id="基于对象-Object-Based"><a href="#基于对象-Object-Based" class="headerlink" title="基于对象 (Object Based)"></a>基于对象 (<code>Object Based</code>)</h2><h3 id="C-class-的两种分类："><a href="#C-class-的两种分类：" class="headerlink" title="C++ class 的两种分类："></a><code>C++ class</code> 的两种分类：</h3><ul>
+<li><code>class without pointer members</code>   </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">complex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">complex</span>(<span class="keyword">double</span> r = <span class="number">0</span>, <span class="keyword">double</span> i = <span class="number">0</span>)</span><br><span class="line">        : re(r), im(i)</span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">complex</span>&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">real</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> re; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">imag</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> im; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> re, im;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">friend</span> <span class="built_in">complex</span>&amp; __doapl(<span class="built_in">complex</span>*, <span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参数传递：<code>pass by value vs. pass by reference(to const)</code>  </p>
+</blockquote>
+<blockquote>
+<p>返回值传递：<code>return by value vs. return by reference(to const)</code></p>
+</blockquote>
+<ul>
+<li><code>class with pointer members</code>  </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">char</span>* c_str = <span class="number">0</span>); <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝构造</span></span><br><span class="line">    <span class="built_in">string</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝赋值</span></span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">string</span>(); <span class="comment">// 析构函数</span></span><br><span class="line">    <span class="function"><span class="keyword">char</span>* <span class="title">c_str</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> m_data; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* m_data;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+<h2 id="面向对象-Object-Oriented"><a href="#面向对象-Object-Oriented" class="headerlink" title="面向对象 (Object Oriented)"></a>面向对象 (<code>Object Oriented</code>)</h2><h3 id="C-class-之间的关系"><a href="#C-class-之间的关系" class="headerlink" title="C++ class 之间的关系"></a><code>C++ class</code> 之间的关系</h3><ul>
+<li>继承 (<code>inheritance</code>) — 表示 <code>is-a</code></li>
+</ul>
+<ul>
+<li>复合 (<code>composition</code>) — 表示 <code>has-a</code></li>
+</ul>
+<ul>
+<li>委托 (<code>delegation</code>)</li>
+</ul>
+<h4 id="C-学习资料推荐："><a href="#C-学习资料推荐：" class="headerlink" title="C++ 学习资料推荐："></a>C++ 学习资料推荐：</h4><ul>
+<li>C++ Primer (fifth Edition) — Stanley B.Lippman</li>
+<li>The C++ Programming Language (Fourth Edition) — Bjarne Stroustrup</li>
+<li>Effective C++ (Third Edition) — Scott Meyers</li>
+<li>More Effective C++ — Scott Meyers</li>
+<li>Inside The C++ Object Model — Stanley B.Lippman</li>
+<li><font color=#FF88AA>Modern C++ Design — Scott Meyers</font></li>
+<li>The C++ Standard Library (Second Edition) — Nicolai M. Josuttis</li>
+<li>STL 源码剖析 — 侯捷<blockquote>
+<p>能够把以上这些书籍全部啃完，然后通过工作实践应用，就足够了</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 系统编程</title>
+    <url>/2016/03/18/Linux%20Notes/Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw6.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="终端常用命令"><a href="#终端常用命令" class="headerlink" title="终端常用命令"></a>终端常用命令</h2><p><kbd>Tab</kbd>                 自动命令补全 </p>
+<p><kbd>Ctrl</kbd> + <kbd>c</kbd>      中断正在运行的进程或命令</p>
+<p><kbd>Ctrl</kbd> + <kbd>z</kbd>      将正在运行的程序送到后台</p>
+<p><kbd>Ctrl</kbd> + <kbd>d</kbd>      退出当前终端</p>
+<!-- more -->
+
+<p><kbd>Ctrl</kbd> + <kbd>l</kbd>      清空终端屏幕</p>
+<p><kbd>Ctrl</kbd> + <kbd>a</kbd>      将光标移动到行首</p>
+<p><kbd>Ctrl</kbd> + <kbd>e</kbd>      将光标移动到行尾</p>
+<p><kbd>Ctrl</kbd> + <kbd>u</kbd>      擦除从当前光标位置到<strong>行首</strong>的全部内容</p>
+<p><kbd>Ctrl</kbd> + <kbd>k</kbd>      擦除从当前光标位置到<strong>行尾</strong>的全部内容</p>
+<p><kbd>Ctrl</kbd> + <kbd>w</kbd>      擦除光标位置前的单词，如果光标在一个单词本身上，它将擦除从光标位置到词首的全部字母</p>
+<p><kbd>Ctrl</kbd> + <kbd>y</kbd>      粘贴使用 <kbd>Ctrl + w</kbd>、<kbd>Ctrl + u</kbd> 和 <kbd>Ctrl + k</kbd> 快捷键擦除的文本</p>
+<p><kbd>Ctrl</kbd> + <kbd>p</kbd>      查看上一个命令</p>
+<p><kbd>Ctrl</kbd> + <kbd>n</kbd>      查看下一个命令</p>
+<p><kbd>Ctrl</kbd> + <kbd>r</kbd>      搜索历史命令</p>
+<h2 id="压缩包管理"><a href="#压缩包管理" class="headerlink" title="压缩包管理"></a>压缩包管理</h2><h3 id="tar（说明：打包是把压缩好的文件进行归档）"><a href="#tar（说明：打包是把压缩好的文件进行归档）" class="headerlink" title="tar（说明：打包是把压缩好的文件进行归档）"></a>tar（说明：打包是把压缩好的文件进行归档）</h3><ul>
+<li><p>主选项：（主选项是互斥的，一条命令只能出现一个）</p>
+<ul>
+<li><code>c</code> 创建新的档案文件，如果用户想备份一个目录或是一些文件，就要选择这个选项</li>
+<li><code>r</code> 把要存档的文件追加到档案文件末尾</li>
+<li><code>t</code> 列出档案文件的内容，查看已经备份了哪些文件</li>
+<li><code>u</code> 更新文件，用新增的文件取代原备份文件，如果在备份文件中找不到要更新的文件，则把它追加到备份文件的最后</li>
+<li><code>x</code> 从档案文件中释放文件（常用）</li>
+</ul>
+</li>
+<li><p>辅选项：</p>
+<ul>
+<li><p><code>f</code> 使用档案文件或设备，这个选项通常是必选的（常用）</p>
+</li>
+<li><p><code>k</code> 保存已经存在的文件</p>
+</li>
+<li><p><code>m</code> 在还原文件时，把所有文件的修改时间设定为现在</p>
+</li>
+<li><p><code>M</code> 创建多卷的档案文件，以便在几个磁盘中存放</p>
+</li>
+<li><p><code>v</code> 详细报告 tar 处理的文件信息，如无此选项，tar 不报告文件信息（常用）</p>
+</li>
+<li><p><code>w</code> 每一步都要求确认</p>
+</li>
+<li><p><code>z</code> 用 <strong>gzip</strong> 来压缩/解压缩文件，加上该选项后可以将档案文件进行压缩（常用）</p>
+</li>
+<li><p><code>j</code> 用 <strong>bzip2</strong> 来压缩/解压缩文件，加上该选项后可以将档案文件进行压缩（常用）</p>
+<blockquote>
+<p><em>Note：</em></p>
+<p>​        <em>gizp出现较早，在压缩较小文件有优势，bzip2是gzip的升级版，压缩较大文件有优势</em></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="常用示例"><a href="#常用示例" class="headerlink" title="常用示例"></a>常用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 打包 / 解包：</span></span><br><span class="line">tar cvf dir.tar dir</span><br><span class="line">tar xvf dir.tar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打gz压缩包 / 解gz压缩包：</span></span><br><span class="line">tar zcvf dir.tar.gz dir</span><br><span class="line">tar zxvf dir.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打bz2压缩包 / 解bz2压缩包：</span></span><br><span class="line">tar jcvf dir.tar.bz2 dir</span><br><span class="line">tar jxvf dir.tar.bz2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定解压目录：</span></span><br><span class="line">tar zxvf dir.tar.gz -C ../target.dir</span><br></pre></td></tr></table></figure>
+
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><p><code>who</code> 查看当前在线上的用户情况</p>
+</li>
+<li><p><code>ps</code> 查看后台进程运行状况</p>
+<ul>
+<li><code>-e</code> 显示所有进程</li>
+<li><code>-f</code> 全格式</li>
+<li><code>-h</code> 不显示标题</li>
+<li><code>-l</code> 长格式</li>
+<li><code>-w</code> 宽输出</li>
+<li><code>-r</code> 只显示正在运行的进程</li>
+<li><code>-a</code> 即 all，查看当前系统所有用户的所有进程</li>
+<li><code>-u</code> 查看进程所有者及其他一些详细信息</li>
+<li><code>-x</code> 显示没有控制终端的进程</li>
+</ul>
+</li>
+<li><p><code>jobs</code> 查看当前shell下正在运行的进程</p>
+</li>
+<li><p><code>fg %workno</code> 把指定的后台作业或挂起的作业移动到前台运行，workno 为作业号</p>
+</li>
+<li><p><code>bg %workno</code> 把被挂起的进程提到后台运行，workno 为作业号</p>
+</li>
+<li><p><code>kill</code> 发送信号给指定进程</p>
+</li>
+<li><p><code>env</code> 查看当前进程环境变量</p>
+</li>
+<li><p><code>top</code> / <code>htop</code> 查看当前正在运行的进程的资源占用情况</p>
+</li>
+</ul>
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><p><code>ifconfig</code> 查看网卡信息</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 关闭网卡：</span></span><br><span class="line">sudo ifconfig eth0 down</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启网卡：</span></span><br><span class="line">sudo ifconfig eth0 up</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给 eth0 配置临时IP</span></span><br><span class="line">sudo ifconfig eth0 IP</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ping</code> 查看网络上的主机是否在工作</p>
+</li>
+<li><p><code>netstat</code> 显示网络连接、路由表合网口信息</p>
+</li>
+<li><p><code>nslookup</code> 查询一台机器额 IP 和其对应的域名解析器</p>
+</li>
+</ul>
+<h2 id="常用服务器构建"><a href="#常用服务器构建" class="headerlink" title="常用服务器构建"></a>常用服务器构建</h2><h3 id="ftp-服务"><a href="#ftp-服务" class="headerlink" title="ftp 服务"></a>ftp 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 vsftpd 服务器</span></span><br><span class="line">sudo apt install vsftpd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置 vsftpd.conf 文件</span></span><br><span class="line">sudo vim /etc/vsftpd.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改或添加如下配置：</span></span><br><span class="line">anonymous_enable=YES</span><br><span class="line">anon_root=/home/itcast/ftp</span><br><span class="line">no_anon_password=YES</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_umask=0022</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启 vsftpd 服务器，重新加载配置文件</span></span><br><span class="line">sudo systemd start vsftpd.service 或 sudo service vsftpd start</span><br></pre></td></tr></table></figure>
+
+<h4 id="ftp-服务的使用："><a href="#ftp-服务的使用：" class="headerlink" title="ftp 服务的使用："></a>ftp 服务的使用：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">get file</span><br><span class="line">put file</span><br></pre></td></tr></table></figure>
+
+<h3 id="ssh-服务"><a href="#ssh-服务" class="headerlink" title="ssh 服务"></a>ssh 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 ssh 服务器</span></span><br><span class="line">sudo apt install openssh-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># ssh 远程登录</span></span><br><span class="line">ssh 用户名@IP</span><br><span class="line"></span><br><span class="line"><span class="comment"># scp 使用格式</span></span><br><span class="line">scp -r 目标用户名@目标主机IP地址:/目标文件的绝对路径 /保存到本机的路径</span><br></pre></td></tr></table></figure>
+
+<h2 id="Linux-基础开发工具"><a href="#Linux-基础开发工具" class="headerlink" title="Linux 基础开发工具"></a>Linux 基础开发工具</h2><h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><h3 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h3><h3 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h3><h2 id="动态库与静态库"><a href="#动态库与静态库" class="headerlink" title="动态库与静态库"></a>动态库与静态库</h2>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 网络编程</title>
+    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h1><h2 id="多进程并发模型"><a href="#多进程并发模型" class="headerlink" title="多进程并发模型"></a>多进程并发模型</h2><h2 id="多线程并发模型"><a href="#多线程并发模型" class="headerlink" title="多线程并发模型"></a>多线程并发模型</h2><h1 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h1><h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><h2 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h2><h2 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h2>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Google glog 使用详解</title>
+    <url>/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p><img src="/buckets/images/pla1.jpg" alt=""></p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Google Glog是由Google使用C/C++语言开发的一个跨平台应用级日志记录框架。Glog对外提供类似C++流操作的输出模式和各种助手宏。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;glog/logging.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Initialize Google's logging library.</span></span><br><span class="line">    google::InitGoogleLogging(argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="comment">// ...  </span></span><br><span class="line">    LOG(INFO) &lt;&lt; <span class="string">"Found "</span> &lt;&lt; num_cookies &lt;&lt; <span class="string">" cookies"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="链接-amp-下载"><a href="#链接-amp-下载" class="headerlink" title="链接&amp;下载"></a>链接&amp;下载</h3><p><a href="http://code.google.com/p/google-glog" target="_blank" rel="noopener">项目主页</a> —— 已迁移至Github</p>
+<p><a href="https://github.com/google/glog" target="_blank" rel="noopener">项目地址</a></p>
+<h3 id="Windows下编译"><a href="#Windows下编译" class="headerlink" title="Windows下编译"></a>Windows下编译</h3><ol>
+<li><p>进入glog文件目录</p>
+</li>
+<li><p>使用VS2013打开 <code>google-glog.sln</code></p>
+</li>
+<li><p>选择编译 <code>libglog_static</code> 项目</p>
+</li>
+<li><p>在对应的 <code>debug/release</code> 目录下生成 <code>libglog_static.lib</code></p>
+<h4 id="解决编译-libglog-static-项目出错"><a href="#解决编译-libglog-static-项目出错" class="headerlink" title="解决编译 libglog_static 项目出错"></a>解决编译 <code>libglog_static</code> 项目出错</h4></li>
+</ol>
+<ul>
+<li><p>查看项目配置中 <code>GOOGLE_GLOG_DLL_DECL=</code> 宏是否加入，包括今后使用的项目中也需要加入该宏。</p>
+</li>
+<li><p>查看文件 <code>logging.h</code> 是否引用windows的而非linux的，Windows的文件在 <code>...\src\windows\glog</code>目录下。  </p>
+</li>
+<li><p>链接的时候报出 <code>fatal error C1189: #error : ERROR macro is defined</code>.<br>  ​    C/C++ –&gt; 预处理器 –&gt; 预处理器定义 –&gt; 加上 <code>GLOG_NO_ABBREVIATED_SEVERITIES宏</code></p>
+<p>  Windows下文件位置说明：</p>
+<pre><code>`Libglog.*` 文件默认位置：解决方案 /Debug/ 
+源代码中头文件的路径：代码目录 `/src/windows/glog` 
+帮助文档路径：代码目录 `/doc/glog.html`</code></pre></li>
+</ul>
+<h3 id="Linux下编译-amp-安装"><a href="#Linux下编译-amp-安装" class="headerlink" title="Linux下编译&amp;安装"></a>Linux下编译&amp;安装</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="built_in">cd</span> glog <span class="comment"># 文件目录</span></span><br><span class="line">chmod +x configure <span class="comment">#如果没有权限的话需要设置执行权限</span></span><br><span class="line">./configure</span><br><span class="line">./make</span><br><span class="line">./make inatall</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h3><p>Linux下：<br>libglog.so文件默认安装路径是/usr/local/lib，需要将建立软链接<br>源代码中头文件的路径：代码目录/src/glog<br>帮助文档路径：代码目录/doc/glog.html  </p>
+<p>Linux下安装完glog的输出：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">make[1]: Entering directory <span class="string">'/home/wuwei/glog/glog-0.3.4'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/lib'</span>    </span><br><span class="line">    /bin/bash ./libtool   --mode=install /usr/bin/install -c   libglog.la <span class="string">'/usr/local/lib'</span>    </span><br><span class="line">    libtool: install: /usr/bin/install -c .libs/libglog.so.0.0.0 /usr/<span class="built_in">local</span>/lib/libglog.so.0.0.0    </span><br><span class="line">    libtool: install: (<span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib &amp;&amp; &#123; ln -s -f libglog.so.0.0.0 libglog.so.0 || &#123; rm -f libglog.so.0 &amp;&amp; ln -s libglog.so.0.0.0 libglog.so.0; &#125;; &#125;)    </span><br><span class="line">    libtool: install: (<span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib &amp;&amp; &#123; ln -s -f libglog.so.0.0.0 libglog.so || &#123; rm -f libglog.so &amp;&amp; ln -s libglog.so.0.0.0 libglog.so; &#125;; &#125;)    </span><br><span class="line">    libtool: install: /usr/bin/install -c .libs/libglog.lai /usr/<span class="built_in">local</span>/lib/libglog.la    </span><br><span class="line">    libtool: install: /usr/bin/install -c .libs/libglog.a /usr/<span class="built_in">local</span>/lib/libglog.a    </span><br><span class="line">    libtool: install: chmod 644 /usr/<span class="built_in">local</span>/lib/libglog.a    </span><br><span class="line">    libtool: install: ranlib /usr/<span class="built_in">local</span>/lib/libglog.a    </span><br><span class="line">    libtool: finish: PATH=<span class="string">"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/sbin"</span> ldconfig -n /usr/<span class="built_in">local</span>/lib    </span><br><span class="line">----------------------------------------------------------------------    </span><br><span class="line">已经安装了库在以下目录:    </span><br><span class="line">    /usr/<span class="built_in">local</span>/lib    </span><br><span class="line">        </span><br><span class="line">如果您碰巧要链接到给定目录LIBDIR中已安装的库，则必须使用libtool，并指定库的完整路径名，或者在链接期间使用<span class="string">'-LLIBDIR'</span>标志并至少执行其中一个 以下：  </span><br><span class="line">    - 在执行期间将LIBDIR添加到<span class="string">'LD_LIBRARY_PATH'</span>环境变量中  </span><br><span class="line">    - 在链接期间将LIBDIR添加到<span class="string">'LD_RUN_PATH'</span>环境变量中  </span><br><span class="line">    - 使用<span class="string">'-Wl, -rpath -Wl, LIBDIR'</span>链接器标志  </span><br><span class="line">    - 让系统管理员将LIBDIR添加到<span class="string">'/etc/ld.so.conf'</span>   </span><br><span class="line">    </span><br><span class="line">有关更多信息，请参阅有关共享库的任何操作系统文档，例如ld（1）和ld.so（8）手册页。   </span><br><span class="line">----------------------------------------------------------------------    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/share/doc/glog-0.3.4'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 AUTHORS COPYING ChangeLog INSTALL NEWS README README.windows doc/designstyle.css doc/glog.html <span class="string">'/usr/local/share/doc/glog-0.3.4'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 src/glog/log_severity.h <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 src/glog/logging.h src/glog/raw_logging.h src/glog/vlog_is_on.h src/glog/stl_logging.h <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/lib/pkgconfig'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 libglog.pc <span class="string">'/usr/local/lib/pkgconfig'</span>    </span><br><span class="line">make[1]: Leaving directory <span class="string">'/home/wuwei/glog/glog-0.3.4'</span></span><br></pre></td></tr></table></figure>
+<p>头文件说明：<br>由于Glog自动生成Makefile，所以加入自己的代码二次封装后编译glog并不会把你的代码编译进去；这种情况下只能单独把glog打成库，二次封装的代码单独使用。<br>代码列表：<br>GlogHelper.h  GlogHelper.cc</p>
+<p>Glog安装后生成的pkg-config的libglog.pc文件</p>
+<p>配置PKG_CONFIG_PATH环境变量</p>
+<ol>
+<li>export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/  </li>
+</ol>
+<p>编译选项：（编译程序时候加入以下代码）</p>
+<ol>
+<li><code>pkg-config libglog --cflags --libs --print-errors</code>  </li>
+</ol>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><h3 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h3><p>Glog有4个日志级别，分别是 INFO, WARNING, ERROR, 和 FATAL。 以上是简写形式，可通过宏关闭简写形式，其原始定义是有GLOG_前缀，具体形式见源码。</p>
+<ol>
+<li>const int GLOG_INFO = 0, GLOG_WARNING = 1, GLOG_ERROR = 2, GLOG_FATAL = 3, NUM_SEVERITIES = 4;   </li>
+<li>const int INFO = GLOG_INFO, WARNING = GLOG_WARNING, ERROR = GLOG_ERROR,FATAL = GLOG_FATAL;<br>最严重级的FATAL级别,在输出FATAL日志消息后，会终止程序运行；<br>DEBUG模式中，DFATAL级别对应ERROR–便于调试，而非DEBUG模式则对应FATAL<h3 id="标记设置"><a href="#标记设置" class="headerlink" title="标记设置"></a>标记设置</h3></li>
+</ol>
+<h3 id="日志文件命名规则"><a href="#日志文件命名规则" class="headerlink" title="日志文件命名规则"></a>日志文件命名规则</h3><h4 id="2-3-1-不做任何设置的情况下日志文件的命名规则为："><a href="#2-3-1-不做任何设置的情况下日志文件的命名规则为：" class="headerlink" title="2.3.1 不做任何设置的情况下日志文件的命名规则为："></a>2.3.1 不做任何设置的情况下日志文件的命名规则为：</h4><p>“/tmp/<program name>.<hostname>.<user name>.log.<severity level>.<date>.<time>.<pid>“<br>•    /tmp/:         日志保存的默认目录<br>•    program name:     程序名称也就是google::InitGoogleLogging(argv[0])传入argv[0]的含义。<br>•    hostname：        PC主机名称<br>•    user name：        当前用户名称<br>•    log：            log标记<br>•    severity level：    日志级别 info，warning，error，fatal<br>•    date：         日期<br>•    time：         当前时间<br>•    pid：             进程ID<br>例如： Glog.exe.WUWEI.WuWei.log.INFO.20180508-124705.17928<br>特别注意： 日志文件默认存放在临时目录中，windows下是“C:\Users\user_name\AppData\Local\Temp”, Linux 是 “/tmp”<br>可以通过配置 FLAGS_log_dir 来进行设置需要输出的文件路径。<br>•    2.3.2 设置log配置参数后的命名规则<br>&lt; 自定义的前缀 &gt;&lt; date &gt;-&lt; time &gt;.&lt; pid &gt;<br>通过如下函数设置日志级别的路径和文件名：</p>
+<ol>
+<li>// 设置 google::INFO 级别的日志存储路径文件名前缀</li>
+<li>google::SetLogDestination(google::INFO, “./log/INFO_”);  </li>
+<li>// 设置 google::WARNING 级别的日志存储路径和文件名前缀  </li>
+<li>google::SetLogDestination(google::WARNING,”./log/WARNING_”);  </li>
+<li>// 设置 google::ERROR 级别的日志存储路径和文件名前缀  </li>
+<li>google::SetLogDestination(google::ERROR,”./log/ERROR_”);<br>例如： INFO_20180514-102032.6048</li>
+</ol>
+<h3 id="日志消息命名规则"><a href="#日志消息命名规则" class="headerlink" title="日志消息命名规则"></a>日志消息命名规则</h3><p>Log line format:<br>[IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg<br>•    IWEF:         Info，Warning，Error，Fatal<br>•    mmdd:         月日<br>•    hh:mm:ss.uuuuuu:     小时，分钟，秒，毫秒<br>•    threadid:         线程ID<br>•    file:line:         文件名及其代码行数<br>•    ]:             固定格式结束标记<br>•    msg:             具体的消息<br>例如： I0508 13:39:30.665004 8481 main.cpp:28] CommOpt service init begin<br> 如INFO级别的日志包含其他高级别的所有日志，ERROR级别的日志只包含ERROR和FATAL两个级别。</p>
+<h3 id="按照条件记录日志信息"><a href="#按照条件记录日志信息" class="headerlink" title="按照条件记录日志信息"></a>按照条件记录日志信息</h3><p>glog可以控制日志信息在指定条件下进行记录。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">    LOG_IF(INFO, i &gt;= <span class="number">8</span>) &lt;&lt; <span class="string">"LOG_IF i="</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    LOG_EVERY_N(INFO, <span class="number">5</span>) &lt;&lt; <span class="string">"LOG_EVERY_N i="</span> &lt;&lt; i &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    LOG_IF_EVERY_N(INFO, i &gt; <span class="number">2</span>, <span class="number">3</span>) &lt;&lt; <span class="string">"LOG_IF_EVERY_N i="</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    LOG_FIRST_N(INFO, <span class="number">3</span>) &lt;&lt; <span class="string">"LOG_FIRST_N i="</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>LOG_IF(severity, condition)<br>表示满足条件condition的时候进行日志输出。对应上面代码而言是当I &gt;= 8的时候这条日志才输出，也就是输出LOG_IF i=8， LOG_IF i=9两条日志。</li>
+<li>LOG_EVERY_N(severity, n)<br>表示周期性的记录日志，在第0，n,2*n,…的时候进行记录日志。对应上面代码而言是当执行了1次和6次的是进行日志输出，也就是输出LOG_EVERY_N i = 0， LOG_EVERY_N I = 5两条日志。</li>
+<li>LOG_IF_EVERY_N(severity, condition, n)<br>表示在满足condition的时候每循环n次记录日志。对应上面代码而言当执行了i = 3,6,9的时候进行日志输出，也就是输出LOG_IF_EVERY_N i = 3，LOG_IF_EVERY_N i = 6，LOG_IF_EVERY_N i = 9三条日志。</li>
+<li>LOG_FIRST_N(severity, n)<br>表示在在低于n次的日志进行记录而大于的不进行记录。对应上面代码而言执行了i = 0,i = 1,i = 2的时候进行日志输出，也就是输出LOG_FIRST_N i = 0， LOG_FIRST_N i = 1， LOG_FIRST_N i = 2三条日志。<h3 id="调试宏"><a href="#调试宏" class="headerlink" title="调试宏"></a>调试宏</h3>调试模式的日志宏只在调试模式下有效，在非调试模式会被清除。可以避免生产环境的程序由于大量的日志而变慢。</li>
+<li>DLOG(INFO) &lt;&lt; “Found cookies”;  </li>
+<li>DLOG_IF(INFO, num_cookies &gt; 10) &lt;&lt; “Got lots of cookies”;    </li>
+<li>DLOG_EVERY_N(INFO, 10) &lt;&lt; “Got the “ &lt;&lt; google::COUNTER &lt;&lt; “th cookie”;  </li>
+</ol>
+<h3 id="CHECK宏"><a href="#CHECK宏" class="headerlink" title="CHECK宏"></a>CHECK宏</h3><p>常做状态检查以尽早发现错误是一个很好的编程习惯。CHECK 宏和标准库中的 assert 宏类似，可以在给定的条件不满足时终止程序。<br>CHECK 和 assert 不同的是，它不由 NDEBUG 控制，所以一直有效。因此下面的fp-&gt;Write(x) 会一直执行：</p>
+<ol>
+<li>CHECK(fp-&gt;Write(x) == 4) &lt;&lt; “Write failed!”;<br>有各种用于相等/不等检查的宏：CHECK_EQ, CHECK_NE, CHECK_LE, CHECK_LT, CHECK_GE, CHECK_GT。它们比较两个值，在不满足期望时打印包括这两个值的 FATAL 日志。注意这里的值需要定义了 operator&lt;&lt;(ostream, …)。例如：</li>
+<li>CHECK_NE(1, 2) &lt;&lt; “: The world must be ending!”;<br>每个参数都可以保证只用一次，所以任何可以做为函数参数的都可以传给它。参数也可以是临时的表达式，比如：</li>
+<li>CHECK_EQ(string(“abc”)[1], ‘b’);<br>如果一个参数是指针，另一个是 NULL ，编译器会报错。可以给 NULL 加上对应类型的static_cast 来绕过。</li>
+<li>CHECK_EQ(some_ptr, static_cast&lt;SomeType*&gt;(NULL));<br>更好的办法是用 CHECK_NOTNULL 宏：</li>
+<li>CHECK_NOTNULL(some_ptr);  </li>
+<li>some_ptr-&gt;DoSomething();<br>该宏会返回传入的指针，因此在构造函数的初始化列表中非常有用。<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S</span>   </span></span><br><span class="line"><span class="class">&#123;</span>  </span><br><span class="line">    S(Something* ptr) : ptr_(CHECK_NOTNULL(ptr)) &#123;&#125;  </span><br><span class="line">    Something* ptr_;  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+因为该特性，这个宏不能用作C++流。如果需要额外信息，请使用 CHECK_EQ。<br>如果是需要比较C字符串（char*），可以用 CHECK_STREQ, CHECK_STRNE, CHECK_STRCASEEQ, CHECK_STRCASENE。CASE 的版本是不区分大小写的。这里可以传入 NULL。NULL 和任何非 NULL 的字符串是不等的，两个 NULL 是相等的。<br>这里的参数都可以是临时字符串，比如 CHECK_STREQ(Foo().c_str(), Bar().c_str())。<br>CHECK_DOUBLE_EQ 宏可以用来检查两个浮点值是否等价，允许一点误差。CHECK_NEAR 还可以传入第三个浮点参数，指定误差。</li>
+</ol>
+<h3 id="日志类型"><a href="#日志类型" class="headerlink" title="日志类型"></a>日志类型</h3><ol>
+<li>LOG     // 内置日志  </li>
+<li>VLOG    // 自定义日志  </li>
+<li>DLOG    // DEBUG模式可输出的日志  </li>
+<li>DVLOG   // DEBUG模式可输出的自定义日志  </li>
+<li>SYSLOG  // 系统日志，同时通过 syslog() 函数写入到 /var/log/message 文件  </li>
+<li>PLOG    // perror风格日志，设置errno状态并输出到日志中</li>
+<li>RAW_LOG // 线程安全的日志，需要#include &lt;glog/raw_logging.h&gt;<br>RAW_LOG不支持条件日志输出，其他的日志输出方式相同。</li>
+</ol>
+<h3 id="CORE-DUMPED"><a href="#CORE-DUMPED" class="headerlink" title="CORE DUMPED"></a>CORE DUMPED</h3><p>针对可能导致程序崩溃的信号会输出dump信息<br>处理的信号包括：SIGSEGV, SIGILL, SIGABRT, SIGBUS, SIGTERM<br>相关信号处理函数：</p>
+<ol>
+<li>google::InstallFailureSignalHandler()  </li>
+<li>google::InstallFailureWriter(void (writer)(const char data,int size))<br>默认dump信息输出到STDERR,可通过该函数定制dump输出目标。<br>代码实例：(linux下)<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"glog/logging.h"</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SignalHandle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* data, <span class="keyword">int</span> <span class="built_in">size</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::ofstream <span class="title">fs</span><span class="params">(<span class="string">"glog_dump.log"</span>, <span class="built_in">std</span>::ios::app)</span></span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> str = <span class="built_in">std</span>::<span class="built_in">string</span>(data, <span class="built_in">size</span>);</span><br><span class="line">    fs &lt;&lt; str;</span><br><span class="line">    fs.<span class="built_in">close</span>();</span><br><span class="line">    LOG(ERROR) &lt;&lt; str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* pi = <span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line">    <span class="keyword">delete</span> pi;</span><br><span class="line">    <span class="keyword">delete</span> pi; <span class="comment">// 测试一下double free</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    google::InitGoogleLogging(argv[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    FLAGS_log_dir = <span class="string">"."</span>;</span><br><span class="line"></span><br><span class="line">    google::InstallFailureSignalHandler();</span><br><span class="line">    google::InstallFailureWriter(&amp;SignalHandle);</span><br><span class="line"></span><br><span class="line">    fun();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">g++ -o testglog -lglog main.cpp</span><br><span class="line">Output：</span><br><span class="line">E0508 14:43:28.945094  8258 main.cpp:12] *** Aborted at 1470120208 (unix time) try <span class="string">"date -d @1470120208"</span> <span class="keyword">if</span> you are using GNU date ***</span><br><span class="line"> E0508 14:43:28.945556  8258 main.cpp:12] PC: @       0x392be32625 (unknown)</span><br><span class="line"> E0508 14:43:28.945590  8258 main.cpp:12] *** SIGABRT (@0x2042) received by PID 8258 (TID 0x7f6787edd720) from PID 8258; stack trace: ***</span><br><span class="line"> E0508 14:43:28.945752  8258 main.cpp:12]     @       0x392be326a0 (unknown)</span><br><span class="line"> E0508 14:43:28.945914  8258 main.cpp:12]     @       0x392be32625 (unknown)</span><br><span class="line"> E0508 14:43:28.946064  8258 main.cpp:12]     @       0x392be33e05 (unknown)</span><br><span class="line"> E0508 14:43:28.946216  8258 main.cpp:12]     @       0x392be70537 (unknown)</span><br><span class="line"> E0508 14:43:28.946390  8258 main.cpp:12]     @       0x392be75e66 (unknown)</span><br><span class="line"> E0508 14:43:28.946554  8258 main.cpp:12]     @       0x392be7897a (unknown)</span><br><span class="line"> E0508 14:43:28.946594  8258 main.cpp:12]     @           0x4011d8 fun()</span><br><span class="line"> E0508 14:43:28.946627  8258 main.cpp:12]     @           0x401220 main</span><br><span class="line"> E0508 14:43:28.946784  8258 main.cpp:12]     @       0x392be1ed5d (unknown)</span><br><span class="line"> E0508 14:43:28.946820  8258 main.cpp:12]     @           0x400f29 (unknown)</span><br><span class="line"> 已放弃 (core dumped)</span><br></pre></td></tr></table></figure>
+如果不使用google::InstallFailureSignalHandler()只会出现已放弃 (core dumped)其他信息无，难以排查问题。<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2>简单分为日志库的初始化，日志输出，信号捕获，关闭日志这几个方面。<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"glog/logging.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化glog日志库</span></span><br><span class="line"><span class="comment">// program为程序名称，如果是main函数直接传递argc[0]</span></span><br><span class="line">google::InitGoogleLogging(program);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径及命名设置</span></span><br><span class="line"><span class="comment">// 设置级别高于 google::INFO 的日志同时输出到屏幕,如果不要求可以屏蔽</span></span><br><span class="line">google::SetStderrLogging(google::INFO);</span><br><span class="line"><span class="comment">// 设置 google::INFO 级别的日志存储路径和文件名</span></span><br><span class="line">google::SetLogDestination(google::INFO, <span class="string">"./log/INFO_"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置 google::WARNING 级别的日志存储路径和文件名前缀</span></span><br><span class="line">google::SetLogDestination(google::WARNING,<span class="string">"./log/WARNING_"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置 google::ERROR 级别的日志存储路径和文件名前缀</span></span><br><span class="line">google::SetLogDestination(google::ERROR,<span class="string">"./log/ERROR_"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 系统设置</span></span><br><span class="line">FLAGS_logbufsecs = <span class="number">0</span>; <span class="comment">//缓冲日志输出，默认为30秒，此处改为立即输出</span></span><br><span class="line">FLAGS_max_log_size = <span class="number">100</span>; <span class="comment">//最大日志大小为 100MB</span></span><br><span class="line">FLAGS_stop_logging_if_full_disk = <span class="literal">true</span>; <span class="comment">//当磁盘被写满时，停止日志输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// core dump (linux)</span></span><br><span class="line"><span class="comment">// SignalHandle为回调函数，用于自定义处理glog捕获的信号信息。下面的函数暂时只能在linux下使用。</span></span><br><span class="line"><span class="comment">// 捕捉 core dump (linux)</span></span><br><span class="line">google::InstallFailureSignalHandler();</span><br><span class="line"><span class="comment">// 默认捕捉 SIGSEGV 信号信息输出会输出到 stderr (linux)</span></span><br><span class="line">google::InstallFailureWriter(&amp;SignalHandle);</span><br></pre></td></tr></table></figure>
+
+<h3 id="日志输出"><a href="#日志输出" class="headerlink" title="日志输出"></a>日志输出</h3><p>这里使用内置日志类型进行日志输出，使用方式与c++的stream操作类似。<br>•    使用不同的日志宏进行输出</p>
+<ol>
+<li>// info级别</li>
+<li>LOG(INFO) &lt;&lt; “info log”;</li>
+<li>// warning级别  </li>
+<li>LOG(WARNING) &lt;&lt; “warning log”;</li>
+<li>// error级别</li>
+<li>LOG(ERROR) &lt;&lt; “error log”;<br>•    字符组合输出</li>
+<li>const char* pchar = “this is const char*”;  </li>
+<li>std::string str   = “this is std::string”;  </li>
+<li>LOG(INFO) &lt;&lt; pchar;  </li>
+<li>LOG(INFO) &lt;&lt; str;  </li>
+<li>LOG(INFO) &lt;&lt; str &lt;&lt; “ and const string”;  <h3 id="关闭日志"><a href="#关闭日志" class="headerlink" title="关闭日志"></a>关闭日志</h3></li>
+<li>// 关闭日志库函数：  </li>
+<li>google::ShutdownGoogleLogging()</li>
+</ol>
+<p>附录一 glog APIs</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 初始化glog库，参数是第一个命令行参数即程序名  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InitGoogleLogging</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* argv0)</span>  </span></span><br><span class="line"><span class="function"><span class="comment">// 关闭glog库  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::ShutdownGoogleLogging</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 指定级别以上的所有日志消息都立即写入到日志文件中  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::FlushLogFiles</span><span class="params">(LoSeverity min_severity)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 非线程安全的输出指定级别以上的日志消息，用于灾难性程序问题时输出必要的日志消息  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::FlushLogFilesUnsafe</span><span class="params">(LogSeverity min_severity)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 设置指定级别的日志输出的日志文件  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::SetLogDestination</span><span class="params">(LogSeverity severity,<span class="keyword">const</span> <span class="keyword">char</span>* base_filename)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 为所有日志文件添加文件扩展名，特别用于SetLogDestination()设置的日志文件  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::SetLogFilenameExtension</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* filename_extension)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 确定除了输出到日志文件同时还输出到STDERR的日志最小级别  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::SetStderrLogging</span><span class="params">(LogSeverity min_severity)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// [Thread-safe]设置只将日志输出到STDERR而不输出到日志文件  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::LogToStderr</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 获取日志输出目录集合  </span></span></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&amp; <span class="title">google::GetLoggingDirectories</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 信号处理函数，处理的主要信号有SIGSEGV/SIGILL/SIGFPE/SIGBRT/SIGBUS/SIGTERM  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InstallFailureSignalHandler</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"><span class="comment">// 设置系统崩溃时的输出函数，data数据不一定是以'\0'结尾  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InstallFailureWriter</span><span class="params">(<span class="keyword">void</span> (writer)(<span class="keyword">const</span> <span class="keyword">char</span> data,<span class="keyword">int</span> <span class="built_in">size</span>))</span>  </span></span><br><span class="line"><span class="function"><span class="comment">// 设置LOG(FATAL)在输出日志消息后调用的函数  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InstallFailureFunction</span><span class="params">(<span class="keyword">void</span> (*fail_func)())</span></span></span><br></pre></td></tr></table></figure>
+<p>参考资料<br><a href="http://rpg.ifi.uzh.ch/docs/glog.html" target="_blank" rel="noopener">http://rpg.ifi.uzh.ch/docs/glog.html</a><br><a href="https://www.cnblogs.com/kuliuheng/p/5046101.html" target="_blank" rel="noopener">https://www.cnblogs.com/kuliuheng/p/5046101.html</a><br><a href="http://www.cnblogs.com/tianyajuanke/archive/2013/02/22/2921850.html" target="_blank" rel="noopener">http://www.cnblogs.com/tianyajuanke/archive/2013/02/22/2921850.html</a><br><a href="https://www.cppfans.org/1566.html" target="_blank" rel="noopener">https://www.cppfans.org/1566.html</a><br><a href="http://www.cnblogs.com/davidyang2415/p/3861112.html" target="_blank" rel="noopener">http://www.cnblogs.com/davidyang2415/p/3861112.html</a><br><a href="https://www.cnblogs.com/zhoug2020/p/5884598.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhoug2020/p/5884598.html</a><br><a href="http://www.yeolar.com/note/2014/12/20/glog/" target="_blank" rel="noopener">http://www.yeolar.com/note/2014/12/20/glog/</a></p>
+<p>Create by —  WuWei 2015/06/08 12:50</p>
+<p>Google Glog 支持的功能：  </p>
+<ul>
+<li>参数设置，以命令行参数的方式设置标志参数来控制日志记录行为  </li>
+<li>严重性分级，根据日志严重性分级记录日志  </li>
+<li>可有条件地记录日志信息  </li>
+<li>条件中止程序。丰富的条件判定宏，可预设程序终止条件  </li>
+<li>异常信号处理。程序异常情况，可自定义异常处理过程  </li>
+<li>支持debug功能。可只用于debug模式  </li>
+<li>自定义日志信息  </li>
+<li>线程安全日志记录方式  </li>
+<li>系统级日志记录  </li>
+<li>google perror风格日志信息  </li>
+<li>精简日志字符串信息  </li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>Google-Glog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 基础</title>
+    <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p><img src="/buckets/images/jztm.jpg" alt=""></p>
+<a id="more"></a>
+
+<h2 id="01-算数运算符"><a href="#01-算数运算符" class="headerlink" title="01. 算数运算符"></a>01. 算数运算符</h2><table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+</td>
+<td align="left">加</td>
+<td align="left">10 + 20 = 30</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">减</td>
+<td align="left">10 - 20 = -10</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">乘</td>
+<td align="left">10 * 20 = 200</td>
+</tr>
+<tr>
+<td align="left">/</td>
+<td align="left">除</td>
+<td align="left">10 / 3 = 3.3333333333333335</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">求模</td>
+<td align="left">10 % 3 = 1</td>
+</tr>
+<tr>
+<td align="left">//</td>
+<td align="left">整除</td>
+<td align="left">10 // 3 = 3</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂运算</td>
+<td align="left">10 ** 3 = 1000</td>
+</tr>
+</tbody></table>
+<!-- more -->
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = <span class="string">"小明"</span></span><br><span class="line">age = <span class="number">18</span></span><br><span class="line">print(<span class="string">"姓名："</span>, name, <span class="string">" 年龄："</span>, age)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="python-变量类型"><a href="#python-变量类型" class="headerlink" title="python 变量类型"></a>python 变量类型</h2><ul>
+<li>数值型<ul>
+<li>整型</li>
+<li>浮点型</li>
+<li>布尔型</li>
+</ul>
+</li>
+<li>非数值型<ul>
+<li>字符串</li>
+<li>元组</li>
+<li>列表</li>
+<li>字典</li>
+</ul>
+</li>
+</ul>
+<h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> list:</span><br><span class="line">    statment</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> condeation:</span><br><span class="line">    statment <span class="comment"># 语句</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">while</span> condeation:</span><br><span class="line">    statment</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+</search>
