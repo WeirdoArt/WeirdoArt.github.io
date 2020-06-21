@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#fff">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fff">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Courier new:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"weirdoart.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"swoopIn","post_header":"slideDownBigIn","post_body":"slideDownBigIn","coll_header":"slideLeftBigIn","sidebar":"perspectiveUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Google glog 使用详解">
+<meta property="og:url" content="https://weirdoart.github.io/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="無為 | Weirdo Art">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdoart.github.io/buckets/images/pla1.jpg">
+<meta property="article:published_time" content="2015-06-08T04:28:37.000Z">
+<meta property="article:modified_time" content="2020-06-19T18:43:17.339Z">
+<meta property="article:author" content="Wu Wei">
+<meta property="article:tag" content="C&#x2F;C++">
+<meta property="article:tag" content="Google-Glog">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://weirdoart.github.io/buckets/images/pla1.jpg">
+
+<link rel="canonical" href="https://weirdoart.github.io/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Google glog 使用详解 | 無為 | Weirdo Art</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="無為 | Weirdo Art" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">無為 | Weirdo Art</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://weirdoart.github.io/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/buckets/images/avatar.jpg">
+      <meta itemprop="name" content="Wu Wei">
+      <meta itemprop="description" content="次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="無為 | Weirdo Art">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Google glog 使用详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2015-06-08 12:28:37" itemprop="dateCreated datePublished" datetime="2015-06-08T12:28:37+08:00">2015-06-08</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-20 02:43:17" itemprop="dateModified" datetime="2020-06-20T02:43:17+08:00">2020-06-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/" class="post-meta-item leancloud_visitors" data-flag-title="Google glog 使用详解" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/buckets/images/pla1.jpg" alt=""></p>
+<a id="more"></a>
+
+<h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><p>Google Glog是由Google使用C/C++语言开发的一个跨平台应用级日志记录框架。Glog对外提供类似C++流操作的输出模式和各种助手宏。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;glog/logging.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>* argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="comment">// Initialize Google's logging library.</span></span><br><span class="line">    google::InitGoogleLogging(argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="comment">// ...  </span></span><br><span class="line">    LOG(INFO) &lt;&lt; <span class="string">"Found "</span> &lt;&lt; num_cookies &lt;&lt; <span class="string">" cookies"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="链接-amp-下载"><a href="#链接-amp-下载" class="headerlink" title="链接&amp;下载"></a>链接&amp;下载</h3><p><a href="http://code.google.com/p/google-glog" target="_blank" rel="noopener">项目主页</a> —— 已迁移至Github</p>
+<p><a href="https://github.com/google/glog" target="_blank" rel="noopener">项目地址</a></p>
+<h3 id="Windows下编译"><a href="#Windows下编译" class="headerlink" title="Windows下编译"></a>Windows下编译</h3><ol>
+<li><p>进入glog文件目录</p>
+</li>
+<li><p>使用VS2013打开 <code>google-glog.sln</code></p>
+</li>
+<li><p>选择编译 <code>libglog_static</code> 项目</p>
+</li>
+<li><p>在对应的 <code>debug/release</code> 目录下生成 <code>libglog_static.lib</code></p>
+<h4 id="解决编译-libglog-static-项目出错"><a href="#解决编译-libglog-static-项目出错" class="headerlink" title="解决编译 libglog_static 项目出错"></a>解决编译 <code>libglog_static</code> 项目出错</h4></li>
+</ol>
+<ul>
+<li><p>查看项目配置中 <code>GOOGLE_GLOG_DLL_DECL=</code> 宏是否加入，包括今后使用的项目中也需要加入该宏。</p>
+</li>
+<li><p>查看文件 <code>logging.h</code> 是否引用windows的而非linux的，Windows的文件在 <code>...\src\windows\glog</code>目录下。  </p>
+</li>
+<li><p>链接的时候报出 <code>fatal error C1189: #error : ERROR macro is defined</code>.<br>  ​    C/C++ –&gt; 预处理器 –&gt; 预处理器定义 –&gt; 加上 <code>GLOG_NO_ABBREVIATED_SEVERITIES宏</code></p>
+<p>  Windows下文件位置说明：</p>
+<pre><code>`Libglog.*` 文件默认位置：解决方案 /Debug/ 
+源代码中头文件的路径：代码目录 `/src/windows/glog` 
+帮助文档路径：代码目录 `/doc/glog.html`</code></pre></li>
+</ul>
+<h3 id="Linux下编译-amp-安装"><a href="#Linux下编译-amp-安装" class="headerlink" title="Linux下编译&amp;安装"></a>Linux下编译&amp;安装</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">cd</span> glog <span class="comment"># 文件目录</span></span><br><span class="line">chmod +x configure <span class="comment">#如果没有权限的话需要设置执行权限</span></span><br><span class="line">./configure</span><br><span class="line">./make</span><br><span class="line">./make inatall</span><br></pre></td></tr></table></figure>
+
+<h3 id="其他说明"><a href="#其他说明" class="headerlink" title="其他说明"></a>其他说明</h3><p>Linux下：<br>libglog.so文件默认安装路径是/usr/local/lib，需要将建立软链接<br>源代码中头文件的路径：代码目录/src/glog<br>帮助文档路径：代码目录/doc/glog.html  </p>
+<p>Linux下安装完glog的输出：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">make[1]: Entering directory <span class="string">'/home/wuwei/glog/glog-0.3.4'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/lib'</span>    </span><br><span class="line">    /bin/bash ./libtool   --mode=install /usr/bin/install -c   libglog.la <span class="string">'/usr/local/lib'</span>    </span><br><span class="line">    libtool: install: /usr/bin/install -c .libs/libglog.so.0.0.0 /usr/<span class="built_in">local</span>/lib/libglog.so.0.0.0    </span><br><span class="line">    libtool: install: (<span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib &amp;&amp; &#123; ln -s -f libglog.so.0.0.0 libglog.so.0 || &#123; rm -f libglog.so.0 &amp;&amp; ln -s libglog.so.0.0.0 libglog.so.0; &#125;; &#125;)    </span><br><span class="line">    libtool: install: (<span class="built_in">cd</span> /usr/<span class="built_in">local</span>/lib &amp;&amp; &#123; ln -s -f libglog.so.0.0.0 libglog.so || &#123; rm -f libglog.so &amp;&amp; ln -s libglog.so.0.0.0 libglog.so; &#125;; &#125;)    </span><br><span class="line">    libtool: install: /usr/bin/install -c .libs/libglog.lai /usr/<span class="built_in">local</span>/lib/libglog.la    </span><br><span class="line">    libtool: install: /usr/bin/install -c .libs/libglog.a /usr/<span class="built_in">local</span>/lib/libglog.a    </span><br><span class="line">    libtool: install: chmod 644 /usr/<span class="built_in">local</span>/lib/libglog.a    </span><br><span class="line">    libtool: install: ranlib /usr/<span class="built_in">local</span>/lib/libglog.a    </span><br><span class="line">    libtool: finish: PATH=<span class="string">"/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/snap/bin:/sbin"</span> ldconfig -n /usr/<span class="built_in">local</span>/lib    </span><br><span class="line">----------------------------------------------------------------------    </span><br><span class="line">已经安装了库在以下目录:    </span><br><span class="line">    /usr/<span class="built_in">local</span>/lib    </span><br><span class="line">        </span><br><span class="line">如果您碰巧要链接到给定目录LIBDIR中已安装的库，则必须使用libtool，并指定库的完整路径名，或者在链接期间使用<span class="string">'-LLIBDIR'</span>标志并至少执行其中一个 以下：  </span><br><span class="line">    - 在执行期间将LIBDIR添加到<span class="string">'LD_LIBRARY_PATH'</span>环境变量中  </span><br><span class="line">    - 在链接期间将LIBDIR添加到<span class="string">'LD_RUN_PATH'</span>环境变量中  </span><br><span class="line">    - 使用<span class="string">'-Wl, -rpath -Wl, LIBDIR'</span>链接器标志  </span><br><span class="line">    - 让系统管理员将LIBDIR添加到<span class="string">'/etc/ld.so.conf'</span>   </span><br><span class="line">    </span><br><span class="line">有关更多信息，请参阅有关共享库的任何操作系统文档，例如ld（1）和ld.so（8）手册页。   </span><br><span class="line">----------------------------------------------------------------------    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/share/doc/glog-0.3.4'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 AUTHORS COPYING ChangeLog INSTALL NEWS README README.windows doc/designstyle.css doc/glog.html <span class="string">'/usr/local/share/doc/glog-0.3.4'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 src/glog/log_severity.h <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 src/glog/logging.h src/glog/raw_logging.h src/glog/vlog_is_on.h src/glog/stl_logging.h <span class="string">'/usr/local/include/glog'</span>    </span><br><span class="line">    /bin/mkdir -p <span class="string">'/usr/local/lib/pkgconfig'</span>    </span><br><span class="line">    /usr/bin/install -c -m 644 libglog.pc <span class="string">'/usr/local/lib/pkgconfig'</span>    </span><br><span class="line">make[1]: Leaving directory <span class="string">'/home/wuwei/glog/glog-0.3.4'</span></span><br></pre></td></tr></table></figure>
+<p>头文件说明：<br>由于Glog自动生成Makefile，所以加入自己的代码二次封装后编译glog并不会把你的代码编译进去；这种情况下只能单独把glog打成库，二次封装的代码单独使用。<br>代码列表：<br>GlogHelper.h  GlogHelper.cc</p>
+<p>Glog安装后生成的pkg-config的libglog.pc文件</p>
+<p>配置PKG_CONFIG_PATH环境变量</p>
+<ol>
+<li>export PKG_CONFIG_PATH=/usr/local/lib/pkgconfig/  </li>
+</ol>
+<p>编译选项：（编译程序时候加入以下代码）</p>
+<ol>
+<li><code>pkg-config libglog --cflags --libs --print-errors</code>  </li>
+</ol>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><h3 id="日志级别"><a href="#日志级别" class="headerlink" title="日志级别"></a>日志级别</h3><p>Glog有4个日志级别，分别是 INFO, WARNING, ERROR, 和 FATAL。 以上是简写形式，可通过宏关闭简写形式，其原始定义是有GLOG_前缀，具体形式见源码。</p>
+<ol>
+<li>const int GLOG_INFO = 0, GLOG_WARNING = 1, GLOG_ERROR = 2, GLOG_FATAL = 3, NUM_SEVERITIES = 4;   </li>
+<li>const int INFO = GLOG_INFO, WARNING = GLOG_WARNING, ERROR = GLOG_ERROR,FATAL = GLOG_FATAL;<br>最严重级的FATAL级别,在输出FATAL日志消息后，会终止程序运行；<br>DEBUG模式中，DFATAL级别对应ERROR–便于调试，而非DEBUG模式则对应FATAL<h3 id="标记设置"><a href="#标记设置" class="headerlink" title="标记设置"></a>标记设置</h3></li>
+</ol>
+<h3 id="日志文件命名规则"><a href="#日志文件命名规则" class="headerlink" title="日志文件命名规则"></a>日志文件命名规则</h3><h4 id="2-3-1-不做任何设置的情况下日志文件的命名规则为："><a href="#2-3-1-不做任何设置的情况下日志文件的命名规则为：" class="headerlink" title="2.3.1 不做任何设置的情况下日志文件的命名规则为："></a>2.3.1 不做任何设置的情况下日志文件的命名规则为：</h4><p>“/tmp/<program name>.<hostname>.<user name>.log.<severity level>.<date>.<time>.<pid>“<br>•    /tmp/:         日志保存的默认目录<br>•    program name:     程序名称也就是google::InitGoogleLogging(argv[0])传入argv[0]的含义。<br>•    hostname：        PC主机名称<br>•    user name：        当前用户名称<br>•    log：            log标记<br>•    severity level：    日志级别 info，warning，error，fatal<br>•    date：         日期<br>•    time：         当前时间<br>•    pid：             进程ID<br>例如： Glog.exe.WUWEI.WuWei.log.INFO.20180508-124705.17928<br>特别注意： 日志文件默认存放在临时目录中，windows下是“C:\Users\user_name\AppData\Local\Temp”, Linux 是 “/tmp”<br>可以通过配置 FLAGS_log_dir 来进行设置需要输出的文件路径。<br>•    2.3.2 设置log配置参数后的命名规则<br>&lt; 自定义的前缀 &gt;&lt; date &gt;-&lt; time &gt;.&lt; pid &gt;<br>通过如下函数设置日志级别的路径和文件名：</p>
+<ol>
+<li>// 设置 google::INFO 级别的日志存储路径文件名前缀</li>
+<li>google::SetLogDestination(google::INFO, “./log/INFO_”);  </li>
+<li>// 设置 google::WARNING 级别的日志存储路径和文件名前缀  </li>
+<li>google::SetLogDestination(google::WARNING,”./log/WARNING_”);  </li>
+<li>// 设置 google::ERROR 级别的日志存储路径和文件名前缀  </li>
+<li>google::SetLogDestination(google::ERROR,”./log/ERROR_”);<br>例如： INFO_20180514-102032.6048</li>
+</ol>
+<h3 id="日志消息命名规则"><a href="#日志消息命名规则" class="headerlink" title="日志消息命名规则"></a>日志消息命名规则</h3><p>Log line format:<br>[IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg<br>•    IWEF:         Info，Warning，Error，Fatal<br>•    mmdd:         月日<br>•    hh:mm:ss.uuuuuu:     小时，分钟，秒，毫秒<br>•    threadid:         线程ID<br>•    file:line:         文件名及其代码行数<br>•    ]:             固定格式结束标记<br>•    msg:             具体的消息<br>例如： I0508 13:39:30.665004 8481 main.cpp:28] CommOpt service init begin<br> 如INFO级别的日志包含其他高级别的所有日志，ERROR级别的日志只包含ERROR和FATAL两个级别。</p>
+<h3 id="按照条件记录日志信息"><a href="#按照条件记录日志信息" class="headerlink" title="按照条件记录日志信息"></a>按照条件记录日志信息</h3><p>glog可以控制日志信息在指定条件下进行记录。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ( <span class="keyword">int</span> i = <span class="number">0</span> ; i &lt; <span class="number">10</span>; i++)</span><br><span class="line">&#123;</span><br><span class="line">    LOG_IF(INFO, i &gt;= <span class="number">8</span>) &lt;&lt; <span class="string">"LOG_IF i="</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    LOG_EVERY_N(INFO, <span class="number">5</span>) &lt;&lt; <span class="string">"LOG_EVERY_N i="</span> &lt;&lt; i &lt;&lt;<span class="built_in">endl</span>;</span><br><span class="line">    LOG_IF_EVERY_N(INFO, i &gt; <span class="number">2</span>, <span class="number">3</span>) &lt;&lt; <span class="string">"LOG_IF_EVERY_N i="</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">    LOG_FIRST_N(INFO, <span class="number">3</span>) &lt;&lt; <span class="string">"LOG_FIRST_N i="</span> &lt;&lt; i &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>LOG_IF(severity, condition)<br>表示满足条件condition的时候进行日志输出。对应上面代码而言是当I &gt;= 8的时候这条日志才输出，也就是输出LOG_IF i=8， LOG_IF i=9两条日志。</li>
+<li>LOG_EVERY_N(severity, n)<br>表示周期性的记录日志，在第0，n,2*n,…的时候进行记录日志。对应上面代码而言是当执行了1次和6次的是进行日志输出，也就是输出LOG_EVERY_N i = 0， LOG_EVERY_N I = 5两条日志。</li>
+<li>LOG_IF_EVERY_N(severity, condition, n)<br>表示在满足condition的时候每循环n次记录日志。对应上面代码而言当执行了i = 3,6,9的时候进行日志输出，也就是输出LOG_IF_EVERY_N i = 3，LOG_IF_EVERY_N i = 6，LOG_IF_EVERY_N i = 9三条日志。</li>
+<li>LOG_FIRST_N(severity, n)<br>表示在在低于n次的日志进行记录而大于的不进行记录。对应上面代码而言执行了i = 0,i = 1,i = 2的时候进行日志输出，也就是输出LOG_FIRST_N i = 0， LOG_FIRST_N i = 1， LOG_FIRST_N i = 2三条日志。<h3 id="调试宏"><a href="#调试宏" class="headerlink" title="调试宏"></a>调试宏</h3>调试模式的日志宏只在调试模式下有效，在非调试模式会被清除。可以避免生产环境的程序由于大量的日志而变慢。</li>
+<li>DLOG(INFO) &lt;&lt; “Found cookies”;  </li>
+<li>DLOG_IF(INFO, num_cookies &gt; 10) &lt;&lt; “Got lots of cookies”;    </li>
+<li>DLOG_EVERY_N(INFO, 10) &lt;&lt; “Got the “ &lt;&lt; google::COUNTER &lt;&lt; “th cookie”;  </li>
+</ol>
+<h3 id="CHECK宏"><a href="#CHECK宏" class="headerlink" title="CHECK宏"></a>CHECK宏</h3><p>常做状态检查以尽早发现错误是一个很好的编程习惯。CHECK 宏和标准库中的 assert 宏类似，可以在给定的条件不满足时终止程序。<br>CHECK 和 assert 不同的是，它不由 NDEBUG 控制，所以一直有效。因此下面的fp-&gt;Write(x) 会一直执行：</p>
+<ol>
+<li>CHECK(fp-&gt;Write(x) == 4) &lt;&lt; “Write failed!”;<br>有各种用于相等/不等检查的宏：CHECK_EQ, CHECK_NE, CHECK_LE, CHECK_LT, CHECK_GE, CHECK_GT。它们比较两个值，在不满足期望时打印包括这两个值的 FATAL 日志。注意这里的值需要定义了 operator&lt;&lt;(ostream, …)。例如：</li>
+<li>CHECK_NE(1, 2) &lt;&lt; “: The world must be ending!”;<br>每个参数都可以保证只用一次，所以任何可以做为函数参数的都可以传给它。参数也可以是临时的表达式，比如：</li>
+<li>CHECK_EQ(string(“abc”)[1], ‘b’);<br>如果一个参数是指针，另一个是 NULL ，编译器会报错。可以给 NULL 加上对应类型的static_cast 来绕过。</li>
+<li>CHECK_EQ(some_ptr, static_cast&lt;SomeType*&gt;(NULL));<br>更好的办法是用 CHECK_NOTNULL 宏：</li>
+<li>CHECK_NOTNULL(some_ptr);  </li>
+<li>some_ptr-&gt;DoSomething();<br>该宏会返回传入的指针，因此在构造函数的初始化列表中非常有用。<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">S</span>   </span></span><br><span class="line"><span class="class">&#123;</span>  </span><br><span class="line">    S(Something* ptr) : ptr_(CHECK_NOTNULL(ptr)) &#123;&#125;  </span><br><span class="line">    Something* ptr_;  </span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+因为该特性，这个宏不能用作C++流。如果需要额外信息，请使用 CHECK_EQ。<br>如果是需要比较C字符串（char*），可以用 CHECK_STREQ, CHECK_STRNE, CHECK_STRCASEEQ, CHECK_STRCASENE。CASE 的版本是不区分大小写的。这里可以传入 NULL。NULL 和任何非 NULL 的字符串是不等的，两个 NULL 是相等的。<br>这里的参数都可以是临时字符串，比如 CHECK_STREQ(Foo().c_str(), Bar().c_str())。<br>CHECK_DOUBLE_EQ 宏可以用来检查两个浮点值是否等价，允许一点误差。CHECK_NEAR 还可以传入第三个浮点参数，指定误差。</li>
+</ol>
+<h3 id="日志类型"><a href="#日志类型" class="headerlink" title="日志类型"></a>日志类型</h3><ol>
+<li>LOG     // 内置日志  </li>
+<li>VLOG    // 自定义日志  </li>
+<li>DLOG    // DEBUG模式可输出的日志  </li>
+<li>DVLOG   // DEBUG模式可输出的自定义日志  </li>
+<li>SYSLOG  // 系统日志，同时通过 syslog() 函数写入到 /var/log/message 文件  </li>
+<li>PLOG    // perror风格日志，设置errno状态并输出到日志中</li>
+<li>RAW_LOG // 线程安全的日志，需要#include &lt;glog/raw_logging.h&gt;<br>RAW_LOG不支持条件日志输出，其他的日志输出方式相同。</li>
+</ol>
+<h3 id="CORE-DUMPED"><a href="#CORE-DUMPED" class="headerlink" title="CORE DUMPED"></a>CORE DUMPED</h3><p>针对可能导致程序崩溃的信号会输出dump信息<br>处理的信号包括：SIGSEGV, SIGILL, SIGABRT, SIGBUS, SIGTERM<br>相关信号处理函数：</p>
+<ol>
+<li>google::InstallFailureSignalHandler()  </li>
+<li>google::InstallFailureWriter(void (writer)(const char data,int size))<br>默认dump信息输出到STDERR,可通过该函数定制dump输出目标。<br>代码实例：(linux下)<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;fstream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"glog/logging.h"</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">SignalHandle</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* data, <span class="keyword">int</span> <span class="built_in">size</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function"><span class="built_in">std</span>::ofstream <span class="title">fs</span><span class="params">(<span class="string">"glog_dump.log"</span>, <span class="built_in">std</span>::ios::app)</span></span>;</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> str = <span class="built_in">std</span>::<span class="built_in">string</span>(data, <span class="built_in">size</span>);</span><br><span class="line">    fs &lt;&lt; str;</span><br><span class="line">    fs.<span class="built_in">close</span>();</span><br><span class="line">    LOG(ERROR) &lt;&lt; str;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">fun</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span>* pi = <span class="keyword">new</span> <span class="keyword">int</span>;</span><br><span class="line">    <span class="keyword">delete</span> pi;</span><br><span class="line">    <span class="keyword">delete</span> pi; <span class="comment">// 测试一下double free</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span> <span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    google::InitGoogleLogging(argv[<span class="number">0</span>]);</span><br><span class="line"></span><br><span class="line">    FLAGS_log_dir = <span class="string">"."</span>;</span><br><span class="line"></span><br><span class="line">    google::InstallFailureSignalHandler();</span><br><span class="line">    google::InstallFailureWriter(&amp;SignalHandle);</span><br><span class="line"></span><br><span class="line">    fun();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">g++ -o testglog -lglog main.cpp</span><br><span class="line">Output：</span><br><span class="line">E0508 14:43:28.945094  8258 main.cpp:12] *** Aborted at 1470120208 (unix time) try <span class="string">"date -d @1470120208"</span> <span class="keyword">if</span> you are using GNU date ***</span><br><span class="line"> E0508 14:43:28.945556  8258 main.cpp:12] PC: @       0x392be32625 (unknown)</span><br><span class="line"> E0508 14:43:28.945590  8258 main.cpp:12] *** SIGABRT (@0x2042) received by PID 8258 (TID 0x7f6787edd720) from PID 8258; stack trace: ***</span><br><span class="line"> E0508 14:43:28.945752  8258 main.cpp:12]     @       0x392be326a0 (unknown)</span><br><span class="line"> E0508 14:43:28.945914  8258 main.cpp:12]     @       0x392be32625 (unknown)</span><br><span class="line"> E0508 14:43:28.946064  8258 main.cpp:12]     @       0x392be33e05 (unknown)</span><br><span class="line"> E0508 14:43:28.946216  8258 main.cpp:12]     @       0x392be70537 (unknown)</span><br><span class="line"> E0508 14:43:28.946390  8258 main.cpp:12]     @       0x392be75e66 (unknown)</span><br><span class="line"> E0508 14:43:28.946554  8258 main.cpp:12]     @       0x392be7897a (unknown)</span><br><span class="line"> E0508 14:43:28.946594  8258 main.cpp:12]     @           0x4011d8 fun()</span><br><span class="line"> E0508 14:43:28.946627  8258 main.cpp:12]     @           0x401220 main</span><br><span class="line"> E0508 14:43:28.946784  8258 main.cpp:12]     @       0x392be1ed5d (unknown)</span><br><span class="line"> E0508 14:43:28.946820  8258 main.cpp:12]     @           0x400f29 (unknown)</span><br><span class="line"> 已放弃 (core dumped)</span><br></pre></td></tr></table></figure>
+如果不使用google::InstallFailureSignalHandler()只会出现已放弃 (core dumped)其他信息无，难以排查问题。<h2 id="如何使用"><a href="#如何使用" class="headerlink" title="如何使用"></a>如何使用</h2>简单分为日志库的初始化，日志输出，信号捕获，关闭日志这几个方面。<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 包含头文件</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"glog/logging.h"</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化glog日志库</span></span><br><span class="line"><span class="comment">// program为程序名称，如果是main函数直接传递argc[0]</span></span><br><span class="line">google::InitGoogleLogging(program);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 路径及命名设置</span></span><br><span class="line"><span class="comment">// 设置级别高于 google::INFO 的日志同时输出到屏幕,如果不要求可以屏蔽</span></span><br><span class="line">google::SetStderrLogging(google::INFO);</span><br><span class="line"><span class="comment">// 设置 google::INFO 级别的日志存储路径和文件名</span></span><br><span class="line">google::SetLogDestination(google::INFO, <span class="string">"./log/INFO_"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置 google::WARNING 级别的日志存储路径和文件名前缀</span></span><br><span class="line">google::SetLogDestination(google::WARNING,<span class="string">"./log/WARNING_"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 设置 google::ERROR 级别的日志存储路径和文件名前缀</span></span><br><span class="line">google::SetLogDestination(google::ERROR,<span class="string">"./log/ERROR_"</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 系统设置</span></span><br><span class="line">FLAGS_logbufsecs = <span class="number">0</span>; <span class="comment">//缓冲日志输出，默认为30秒，此处改为立即输出</span></span><br><span class="line">FLAGS_max_log_size = <span class="number">100</span>; <span class="comment">//最大日志大小为 100MB</span></span><br><span class="line">FLAGS_stop_logging_if_full_disk = <span class="literal">true</span>; <span class="comment">//当磁盘被写满时，停止日志输出</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// core dump (linux)</span></span><br><span class="line"><span class="comment">// SignalHandle为回调函数，用于自定义处理glog捕获的信号信息。下面的函数暂时只能在linux下使用。</span></span><br><span class="line"><span class="comment">// 捕捉 core dump (linux)</span></span><br><span class="line">google::InstallFailureSignalHandler();</span><br><span class="line"><span class="comment">// 默认捕捉 SIGSEGV 信号信息输出会输出到 stderr (linux)</span></span><br><span class="line">google::InstallFailureWriter(&amp;SignalHandle);</span><br></pre></td></tr></table></figure>
+
+<h3 id="日志输出"><a href="#日志输出" class="headerlink" title="日志输出"></a>日志输出</h3><p>这里使用内置日志类型进行日志输出，使用方式与c++的stream操作类似。<br>•    使用不同的日志宏进行输出</p>
+<ol>
+<li>// info级别</li>
+<li>LOG(INFO) &lt;&lt; “info log”;</li>
+<li>// warning级别  </li>
+<li>LOG(WARNING) &lt;&lt; “warning log”;</li>
+<li>// error级别</li>
+<li>LOG(ERROR) &lt;&lt; “error log”;<br>•    字符组合输出</li>
+<li>const char* pchar = “this is const char*”;  </li>
+<li>std::string str   = “this is std::string”;  </li>
+<li>LOG(INFO) &lt;&lt; pchar;  </li>
+<li>LOG(INFO) &lt;&lt; str;  </li>
+<li>LOG(INFO) &lt;&lt; str &lt;&lt; “ and const string”;  <h3 id="关闭日志"><a href="#关闭日志" class="headerlink" title="关闭日志"></a>关闭日志</h3></li>
+<li>// 关闭日志库函数：  </li>
+<li>google::ShutdownGoogleLogging()</li>
+</ol>
+<p>附录一 glog APIs</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化glog库，参数是第一个命令行参数即程序名  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InitGoogleLogging</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* argv0)</span>  </span></span><br><span class="line"><span class="function"><span class="comment">// 关闭glog库  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::ShutdownGoogleLogging</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 指定级别以上的所有日志消息都立即写入到日志文件中  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::FlushLogFiles</span><span class="params">(LoSeverity min_severity)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 非线程安全的输出指定级别以上的日志消息，用于灾难性程序问题时输出必要的日志消息  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::FlushLogFilesUnsafe</span><span class="params">(LogSeverity min_severity)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 设置指定级别的日志输出的日志文件  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::SetLogDestination</span><span class="params">(LogSeverity severity,<span class="keyword">const</span> <span class="keyword">char</span>* base_filename)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 为所有日志文件添加文件扩展名，特别用于SetLogDestination()设置的日志文件  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::SetLogFilenameExtension</span><span class="params">(<span class="keyword">const</span> <span class="keyword">char</span>* filename_extension)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 确定除了输出到日志文件同时还输出到STDERR的日志最小级别  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::SetStderrLogging</span><span class="params">(LogSeverity min_severity)</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// [Thread-safe]设置只将日志输出到STDERR而不输出到日志文件  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::LogToStderr</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 获取日志输出目录集合  </span></span></span><br><span class="line"><span class="function"><span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">vector</span>&amp; <span class="title">google::GetLoggingDirectories</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function">   </span></span><br><span class="line"><span class="function"><span class="comment">// 信号处理函数，处理的主要信号有SIGSEGV/SIGILL/SIGFPE/SIGBRT/SIGBUS/SIGTERM  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InstallFailureSignalHandler</span><span class="params">()</span>  </span></span><br><span class="line"><span class="function"><span class="comment">// 设置系统崩溃时的输出函数，data数据不一定是以'\0'结尾  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InstallFailureWriter</span><span class="params">(<span class="keyword">void</span> (writer)(<span class="keyword">const</span> <span class="keyword">char</span> data,<span class="keyword">int</span> <span class="built_in">size</span>))</span>  </span></span><br><span class="line"><span class="function"><span class="comment">// 设置LOG(FATAL)在输出日志消息后调用的函数  </span></span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">google::InstallFailureFunction</span><span class="params">(<span class="keyword">void</span> (*fail_func)())</span></span></span><br></pre></td></tr></table></figure>
+<p>参考资料<br><a href="http://rpg.ifi.uzh.ch/docs/glog.html" target="_blank" rel="noopener">http://rpg.ifi.uzh.ch/docs/glog.html</a><br><a href="https://www.cnblogs.com/kuliuheng/p/5046101.html" target="_blank" rel="noopener">https://www.cnblogs.com/kuliuheng/p/5046101.html</a><br><a href="http://www.cnblogs.com/tianyajuanke/archive/2013/02/22/2921850.html" target="_blank" rel="noopener">http://www.cnblogs.com/tianyajuanke/archive/2013/02/22/2921850.html</a><br><a href="https://www.cppfans.org/1566.html" target="_blank" rel="noopener">https://www.cppfans.org/1566.html</a><br><a href="http://www.cnblogs.com/davidyang2415/p/3861112.html" target="_blank" rel="noopener">http://www.cnblogs.com/davidyang2415/p/3861112.html</a><br><a href="https://www.cnblogs.com/zhoug2020/p/5884598.html" target="_blank" rel="noopener">https://www.cnblogs.com/zhoug2020/p/5884598.html</a><br><a href="http://www.yeolar.com/note/2014/12/20/glog/" target="_blank" rel="noopener">http://www.yeolar.com/note/2014/12/20/glog/</a></p>
+<p>Create by —  WuWei 2015/06/08 12:50</p>
+<p>Google Glog 支持的功能：  </p>
+<ul>
+<li>参数设置，以命令行参数的方式设置标志参数来控制日志记录行为  </li>
+<li>严重性分级，根据日志严重性分级记录日志  </li>
+<li>可有条件地记录日志信息  </li>
+<li>条件中止程序。丰富的条件判定宏，可预设程序终止条件  </li>
+<li>异常信号处理。程序异常情况，可自定义异常处理过程  </li>
+<li>支持debug功能。可只用于debug模式  </li>
+<li>自定义日志信息  </li>
+<li>线程安全日志记录方式  </li>
+<li>系统级日志记录  </li>
+<li>google perror风格日志信息  </li>
+<li>精简日志字符串信息  </li>
+</ul>
+
+    </div>
+
+    <!--文章结束语-->
+    <div>
+          
+              <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              ------------- 本文结束 <i color: "#ff0000" class="fa fa-heart"></i> 感谢您的阅读-------------
+        </div>
+    
+</div>
+              
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/">Google glog 使用详解</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wu Wei 的个人博客">Wu Wei</a></p>
+  <p><span>发布时间:</span>2015年06月08日 - 12:28</p>
+  <p><span>最后更新:</span>2020年06月20日 - 02:43</p>
+  <p><span>原始链接:</span><a href="/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/" title="Google glog 使用详解">https://weirdoart.github.io/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://weirdoart.github.io/2015/06/08/Other/Google-glog-%E4%BD%BF%E7%94%A8%E8%AF%A6%E8%A7%A3/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+          
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-C/" rel="tag"># C/C++</a>
+              <a href="/tags/Google-Glog/" rel="tag"># Google-Glog</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/" rel="prev" title="C++ 面向对象程序设计">
+      <i class="fa fa-chevron-left"></i> C++ 面向对象程序设计
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/" rel="next" title="C++ STL 泛型编程">
+      C++ STL 泛型编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#简介"><span class="nav-number">1.</span> <span class="nav-text">简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#链接-amp-下载"><span class="nav-number">1.1.</span> <span class="nav-text">链接&amp;下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Windows下编译"><span class="nav-number">1.2.</span> <span class="nav-text">Windows下编译</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#解决编译-libglog-static-项目出错"><span class="nav-number">1.2.1.</span> <span class="nav-text">解决编译 libglog_static 项目出错</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Linux下编译-amp-安装"><span class="nav-number">1.3.</span> <span class="nav-text">Linux下编译&amp;安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他说明"><span class="nav-number">1.4.</span> <span class="nav-text">其他说明</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能"><span class="nav-number">2.</span> <span class="nav-text">功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#日志级别"><span class="nav-number">2.1.</span> <span class="nav-text">日志级别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标记设置"><span class="nav-number">2.2.</span> <span class="nav-text">标记设置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志文件命名规则"><span class="nav-number">2.3.</span> <span class="nav-text">日志文件命名规则</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-1-不做任何设置的情况下日志文件的命名规则为："><span class="nav-number">2.3.1.</span> <span class="nav-text">2.3.1 不做任何设置的情况下日志文件的命名规则为：</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志消息命名规则"><span class="nav-number">2.4.</span> <span class="nav-text">日志消息命名规则</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按照条件记录日志信息"><span class="nav-number">2.5.</span> <span class="nav-text">按照条件记录日志信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#调试宏"><span class="nav-number">2.6.</span> <span class="nav-text">调试宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CHECK宏"><span class="nav-number">2.7.</span> <span class="nav-text">CHECK宏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志类型"><span class="nav-number">2.8.</span> <span class="nav-text">日志类型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#CORE-DUMPED"><span class="nav-number">2.9.</span> <span class="nav-text">CORE DUMPED</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何使用"><span class="nav-number">3.</span> <span class="nav-text">如何使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#初始化"><span class="nav-number">3.1.</span> <span class="nav-text">初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志输出"><span class="nav-number">3.2.</span> <span class="nav-text">日志输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#关闭日志"><span class="nav-number">3.3.</span> <span class="nav-text">关闭日志</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Wei"
+      src="/buckets/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Wu Wei</p>
+  <div class="site-description" itemprop="description">次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+  
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WeirdoArt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wuwei.gt@gmail.com" title="E-Mail → mailto:wuwei.gt@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/WeirdoArt" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/WeirdoArt" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/WeirdoArt" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i></a>
+      </span>
+  </div>
+  <cdnter><hr style="width:200px; height:2px; margin:5px;"></hr></center>
+  <div id="music163player">
+    <!--网易云音乐-->
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=280 height=110 
+          src="//music.163.com/outchain/player?type=0&id=5074011772&auto=1&height=90">
+    </iframe>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      推荐阅读
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/#more" title="https:&#x2F;&#x2F;weirdoart.github.io&#x2F;2017&#x2F;03&#x2F;25&#x2F;Algorithm%20Notes&#x2F;Dynamic%20Programming&#x2F;#more">Dynamic Programming</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Wei</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="60" alpha="0.8" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/three-waves.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/canvas_lines.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  <script src="//code.tidio.co/asv4oopghzd5zcesocwg0tz9vukbop9q.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'MCudlPSDdytvFwqK133Fd7Jc-gzGzoHsz',
+      appKey     : 'pamfC1mrqvgzufLSDXSjKAmh',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : 'https://mcudlpsd.lc-cn-n1-shared.com'
+    });
+  }, window.Valine);
+});
+</script>
+
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+  
+</body>
+</html>

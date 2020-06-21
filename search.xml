@@ -13,8 +13,7 @@
 <p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
 <h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
 <p>ok！以一个简单的例子开始！</p>
-<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><p>$$<br>f_n =<br>\left {<br>\begin{array}{c}<br>f_1=f_2=1 \<br>f_n-_1+f_n-_2<br>\end{array}<br>\right.<br>$$</p>
-<blockquote>
+<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><blockquote>
 <p> 测试程序：</p>
 </blockquote>
 <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -145,74 +144,22 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 2.0 新特性</title>
-    <url>/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a3.png" alt=""></p>
+    <title>C++ 内存管理</title>
+    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
 <a id="more"></a>
 
-<p align="right">———— C++ 11/14          </p>
+<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
 
-<p>本文是基于侯捷老师的《C++11/14 新标准》课程所做的总结。非常感谢侯捷老师，我看过他很多课程和他的书籍，他是我在C++这条道路上的启蒙老师，是他让我真正的学会C++这门语言。侯捷老师的课程有很多，比如《C++ 面向对象高级开发》、《C++内存管理》、《C++ STL 与泛型编程》《C++ Startup 揭密：C++ 程序的生前和死后》……；当然侯捷老师的书籍也很多，例如《STL 源码剖析》，译作也很多，像 effective 那一系列的。如下：</p>
-<p>![侯捷老师课程列表](C:\Users\Administrator\Desktop\C++ Notes\images\1591459395(1).jpg)</p>
-<p>在此特别说明一下个人观点：我特别不喜欢看中文作者写的书，即使本人英文水平有限；我相信有很多像我一样的同学会有跟我一样的想法，因为中文作者写的书大多自己都表达不清楚，你看他写的书籍你常常会感觉在看天书，当然我说的是部分中文作者或者说是大部分。这不是崇洋媚外，如果你经常看老外写的书籍，你会很轻松的被作者带入他的思维模式，你会不由自主的跟着他的节奏和思维去掐到技术关键点。一些中文作者写的书完全是在误人子弟！看了都想吐…恶心！！！</p>
-<p>给大家推荐一个翻译器，一个比 google 做的还好的翻译机，国内的什么有道啦，百度翻译啦。。。纯属扯淡，你应该远离这些垃圾软件。</p>
-<p>OK，以下是总结！</p>
-<h1 id="C-Standard-的演化"><a href="#C-Standard-的演化" class="headerlink" title="C++ Standard 的演化"></a>C++ Standard 的演化</h1><ul>
-<li><font color=#FF0000><strong>C++ 98（1.0）</strong></font></li>
-<li>C++ 03（TR1, Technical Report 1）</li>
-<li><font color=#FF0000><strong>C++ 11（2.0）</strong></font></li>
-<li>C++ 14（对于11的小的补充）</li>
-<li>C++ 17</li>
-<li>C++ 20（协程支持等特性）</li>
-</ul>
-<p>由于C++从C++ 11版本开始算是一个里程碑式的更新，所以可以认为C++进入2.0时代。关于C++2.0的新特性可以分为语言部分和标准库部分。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><ul>
-<li><a href="http://www.stroustrup.com/C++11FAQ.html" target="_blank" rel="noopener" title="C++ 11 新标准完整列表">由 C++ 之父 Bjarne Stroustrup 撰写并维护的C++ 11 新标准的完整列表</a></li>
-<li><a href="http://www.cplusplus.com" target="_blank" rel="noopener" title="C++ 权威指南">C++ 权威指南</a></li>
-<li><a href="https://en.cppreference.com" target="_blank" rel="noopener" title="C++ 参考指南">C++ 参考指南</a></li>
-<li><a href="http://gcc.gnu.org" target="_blank" rel="noopener" title="GCC 官方参考">GCC 官方参考</a></li>
-</ul>
-<h2 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h2><ul>
-<li>The C++ Standard Library (Second Edition)</li>
-<li>C++ Primer (Fifth Edition)</li>
-<li>The C++ Programming Language (Fourth Edition)</li>
-<li><font color=#FF0000><strong>Effective Modern C++ (Scott Meyers)</strong></font></li>
-</ul>
-<h1 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h1><h2 id="第一步，确认支持C-11：macro-——-cplusplus"><a href="#第一步，确认支持C-11：macro-——-cplusplus" class="headerlink" title="第一步，确认支持C++ 11：macro ——__cplusplus"></a>第一步，确认支持C++ 11：macro ——<code>__cplusplus</code></h2><p>在C++ 2.0之前（C++ 98），<code>__cplusplus</code> 被定义为199711L，C++ 11开始，它将被设置为大于199711L（201103L）<br>这个宏可以用来判断编译器所支持C++标准的版本</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; __cplusplus &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 验证编译器所支持的C++版本</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p align="center"><font color=#2F2AC4 size="5">万丈高楼平地起</font></p>
+<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
 
-<h2 id="Variadic-Templates（可变参数模板）"><a href="#Variadic-Templates（可变参数模板）" class="headerlink" title="Variadic Templates（可变参数模板）"></a>Variadic Templates（可变参数模板）</h2><h3 id="语法定义"><a href="#语法定义" class="headerlink" title="语法定义"></a>语法定义</h3><h3 id="应用方向"><a href="#应用方向" class="headerlink" title="应用方向"></a>应用方向</h3><ul>
-<li>函数的递归调用</li>
-</ul>
-<ul>
-<li>类的递归继承</li>
-</ul>
-<h2 id="Initializer-lists（初始化列表）"><a href="#Initializer-lists（初始化列表）" class="headerlink" title="Initializer lists（初始化列表）"></a>Initializer lists（初始化列表）</h2><h2 id="Range－based-for-statement（基于范围的-for-语句）"><a href="#Range－based-for-statement（基于范围的-for-语句）" class="headerlink" title="Range－based for statement（基于范围的 for 语句）"></a>Range－based for statement（基于范围的 for 语句）</h2><blockquote>
-<p>官方解释：</p>
-<p>range for语句允许你在一个 “范围 “中进行迭代，它是任何你可以迭代的东西，就像一个由 <code>begin()</code> 和 <code>end()</code> 定义的STL序列。所有标准的容器都可以作为一个范围，<code>std::string</code> 、初始化器列表、数组以及任何你定义了 <code>begin()</code> 和 <code>end()</code> 的东西都可以作为一个范围，例如一个 <code>istream</code>。</p>
-</blockquote>
-<ul>
-<li>语法规则</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ( decl : coll ) &#123;</span><br><span class="line">	statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于：</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=coll.<span class="built_in">begin</span>(), _end=coll.<span class="built_in">end</span>(); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=<span class="built_in">begin</span>(coll), _end=<span class="built_in">end</span>(coll); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i : &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合 auto 用法</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> elem : vec) &#123; <span class="comment">// 简化代码 --&gt; vector&lt;int&gt;::iterator iter</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> 注意要执行的操作是否是需要“写”</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; elem : vec) &#123;</span><br><span class="line">    elem *= <span class="number">3</span>; <span class="comment">// 如果需要改变值，上面的接收变量需要传引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Control-of-defaults-default-and-delete"><a href="#Control-of-defaults-default-and-delete" class="headerlink" title="Control of defaults: default and delete"></a>Control of defaults: default and delete</h2><h1 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h1><h2 id="Rvalue-reference"><a href="#Rvalue-reference" class="headerlink" title="Rvalue reference"></a>Rvalue reference</h2><blockquote>
-<p>左值：</p>
-<p>右值：</p>
-</blockquote>
-<h3 id="Rvalue-reference-and-Move-Semantics"><a href="#Rvalue-reference-and-Move-Semantics" class="headerlink" title="Rvalue reference and Move Semantics"></a>Rvalue reference and Move Semantics</h3><h3 id="Perfect-Forwarding"><a href="#Perfect-Forwarding" class="headerlink" title="Perfect Forwarding"></a>Perfect Forwarding</h3><hr>
-]]></content>
+<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
       <tags>
-        <tag>C++ 11/14</tag>
-        <tag>C++ 2.0</tag>
+        <tag>C/C++</tag>
       </tags>
   </entry>
   <entry>
@@ -721,17 +668,96 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 内存管理</title>
-    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
+    <title>C++ 2.0 新特性</title>
+    <url>/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a3.png" alt=""></p>
 <a id="more"></a>
 
-<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
+<p align="right">———— C++ 11/14          </p>
 
-<p align="center"><font color=#2F2AC4 size="5">万丈高楼平地起</font></p>
-<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
+<p>本文是基于侯捷老师的《C++11/14 新标准》课程所做的总结。非常感谢侯捷老师，我看过他很多课程和他的书籍，他是我在C++这条道路上的启蒙老师，是他让我真正的学会C++这门语言。侯捷老师的课程有很多，比如《C++ 面向对象高级开发》、《C++内存管理》、《C++ STL 与泛型编程》《C++ Startup 揭密：C++ 程序的生前和死后》……；当然侯捷老师的书籍也很多，例如《STL 源码剖析》，译作也很多，像 effective 那一系列的。如下：</p>
+<p>![侯捷老师课程列表](C:\Users\Administrator\Desktop\C++ Notes\images\1591459395(1).jpg)</p>
+<p>在此特别说明一下个人观点：我特别不喜欢看中文作者写的书，即使本人英文水平有限；我相信有很多像我一样的同学会有跟我一样的想法，因为中文作者写的书大多自己都表达不清楚，你看他写的书籍你常常会感觉在看天书，当然我说的是部分中文作者或者说是大部分。这不是崇洋媚外，如果你经常看老外写的书籍，你会很轻松的被作者带入他的思维模式，你会不由自主的跟着他的节奏和思维去掐到技术关键点。一些中文作者写的书完全是在误人子弟！看了都想吐…恶心！！！</p>
+<p>给大家推荐一个翻译器，一个比 google 做的还好的翻译机，国内的什么有道啦，百度翻译啦。。。纯属扯淡，你应该远离这些垃圾软件。</p>
+<p>OK，以下是总结！</p>
+<h1 id="C-Standard-的演化"><a href="#C-Standard-的演化" class="headerlink" title="C++ Standard 的演化"></a>C++ Standard 的演化</h1><ul>
+<li><font color=#FF0000><strong>C++ 98（1.0）</strong></font></li>
+<li>C++ 03（TR1, Technical Report 1）</li>
+<li><font color=#FF0000><strong>C++ 11（2.0）</strong></font></li>
+<li>C++ 14（对于11的小的补充）</li>
+<li>C++ 17</li>
+<li>C++ 20（协程支持等特性）</li>
+</ul>
+<p>由于C++从C++ 11版本开始算是一个里程碑式的更新，所以可以认为C++进入2.0时代。关于C++2.0的新特性可以分为语言部分和标准库部分。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><ul>
+<li><a href="http://www.stroustrup.com/C++11FAQ.html" target="_blank" rel="noopener" title="C++ 11 新标准完整列表">由 C++ 之父 Bjarne Stroustrup 撰写并维护的C++ 11 新标准的完整列表</a></li>
+<li><a href="http://www.cplusplus.com" target="_blank" rel="noopener" title="C++ 权威指南">C++ 权威指南</a></li>
+<li><a href="https://en.cppreference.com" target="_blank" rel="noopener" title="C++ 参考指南">C++ 参考指南</a></li>
+<li><a href="http://gcc.gnu.org" target="_blank" rel="noopener" title="GCC 官方参考">GCC 官方参考</a></li>
+</ul>
+<h2 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h2><ul>
+<li>The C++ Standard Library (Second Edition)</li>
+<li>C++ Primer (Fifth Edition)</li>
+<li>The C++ Programming Language (Fourth Edition)</li>
+<li><font color=#FF0000><strong>Effective Modern C++ (Scott Meyers)</strong></font></li>
+</ul>
+<h1 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h1><h2 id="第一步，确认支持C-11：macro-——-cplusplus"><a href="#第一步，确认支持C-11：macro-——-cplusplus" class="headerlink" title="第一步，确认支持C++ 11：macro ——__cplusplus"></a>第一步，确认支持C++ 11：macro ——<code>__cplusplus</code></h2><p>在C++ 2.0之前（C++ 98），<code>__cplusplus</code> 被定义为199711L，C++ 11开始，它将被设置为大于199711L（201103L）<br>这个宏可以用来判断编译器所支持C++标准的版本</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; __cplusplus &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 验证编译器所支持的C++版本</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
+<h2 id="Variadic-Templates（可变参数模板）"><a href="#Variadic-Templates（可变参数模板）" class="headerlink" title="Variadic Templates（可变参数模板）"></a>Variadic Templates（可变参数模板）</h2><h3 id="语法定义"><a href="#语法定义" class="headerlink" title="语法定义"></a>语法定义</h3><h3 id="应用方向"><a href="#应用方向" class="headerlink" title="应用方向"></a>应用方向</h3><ul>
+<li>函数的递归调用</li>
+</ul>
+<ul>
+<li>类的递归继承</li>
+</ul>
+<h2 id="Initializer-lists（初始化列表）"><a href="#Initializer-lists（初始化列表）" class="headerlink" title="Initializer lists（初始化列表）"></a>Initializer lists（初始化列表）</h2><h2 id="Range－based-for-statement（基于范围的-for-语句）"><a href="#Range－based-for-statement（基于范围的-for-语句）" class="headerlink" title="Range－based for statement（基于范围的 for 语句）"></a>Range－based for statement（基于范围的 for 语句）</h2><blockquote>
+<p>官方解释：</p>
+<p>range for语句允许你在一个 “范围 “中进行迭代，它是任何你可以迭代的东西，就像一个由 <code>begin()</code> 和 <code>end()</code> 定义的STL序列。所有标准的容器都可以作为一个范围，<code>std::string</code> 、初始化器列表、数组以及任何你定义了 <code>begin()</code> 和 <code>end()</code> 的东西都可以作为一个范围，例如一个 <code>istream</code>。</p>
+</blockquote>
+<ul>
+<li>语法规则</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ( decl : coll ) &#123;</span><br><span class="line">	statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于：</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=coll.<span class="built_in">begin</span>(), _end=coll.<span class="built_in">end</span>(); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=<span class="built_in">begin</span>(coll), _end=<span class="built_in">end</span>(coll); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i : &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合 auto 用法</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> elem : vec) &#123; <span class="comment">// 简化代码 --&gt; vector&lt;int&gt;::iterator iter</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> 注意要执行的操作是否是需要“写”</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; elem : vec) &#123;</span><br><span class="line">    elem *= <span class="number">3</span>; <span class="comment">// 如果需要改变值，上面的接收变量需要传引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Control-of-defaults-default-and-delete"><a href="#Control-of-defaults-default-and-delete" class="headerlink" title="Control of defaults: default and delete"></a>Control of defaults: default and delete</h2><h1 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h1><h2 id="Rvalue-reference"><a href="#Rvalue-reference" class="headerlink" title="Rvalue reference"></a>Rvalue reference</h2><blockquote>
+<p>左值：</p>
+<p>右值：</p>
+</blockquote>
+<h3 id="Rvalue-reference-and-Move-Semantics"><a href="#Rvalue-reference-and-Move-Semantics" class="headerlink" title="Rvalue reference and Move Semantics"></a>Rvalue reference and Move Semantics</h3><h3 id="Perfect-Forwarding"><a href="#Perfect-Forwarding" class="headerlink" title="Perfect Forwarding"></a>Perfect Forwarding</h3><hr>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C++ 11/14</tag>
+        <tag>C++ 2.0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 基础入门总结</title>
+    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
+<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
+</blockquote>
+<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
+<li><p><code>class</code> 的声明： </p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>return by reference</code> 语法分析：</p>
+<blockquote>
+<p>传递者无需知道接收者是以reference形式接收</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -791,48 +817,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       <tags>
         <tag>C/C++</tag>
         <tag>OOP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 基础入门总结</title>
-    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
-<a id="more"></a>
-
-<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
-<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
-</blockquote>
-<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
-<li><p><code>class</code> 的声明： </p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>return by reference</code> 语法分析：</p>
-<blockquote>
-<p>传递者无需知道接收者是以reference形式接收</p>
-</blockquote>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 网络编程</title>
-    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h1><h2 id="多进程并发模型"><a href="#多进程并发模型" class="headerlink" title="多进程并发模型"></a>多进程并发模型</h2><h2 id="多线程并发模型"><a href="#多线程并发模型" class="headerlink" title="多线程并发模型"></a>多线程并发模型</h2><h1 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h1><h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><h2 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h2><h2 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h2>]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -1090,6 +1074,21 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       <tags>
         <tag>C/C++</tag>
         <tag>Google-Glog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 网络编程</title>
+    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h1><h2 id="多进程并发模型"><a href="#多进程并发模型" class="headerlink" title="多进程并发模型"></a>多进程并发模型</h2><h2 id="多线程并发模型"><a href="#多线程并发模型" class="headerlink" title="多线程并发模型"></a>多线程并发模型</h2><h1 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h1><h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><h2 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h2><h2 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h2>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>

@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#fff">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fff">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Courier new:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"weirdoart.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"swoopIn","post_header":"slideDownBigIn","post_body":"slideDownBigIn","coll_header":"slideLeftBigIn","sidebar":"perspectiveUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="Dynamic Programming">
+<meta property="og:url" content="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/index.html">
+<meta property="og:site_name" content="無為 | Weirdo Art">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdoart.github.io/buckets/images/a1.jpg">
+<meta property="article:published_time" content="2017-03-25T06:08:27.000Z">
+<meta property="article:modified_time" content="2020-06-21T00:06:20.536Z">
+<meta property="article:author" content="Wu Wei">
+<meta property="article:tag" content="Algorithm">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://weirdoart.github.io/buckets/images/a1.jpg">
+
+<link rel="canonical" href="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>Dynamic Programming | 無為 | Weirdo Art</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="無為 | Weirdo Art" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">無為 | Weirdo Art</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/buckets/images/avatar.jpg">
+      <meta itemprop="name" content="Wu Wei">
+      <meta itemprop="description" content="次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="無為 | Weirdo Art">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Dynamic Programming
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2017-03-25 14:08:27" itemprop="dateCreated datePublished" datetime="2017-03-25T14:08:27+08:00">2017-03-25</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-21 08:06:20" itemprop="dateModified" datetime="2020-06-21T08:06:20+08:00">2020-06-21</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Algorithm-beginner/" itemprop="url" rel="index"><span itemprop="name">Algorithm-beginner</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/" class="post-meta-item leancloud_visitors" data-flag-title="Dynamic Programming" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/buckets/images/a1.jpg" alt=""></p>
+<a id="more"></a>
+
+<p align="right"><font size="4">—— (DP, Dynamic Programming)</font></p>
+
+<h1 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h1><p>曾几何时，听到很多同学说“动态规划很难”，“不是搞算法的一般人根本学不会”。。。导致很久很久我对这个算法是望而却步，迟迟没敢上手！但即使作为一名算法渣还真就不信这个邪！于是下定决心啃下来！！！其实只要下功夫，没有什么是能难得倒你的，有句话叫做“你把时间花在哪里，岁月就会在哪里留下记号！”，与你共勉！😄😄😄</p>
+<p>另外提一下，DP在国外算是入门级算法，包括DFS、BFS等，从某个角度来看，DP像是在执行DFS的sort过程，下文将会提到。</p>
+<p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
+<h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
+<p>ok！以一个简单的例子开始！</p>
+<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><blockquote>
+<p> 测试程序：</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-无脑递归（Naive-recursive-algorithm）"><a href="#1-无脑递归（Naive-recursive-algorithm）" class="headerlink" title="1. 无脑递归（Naive recursive algorithm）"></a>1. 无脑递归（Naive recursive algorithm）</h3><p><font color=#44FF><em>recursion：</em>递归存在的最大问题在于递归过程中会出现大量“重叠子问题”（overlap subproblem）</font></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Recursive</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n²)</p>
+<p>空间复杂度：O(1)</p>
+</blockquote>
+<h3 id="2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><a href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）" class="headerlink" title="2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）"></a>2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</h3><blockquote>
+<p><font color=#FFBB>DP ≈ *”careful brute force”* ———— 仔细的蛮力</font></p>
+<p><font color=#CAEF0F>DP ≈ <em>recursion + memoization + guessing</em></font></p>
+</blockquote>
+<p>这种方式是在递归过程中将每个子问题的结果保存起来，在以后遇到相同子问题时直接拿去用，而不用去重复调用产生没必要的开销。事实上此方法只是阻止了“重复计算”，而未阻止“重复调用”。此方法依然会执行函数的递归调用，也就必然会产生函数调用的额外开销。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo; <span class="comment">// 内部递归调用，此变量必须是外部变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">CarefulBruteForce</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo.<span class="built_in">find</span>(n) != memo.<span class="built_in">end</span>()) &#123; <span class="comment">// <span class="doctag">NOTE:</span> 1 # guessing</span></span><br><span class="line">        <span class="keyword">return</span> memo[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        f = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 看似递归，实际上忽略了递归“计算”（<span class="doctag">NOTE:</span> 1）</span></span><br><span class="line">        f = CarefulBruteForce(n - <span class="number">1</span>) + CarefulBruteForce(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    memo[n] = f;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="3-Bottom-up-（自下而上）-——-DP-完全体"><a href="#3-Bottom-up-（自下而上）-——-DP-完全体" class="headerlink" title="3. Bottom-up （自下而上） —— DP 完全体"></a>3. Bottom-up （自下而上） —— DP 完全体</h3><blockquote>
+<p><font color=#F211FF>DP ≈ <em>subproblems + “reuse”</em> ———— 解决问题将其拆分为*<u>子问题</u><em>，然后将</em><u>解决方案</u><em>重复用于</em><u>子问题</u>*</font></p>
+</blockquote>
+<p>自下而上的方案是真正意义上去除递归的方式，摒弃了函数内部的递归调用；回顾程序代码运行逻辑，程序在运行时代码是逐行顺序执行，在遇到函数调用时会进入被调函数内部继续执行代码，完成后返回主调函数，其本质就是一个栈的操作过程。事实上编译器在遇到函数调用的时候会为函数开辟内存空间（也就是分配栈），目的是为了保存寄存器指针等（恢复现场用）。去除递归调用以后就没有了函数切换的开销，我们知道 —— 函数切换的开销也是影响程序性能的问题之一，所以我们一般会将 DP 写成循环的方式。</p>
+<p>那么什么叫自下而上？其实自下而上我认为是正向思考的过程，反而递归才是反向思考的过程。就这道题来说，如果是递归，它的逻辑过程是从后往前计算，而此处则是从前往后计算。要求第N个斐波那契数，那N应该为<strong>上</strong>，而斐波那契数从1开始，所以1为<strong>下</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BottomUp_dp</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            f = memo[i - <span class="number">1</span>] + memo[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        memo[i] = f;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="4-初步总结"><a href="#4-初步总结" class="headerlink" title="4. 初步总结"></a>4. 初步总结</h3><h2 id="例二：Shortest-paths"><a href="#例二：Shortest-paths" class="headerlink" title="例二：Shortest paths"></a>例二：Shortest paths</h2><h2 id="例三：文本对齐"><a href="#例三：文本对齐" class="headerlink" title="例三：文本对齐"></a>例三：文本对齐</h2><h2 id="例四：21点"><a href="#例四：21点" class="headerlink" title="例四：21点"></a>例四：21点</h2><h2 id="例五：括号"><a href="#例五：括号" class="headerlink" title="例五：括号"></a>例五：括号</h2><h2 id="例六：编辑距离"><a href="#例六：编辑距离" class="headerlink" title="例六：编辑距离"></a>例六：编辑距离</h2><h2 id="例七：背包"><a href="#例七：背包" class="headerlink" title="例七：背包"></a>例七：背包</h2><h2 id="例八：钢琴-吉他指法"><a href="#例八：钢琴-吉他指法" class="headerlink" title="例八：钢琴/吉他指法"></a>例八：钢琴/吉他指法</h2><h2 id="例九：俄罗斯方块"><a href="#例九：俄罗斯方块" class="headerlink" title="例九：俄罗斯方块"></a>例九：俄罗斯方块</h2><h2 id="例十：超级马里奥兄弟"><a href="#例十：超级马里奥兄弟" class="headerlink" title="例十：超级马里奥兄弟"></a>例十：超级马里奥兄弟</h2><h2 id="例十一：Longest-common-subsequece"><a href="#例十一：Longest-common-subsequece" class="headerlink" title="例十一：Longest common subsequece"></a>例十一：Longest common subsequece</h2><h1 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h1><h1 id="动态规划解题套路"><a href="#动态规划解题套路" class="headerlink" title="动态规划解题套路"></a>动态规划解题套路</h1><h2 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h2><h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>建议大家不要看中文作者写的技术书籍，以及中文培训机构的视频，不是崇洋媚外，因为即便中文作者技术很好，也未必能表达清楚技术观点。我认为学习技术需要有一个思维转化过程，你看中文作者写的书你会感觉东一头西一头的瞎扯，貌似全是重点，但又毫无重点，因为他根本讲不清楚原理；技术源于国外，所以建议大家多关注国外的教材，你看老外写的书，很容易会被作者带入他的思维里，你会不由自主跟着他的思维一步步掌握核心关键点。最后说一下中文培训机构，大多数培训机构都是总结好了和盘托出，关键部分一笔带过，他们不会明白“授人以鱼不如授人以渔”的道理。</p>
+<p>关于 DP 的参考资料有很多，我比较倾向 “看书 + 视频教程” 的方式结合学习，因为本人算法基础比较菜，直接上手看《算法导论》+ 《算法》有些吃力，以下是我在学习 DP 过程中的一些参考资源。</p>
+<hr>
+<ul>
+<li>视频教程</li>
+</ul>
+<p><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/" target="_blank" rel="noopener" title="MIT 公开课">MIT 算法简介课程-2011年秋季 - p19~p22</a> —— 免费（B站上有中文翻译版本，但是翻译质量只能呵呵了。。。）</p>
+<p><a href=""p15"">MIT 算法导论课程 - p15</a> —— 免费（《算法导论》作者授课，权威性不言而喻）</p>
+<p><a href="https://www.coursera.org/learn/algorithmic-toolbox/home/welcome" target="_blank" rel="noopener" title="Coursera 数据结构与算法">Coursera 数据结构与算法 - 第5周~第六周</a> —— 免费试用一周，之后会收取相关费用，不过有一些策略可以越过收费，自己研究</p>
+<p><a href="https://www.coursera.org/learn/algorithms-greedy" target="_blank" rel="noopener" title="Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划">Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划</a> —— 免费试用7天</p>
+<ul>
+<li>书籍推荐</li>
+</ul>
+<p>《算法导论》第三版</p>
+<p>《算法》第四版</p>
+<h1 id="轻松一刻"><a href="#轻松一刻" class="headerlink" title="轻松一刻"></a>轻松一刻</h1><video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
+      <source id="mp4" src="https://media.githubusercontent.com/media/WinnieVivi/test/master/WishYouWereHere.mp4" type="video/mp4">
+      </video>
+
+<h3 id="star"><a href="#star" class="headerlink" title="star"></a>star</h3><iframe
+style="margin-left: 2px; margin-bottom:-5px;"
+frameborder="0" scrolling="0" width="100px" height="20px"
+src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.io&type=star&count=true" >
+</iframe>
+
+    </div>
+
+    <!--文章结束语-->
+    <div>
+          
+              <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              ------------- 本文结束 <i color: "#ff0000" class="fa fa-heart"></i> 感谢您的阅读-------------
+        </div>
+    
+</div>
+              
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/">Dynamic Programming</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wu Wei 的个人博客">Wu Wei</a></p>
+  <p><span>发布时间:</span>2017年03月25日 - 14:08</p>
+  <p><span>最后更新:</span>2020年06月21日 - 08:06</p>
+  <p><span>原始链接:</span><a href="/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/" title="Dynamic Programming">https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+          
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" rel="prev" title="Linux 网络编程">
+      <i class="fa fa-chevron-left"></i> Linux 网络编程
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/" rel="next" title="Python 基础">
+      Python 基础 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#老生常谈"><span class="nav-number">1.</span> <span class="nav-text">老生常谈</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#什么是动态规划？"><span class="nav-number">2.</span> <span class="nav-text">什么是动态规划？</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#例一：Fibonacci-numbers"><span class="nav-number">2.1.</span> <span class="nav-text">例一：Fibonacci numbers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-无脑递归（Naive-recursive-algorithm）"><span class="nav-number">2.1.1.</span> <span class="nav-text">1. 无脑递归（Naive recursive algorithm）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><span class="nav-number">2.1.2.</span> <span class="nav-text">2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-Bottom-up-（自下而上）-——-DP-完全体"><span class="nav-number">2.1.3.</span> <span class="nav-text">3. Bottom-up （自下而上） —— DP 完全体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-初步总结"><span class="nav-number">2.1.4.</span> <span class="nav-text">4. 初步总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例二：Shortest-paths"><span class="nav-number">2.2.</span> <span class="nav-text">例二：Shortest paths</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例三：文本对齐"><span class="nav-number">2.3.</span> <span class="nav-text">例三：文本对齐</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例四：21点"><span class="nav-number">2.4.</span> <span class="nav-text">例四：21点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例五：括号"><span class="nav-number">2.5.</span> <span class="nav-text">例五：括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例六：编辑距离"><span class="nav-number">2.6.</span> <span class="nav-text">例六：编辑距离</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例七：背包"><span class="nav-number">2.7.</span> <span class="nav-text">例七：背包</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例八：钢琴-吉他指法"><span class="nav-number">2.8.</span> <span class="nav-text">例八：钢琴&#x2F;吉他指法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例九：俄罗斯方块"><span class="nav-number">2.9.</span> <span class="nav-text">例九：俄罗斯方块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例十：超级马里奥兄弟"><span class="nav-number">2.10.</span> <span class="nav-text">例十：超级马里奥兄弟</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#例十一：Longest-common-subsequece"><span class="nav-number">2.11.</span> <span class="nav-text">例十一：Longest common subsequece</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态规划的本质"><span class="nav-number">3.</span> <span class="nav-text">动态规划的本质</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#动态规划解题套路"><span class="nav-number">4.</span> <span class="nav-text">动态规划解题套路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#滚动数组"><span class="nav-number">4.1.</span> <span class="nav-text">滚动数组</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#练习"><span class="nav-number">5.</span> <span class="nav-text">练习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">6.</span> <span class="nav-text">参考资料</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#轻松一刻"><span class="nav-number">7.</span> <span class="nav-text">轻松一刻</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#star"><span class="nav-number">7.0.1.</span> <span class="nav-text">star</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Wei"
+      src="/buckets/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Wu Wei</p>
+  <div class="site-description" itemprop="description">次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+  
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WeirdoArt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wuwei.gt@gmail.com" title="E-Mail → mailto:wuwei.gt@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/WeirdoArt" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/WeirdoArt" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/WeirdoArt" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i></a>
+      </span>
+  </div>
+  <cdnter><hr style="width:200px; height:2px; margin:5px;"></hr></center>
+  <div id="music163player">
+    <!--网易云音乐-->
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=280 height=110 
+          src="//music.163.com/outchain/player?type=0&id=5074011772&auto=1&height=90">
+    </iframe>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      推荐阅读
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/#more" title="https:&#x2F;&#x2F;weirdoart.github.io&#x2F;2017&#x2F;03&#x2F;25&#x2F;Algorithm%20Notes&#x2F;Dynamic%20Programming&#x2F;#more">Dynamic Programming</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Wei</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="60" alpha="0.8" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/three-waves.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/canvas_lines.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  <script src="//code.tidio.co/asv4oopghzd5zcesocwg0tz9vukbop9q.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'MCudlPSDdytvFwqK133Fd7Jc-gzGzoHsz',
+      appKey     : 'pamfC1mrqvgzufLSDXSjKAmh',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : 'https://mcudlpsd.lc-cn-n1-shared.com'
+    });
+  }, window.Valine);
+});
+</script>
+
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+  
+</body>
+</html>

@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#fff">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#fff">
+
+<link rel="stylesheet" href="/css/main.css">
+
+<link rel="stylesheet" href="https://fonts.cat.net/css?family=Lato:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Courier new:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"weirdoart.github.io","root":"/","scheme":"Gemini","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"hide","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":true},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":true,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"swoopIn","post_header":"slideDownBigIn","post_body":"slideDownBigIn","coll_header":"slideLeftBigIn","sidebar":"perspectiveUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta property="og:type" content="article">
+<meta property="og:title" content="C++ 2.0 新特性">
+<meta property="og:url" content="https://weirdoart.github.io/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/index.html">
+<meta property="og:site_name" content="無為 | Weirdo Art">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://weirdoart.github.io/buckets/images/a3.png">
+<meta property="article:published_time" content="2014-08-12T17:21:14.000Z">
+<meta property="article:modified_time" content="2020-06-19T18:42:42.825Z">
+<meta property="article:author" content="Wu Wei">
+<meta property="article:tag" content="C++ 11&#x2F;14">
+<meta property="article:tag" content="C++ 2.0">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://weirdoart.github.io/buckets/images/a3.png">
+
+<link rel="canonical" href="https://weirdoart.github.io/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>C++ 2.0 新特性 | 無為 | Weirdo Art</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+<link rel="alternate" href="/atom.xml" title="無為 | Weirdo Art" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">無為 | Weirdo Art</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-music">
+
+    <a href="/music/" rel="section"><i class="fa fa-music fa-fw"></i>Music</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+  <div class="reading-progress-bar"></div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://weirdoart.github.io/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/buckets/images/avatar.jpg">
+      <meta itemprop="name" content="Wu Wei">
+      <meta itemprop="description" content="次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="無為 | Weirdo Art">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          C++ 2.0 新特性
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2014-08-13 01:21:14" itemprop="dateCreated datePublished" datetime="2014-08-13T01:21:14+08:00">2014-08-13</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-06-20 02:42:42" itemprop="dateModified" datetime="2020-06-20T02:42:42+08:00">2020-06-20</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C/C++</span></a>
+                </span>
+            </span>
+
+          
+            <span id="/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/" class="post-meta-item leancloud_visitors" data-flag-title="C++ 2.0 新特性" title="阅读次数">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span class="leancloud-visitors-count"></span>
+            </span>
+  
+  <span class="post-meta-item">
+    
+      <span class="post-meta-item-icon">
+        <i class="far fa-comment"></i>
+      </span>
+      <span class="post-meta-item-text">Valine：</span>
+    
+    <a title="valine" href="/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/#valine-comments" itemprop="discussionUrl">
+      <span class="post-comments-count valine-comment-count" data-xid="/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><img src="/buckets/images/a3.png" alt=""></p>
+<a id="more"></a>
+
+<p align="right">———— C++ 11/14          </p>
+
+<p>本文是基于侯捷老师的《C++11/14 新标准》课程所做的总结。非常感谢侯捷老师，我看过他很多课程和他的书籍，他是我在C++这条道路上的启蒙老师，是他让我真正的学会C++这门语言。侯捷老师的课程有很多，比如《C++ 面向对象高级开发》、《C++内存管理》、《C++ STL 与泛型编程》《C++ Startup 揭密：C++ 程序的生前和死后》……；当然侯捷老师的书籍也很多，例如《STL 源码剖析》，译作也很多，像 effective 那一系列的。如下：</p>
+<p>![侯捷老师课程列表](C:\Users\Administrator\Desktop\C++ Notes\images\1591459395(1).jpg)</p>
+<p>在此特别说明一下个人观点：我特别不喜欢看中文作者写的书，即使本人英文水平有限；我相信有很多像我一样的同学会有跟我一样的想法，因为中文作者写的书大多自己都表达不清楚，你看他写的书籍你常常会感觉在看天书，当然我说的是部分中文作者或者说是大部分。这不是崇洋媚外，如果你经常看老外写的书籍，你会很轻松的被作者带入他的思维模式，你会不由自主的跟着他的节奏和思维去掐到技术关键点。一些中文作者写的书完全是在误人子弟！看了都想吐…恶心！！！</p>
+<p>给大家推荐一个翻译器，一个比 google 做的还好的翻译机，国内的什么有道啦，百度翻译啦。。。纯属扯淡，你应该远离这些垃圾软件。</p>
+<p>OK，以下是总结！</p>
+<h1 id="C-Standard-的演化"><a href="#C-Standard-的演化" class="headerlink" title="C++ Standard 的演化"></a>C++ Standard 的演化</h1><ul>
+<li><font color=#FF0000><strong>C++ 98（1.0）</strong></font></li>
+<li>C++ 03（TR1, Technical Report 1）</li>
+<li><font color=#FF0000><strong>C++ 11（2.0）</strong></font></li>
+<li>C++ 14（对于11的小的补充）</li>
+<li>C++ 17</li>
+<li>C++ 20（协程支持等特性）</li>
+</ul>
+<p>由于C++从C++ 11版本开始算是一个里程碑式的更新，所以可以认为C++进入2.0时代。关于C++2.0的新特性可以分为语言部分和标准库部分。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><ul>
+<li><a href="http://www.stroustrup.com/C++11FAQ.html" target="_blank" rel="noopener" title="C++ 11 新标准完整列表">由 C++ 之父 Bjarne Stroustrup 撰写并维护的C++ 11 新标准的完整列表</a></li>
+<li><a href="http://www.cplusplus.com" target="_blank" rel="noopener" title="C++ 权威指南">C++ 权威指南</a></li>
+<li><a href="https://en.cppreference.com" target="_blank" rel="noopener" title="C++ 参考指南">C++ 参考指南</a></li>
+<li><a href="http://gcc.gnu.org" target="_blank" rel="noopener" title="GCC 官方参考">GCC 官方参考</a></li>
+</ul>
+<h2 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h2><ul>
+<li>The C++ Standard Library (Second Edition)</li>
+<li>C++ Primer (Fifth Edition)</li>
+<li>The C++ Programming Language (Fourth Edition)</li>
+<li><font color=#FF0000><strong>Effective Modern C++ (Scott Meyers)</strong></font></li>
+</ul>
+<h1 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h1><h2 id="第一步，确认支持C-11：macro-——-cplusplus"><a href="#第一步，确认支持C-11：macro-——-cplusplus" class="headerlink" title="第一步，确认支持C++ 11：macro ——__cplusplus"></a>第一步，确认支持C++ 11：macro ——<code>__cplusplus</code></h2><p>在C++ 2.0之前（C++ 98），<code>__cplusplus</code> 被定义为199711L，C++ 11开始，它将被设置为大于199711L（201103L）<br>这个宏可以用来判断编译器所支持C++标准的版本</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; __cplusplus &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 验证编译器所支持的C++版本</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Variadic-Templates（可变参数模板）"><a href="#Variadic-Templates（可变参数模板）" class="headerlink" title="Variadic Templates（可变参数模板）"></a>Variadic Templates（可变参数模板）</h2><h3 id="语法定义"><a href="#语法定义" class="headerlink" title="语法定义"></a>语法定义</h3><h3 id="应用方向"><a href="#应用方向" class="headerlink" title="应用方向"></a>应用方向</h3><ul>
+<li>函数的递归调用</li>
+</ul>
+<ul>
+<li>类的递归继承</li>
+</ul>
+<h2 id="Initializer-lists（初始化列表）"><a href="#Initializer-lists（初始化列表）" class="headerlink" title="Initializer lists（初始化列表）"></a>Initializer lists（初始化列表）</h2><h2 id="Range－based-for-statement（基于范围的-for-语句）"><a href="#Range－based-for-statement（基于范围的-for-语句）" class="headerlink" title="Range－based for statement（基于范围的 for 语句）"></a>Range－based for statement（基于范围的 for 语句）</h2><blockquote>
+<p>官方解释：</p>
+<p>range for语句允许你在一个 “范围 “中进行迭代，它是任何你可以迭代的东西，就像一个由 <code>begin()</code> 和 <code>end()</code> 定义的STL序列。所有标准的容器都可以作为一个范围，<code>std::string</code> 、初始化器列表、数组以及任何你定义了 <code>begin()</code> 和 <code>end()</code> 的东西都可以作为一个范围，例如一个 <code>istream</code>。</p>
+</blockquote>
+<ul>
+<li>语法规则</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> ( decl : coll ) &#123;</span><br><span class="line">	statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于：</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=coll.<span class="built_in">begin</span>(), _end=coll.<span class="built_in">end</span>(); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=<span class="built_in">begin</span>(coll), _end=<span class="built_in">end</span>(coll); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i : &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合 auto 用法</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> elem : vec) &#123; <span class="comment">// 简化代码 --&gt; vector&lt;int&gt;::iterator iter</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> 注意要执行的操作是否是需要“写”</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; elem : vec) &#123;</span><br><span class="line">    elem *= <span class="number">3</span>; <span class="comment">// 如果需要改变值，上面的接收变量需要传引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Control-of-defaults-default-and-delete"><a href="#Control-of-defaults-default-and-delete" class="headerlink" title="Control of defaults: default and delete"></a>Control of defaults: default and delete</h2><h1 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h1><h2 id="Rvalue-reference"><a href="#Rvalue-reference" class="headerlink" title="Rvalue reference"></a>Rvalue reference</h2><blockquote>
+<p>左值：</p>
+<p>右值：</p>
+</blockquote>
+<h3 id="Rvalue-reference-and-Move-Semantics"><a href="#Rvalue-reference-and-Move-Semantics" class="headerlink" title="Rvalue reference and Move Semantics"></a>Rvalue reference and Move Semantics</h3><h3 id="Perfect-Forwarding"><a href="#Perfect-Forwarding" class="headerlink" title="Perfect Forwarding"></a>Perfect Forwarding</h3><hr>
+
+    </div>
+
+    <!--文章结束语-->
+    <div>
+          
+              <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">
+              ------------- 本文结束 <i color: "#ff0000" class="fa fa-heart"></i> 感谢您的阅读-------------
+        </div>
+    
+</div>
+              
+<div class="my_post_copyright">
+  <script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+  
+  <!-- JS库 sweetalert 可修改路径 -->
+  <script src="https://cdn.bootcss.com/jquery/2.0.0/jquery.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+  <p><span>本文标题:</span><a href="/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/">C++ 2.0 新特性</a></p>
+  <p><span>文章作者:</span><a href="/" title="访问 Wu Wei 的个人博客">Wu Wei</a></p>
+  <p><span>发布时间:</span>2014年08月13日 - 01:21</p>
+  <p><span>最后更新:</span>2020年06月20日 - 02:42</p>
+  <p><span>原始链接:</span><a href="/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/" title="C++ 2.0 新特性">https://weirdoart.github.io/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/</a>
+    <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://weirdoart.github.io/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/"  aria-label="复制成功！"></i></span>
+  </p>
+  <p><span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/" target="_blank" title="Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)">署名-非商业性使用-禁止演绎 4.0 国际</a> 转载请保留原文链接及作者。</p>  
+</div>
+<script> 
+    var clipboard = new Clipboard('.fa-clipboard');
+    $(".fa-clipboard").click(function(){
+      clipboard.on('success', function(){
+        swal({   
+          title: "",   
+          text: '复制成功',
+          icon: "success", 
+          showConfirmButton: true
+          });
+	});
+    });  
+</script>
+
+          
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-11-14/" rel="tag"># C++ 11/14</a>
+              <a href="/tags/C-2-0/" rel="tag"># C++ 2.0</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/" rel="prev" title="C++ 基础入门总结">
+      <i class="fa fa-chevron-left"></i> C++ 基础入门总结
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/" rel="next" title="C++ 2.0 并发编程">
+      C++ 2.0 并发编程 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+    <div class="comments" id="valine-comments"></div>
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#C-Standard-的演化"><span class="nav-number">1.</span> <span class="nav-text">C++ Standard 的演化</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">2.</span> <span class="nav-text">参考资料</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络资源"><span class="nav-number">2.1.</span> <span class="nav-text">网络资源</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考书籍"><span class="nav-number">2.2.</span> <span class="nav-text">参考书籍</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#语言"><span class="nav-number">3.</span> <span class="nav-text">语言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#第一步，确认支持C-11：macro-——-cplusplus"><span class="nav-number">3.1.</span> <span class="nav-text">第一步，确认支持C++ 11：macro ——__cplusplus</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Variadic-Templates（可变参数模板）"><span class="nav-number">3.2.</span> <span class="nav-text">Variadic Templates（可变参数模板）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#语法定义"><span class="nav-number">3.2.1.</span> <span class="nav-text">语法定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#应用方向"><span class="nav-number">3.2.2.</span> <span class="nav-text">应用方向</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initializer-lists（初始化列表）"><span class="nav-number">3.3.</span> <span class="nav-text">Initializer lists（初始化列表）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Range－based-for-statement（基于范围的-for-语句）"><span class="nav-number">3.4.</span> <span class="nav-text">Range－based for statement（基于范围的 for 语句）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Control-of-defaults-default-and-delete"><span class="nav-number">3.5.</span> <span class="nav-text">Control of defaults: default and delete</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#标准库"><span class="nav-number">4.</span> <span class="nav-text">标准库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rvalue-reference"><span class="nav-number">4.1.</span> <span class="nav-text">Rvalue reference</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Rvalue-reference-and-Move-Semantics"><span class="nav-number">4.1.1.</span> <span class="nav-text">Rvalue reference and Move Semantics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Perfect-Forwarding"><span class="nav-number">4.1.2.</span> <span class="nav-text">Perfect Forwarding</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Wu Wei"
+      src="/buckets/images/avatar.jpg">
+  <p class="site-author-name" itemprop="name">Wu Wei</p>
+  <div class="site-description" itemprop="description">次は现実世界で会おう <br/> そしたらまた <br/> 同じように友だちになれるよ。</div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+  
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/WeirdoArt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:wuwei.gt@gmail.com" title="E-Mail → mailto:wuwei.gt@gmail.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://plus.google.com/WeirdoArt" title="Google → https:&#x2F;&#x2F;plus.google.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-google fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://twitter.com/WeirdoArt" title="Twitter → https:&#x2F;&#x2F;twitter.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-twitter fa-fw"></i></a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://stackoverflow.com/WeirdoArt" title="StackOverflow → https:&#x2F;&#x2F;stackoverflow.com&#x2F;WeirdoArt" rel="noopener" target="_blank"><i class="fab fa-stack-overflow fa-fw"></i></a>
+      </span>
+  </div>
+  <cdnter><hr style="width:200px; height:2px; margin:5px;"></hr></center>
+  <div id="music163player">
+    <!--网易云音乐-->
+    <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=280 height=110 
+          src="//music.163.com/outchain/player?type=0&id=5074011772&auto=1&height=90">
+    </iframe>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title"><i class="fa fa-link fa-fw"></i>
+      推荐阅读
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="https://weirdoart.github.io/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/#more" title="https:&#x2F;&#x2F;weirdoart.github.io&#x2F;2017&#x2F;03&#x2F;25&#x2F;Algorithm%20Notes&#x2F;Dynamic%20Programming&#x2F;#more">Dynamic Programming</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 2015 – 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Wu Wei</span>
+</div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script size="60" alpha="0.8" zIndex="-1" src="//cdn.jsdelivr.net/gh/theme-next/theme-next-canvas-ribbon@1/canvas-ribbon.js"></script>
+  <script src="/lib/anime.min.js"></script>
+  <script src="//cdn.jsdelivr.net/npm/jquery@3/dist/jquery.min.js"></script>
+  <script src="//cdn.jsdelivr.net/gh/fancyapps/fancybox@3/dist/jquery.fancybox.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+  <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/three.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/three-waves.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/canvas_lines.min.js"></script>
+    <script defer src="//cdn.jsdelivr.net/gh/next-theme/theme-next-three@1/canvas_sphere.min.js"></script>
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+  <script src="//code.tidio.co/asv4oopghzd5zcesocwg0tz9vukbop9q.js"></script>
+
+
+
+
+
+
+
+  
+
+  
+
+  
+
+
+<script>
+NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
+  NexT.utils.getScript('//unpkg.com/valine/dist/Valine.min.js', () => {
+    var GUEST = ['nick', 'mail', 'link'];
+    var guest = 'nick,mail,link';
+    guest = guest.split(',').filter(item => {
+      return GUEST.includes(item);
+    });
+    new Valine({
+      el         : '#valine-comments',
+      verify     : true,
+      notify     : false,
+      appId      : 'MCudlPSDdytvFwqK133Fd7Jc-gzGzoHsz',
+      appKey     : 'pamfC1mrqvgzufLSDXSjKAmh',
+      placeholder: "Just go go",
+      avatar     : 'mm',
+      meta       : guest,
+      pageSize   : '10' || 10,
+      visitor    : true,
+      lang       : '' || 'zh-cn',
+      path       : location.pathname,
+      recordIP   : true,
+      serverURLs : 'https://mcudlpsd.lc-cn-n1-shared.com'
+    });
+  }, window.Valine);
+});
+</script>
+
+
+  
+   <canvas class="fireworks" style="position: fixed;left: 0;top: 0;z-index: 1; pointer-events: none;" ></canvas> 
+   <script type="text/javascript" src="//cdn.bootcss.com/animejs/2.2.0/anime.min.js"></script> 
+   <script type="text/javascript" src="/js/fireworks.js"></script>
+  
+</body>
+</html>
