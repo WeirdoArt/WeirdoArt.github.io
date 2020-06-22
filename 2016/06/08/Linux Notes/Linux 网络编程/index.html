@@ -28,7 +28,7 @@
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://weirdoart.github.io/buckets/images/paw5.jpg">
 <meta property="article:published_time" content="2016-06-08T04:28:37.000Z">
-<meta property="article:modified_time" content="2020-06-19T18:43:07.037Z">
+<meta property="article:modified_time" content="2020-06-22T17:00:19.390Z">
 <meta property="article:author" content="Wu Wei">
 <meta property="article:tag" content="Linux">
 <meta property="article:tag" content="网络编程">
@@ -233,7 +233,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-06-20 02:43:07" itemprop="dateModified" datetime="2020-06-20T02:43:07+08:00">2020-06-20</time>
+                <time title="修改时间：2020-06-23 01:00:19" itemprop="dateModified" datetime="2020-06-23T01:00:19+08:00">2020-06-23</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -280,7 +280,10 @@
         <p><img src="/buckets/images/paw5.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="并发模型"><a href="#并发模型" class="headerlink" title="并发模型"></a>并发模型</h1><h2 id="多进程并发模型"><a href="#多进程并发模型" class="headerlink" title="多进程并发模型"></a>多进程并发模型</h2><h2 id="多线程并发模型"><a href="#多线程并发模型" class="headerlink" title="多线程并发模型"></a>多线程并发模型</h2><h1 id="IO模型"><a href="#IO模型" class="headerlink" title="IO模型"></a>IO模型</h1><h2 id="阻塞IO"><a href="#阻塞IO" class="headerlink" title="阻塞IO"></a>阻塞IO</h2><h2 id="非阻塞IO"><a href="#非阻塞IO" class="headerlink" title="非阻塞IO"></a>非阻塞IO</h2><h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><h2 id="IO复用"><a href="#IO复用" class="headerlink" title="IO复用"></a>IO复用</h2><h2 id="信号驱动IO"><a href="#信号驱动IO" class="headerlink" title="信号驱动IO"></a>信号驱动IO</h2>
+
+
+<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h2 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h2><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
+<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><h3 id="OSI-七层网络模型"><a href="#OSI-七层网络模型" class="headerlink" title="OSI 七层网络模型"></a>OSI 七层网络模型</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3>
     </div>
 
     <!--文章结束语-->
@@ -303,7 +306,7 @@
   <p><span>本文标题:</span><a href="/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/">Linux 网络编程</a></p>
   <p><span>文章作者:</span><a href="/" title="访问 Wu Wei 的个人博客">Wu Wei</a></p>
   <p><span>发布时间:</span>2016年06月08日 - 12:28</p>
-  <p><span>最后更新:</span>2020年06月20日 - 02:43</p>
+  <p><span>最后更新:</span>2020年06月23日 - 01:00</p>
   <p><span>原始链接:</span><a href="/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/" title="Linux 网络编程">https://weirdoart.github.io/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</a>
     <span class="copy-path"  title="点击复制文章链接"><i class="fa fa-clipboard" data-clipboard-text="https://weirdoart.github.io/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/"  aria-label="复制成功！"></i></span>
   </p>
@@ -408,7 +411,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#并发模型"><span class="nav-number">1.</span> <span class="nav-text">并发模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#多进程并发模型"><span class="nav-number">1.1.</span> <span class="nav-text">多进程并发模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#多线程并发模型"><span class="nav-number">1.2.</span> <span class="nav-text">多线程并发模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#IO模型"><span class="nav-number">2.</span> <span class="nav-text">IO模型</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#阻塞IO"><span class="nav-number">2.1.</span> <span class="nav-text">阻塞IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#非阻塞IO"><span class="nav-number">2.2.</span> <span class="nav-text">非阻塞IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步IO"><span class="nav-number">2.3.</span> <span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#IO复用"><span class="nav-number">2.4.</span> <span class="nav-text">IO复用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#信号驱动IO"><span class="nav-number">2.5.</span> <span class="nav-text">信号驱动IO</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#网络基础"><span class="nav-number">1.</span> <span class="nav-text">网络基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#协议"><span class="nav-number">1.1.</span> <span class="nav-text">协议</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#分层模型"><span class="nav-number">1.2.</span> <span class="nav-text">分层模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#OSI-七层网络模型"><span class="nav-number">1.2.1.</span> <span class="nav-text">OSI 七层网络模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP-四层网络模型"><span class="nav-number">1.2.2.</span> <span class="nav-text">TCP&#x2F;IP 四层网络模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TCP-IP-通信过程"><span class="nav-number">1.2.3.</span> <span class="nav-text">TCP&#x2F;IP 通信过程</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
