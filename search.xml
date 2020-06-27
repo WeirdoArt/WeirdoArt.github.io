@@ -1098,7 +1098,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   <entry>
     <title>TCP/IP 详解</title>
     <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw6.png" alt=""></p>
+    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
 <a id="more"></a>
 
 <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
