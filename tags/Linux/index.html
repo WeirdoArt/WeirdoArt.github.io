@@ -251,6 +251,26 @@
     </header>
   </article>
 
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <div class="post-meta">
+        <time itemprop="dateCreated"
+              datetime="2016-03-18T10:22:02+08:00"
+              content="2016-03-18">
+          03-18
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/" itemprop="url">
+            <span itemprop="name">Linux 系统编程</span>
+          </a>
+      </div>
+
+    </header>
+  </article>
+
     </div>
   </div>
   
@@ -324,7 +344,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">11</span>
+          <span class="site-state-item-count">12</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -508,7 +528,7 @@ NexT.utils.loadComments(document.querySelector('#valine-comments'), () => {
     new Valine({
       el         : '#valine-comments',
       verify     : true,
-      notify     : false,
+      notify     : true,
       appId      : 'MCudlPSDdytvFwqK133Fd7Jc-gzGzoHsz',
       appKey     : 'pamfC1mrqvgzufLSDXSjKAmh',
       placeholder: "Just go go",
