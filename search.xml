@@ -1,6 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>C++ 2.0 并发编程</title>
+    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
+<a id="more"></a>
+
+<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
+<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
+<table>
+<thead>
+<tr>
+<th align="right"><thread></th>
+<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">default (1)</td>
+<td><code>thread() noexcept;</code></td>
+</tr>
+<tr>
+<td align="right">initialization (2)</td>
+<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
+</tr>
+<tr>
+<td align="right">copy [deleted] (3)</td>
+<td><code>thread( const thread&amp; ) = delete;</code></td>
+</tr>
+<tr>
+<td align="right">move (4)</td>
+<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>(1).默认构造函数</strong></p>
+<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
+<p><strong>(2).初始化构造函数</strong></p>
+<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
+<p><strong>(3).拷贝构造函数</strong></p>
+<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
+<p><strong>(4).移动构造函数</strong></p>
+<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
+</blockquote>
+<p><em>示例：</em></p>
+<ul>
+<li><p>普通函数</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可调用对象</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>并发编程</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Dynamic Programming</title>
     <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
     <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
@@ -83,64 +144,22 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 2.0 并发编程</title>
-    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
+    <title>C++ 内存管理</title>
+    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
 <a id="more"></a>
 
-<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
-<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
-<table>
-<thead>
-<tr>
-<th align="right"><thread></th>
-<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="right">default (1)</td>
-<td><code>thread() noexcept;</code></td>
-</tr>
-<tr>
-<td align="right">initialization (2)</td>
-<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
-</tr>
-<tr>
-<td align="right">copy [deleted] (3)</td>
-<td><code>thread( const thread&amp; ) = delete;</code></td>
-</tr>
-<tr>
-<td align="right">move (4)</td>
-<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>(1).默认构造函数</strong></p>
-<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
-<p><strong>(2).初始化构造函数</strong></p>
-<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
-<p><strong>(3).拷贝构造函数</strong></p>
-<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
-<p><strong>(4).移动构造函数</strong></p>
-<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
-</blockquote>
-<p><em>示例：</em></p>
-<ul>
-<li><p>普通函数</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可调用对象</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li></li>
-</ul>
-]]></content>
+<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
+
+<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
+<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
+
+<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
       <tags>
         <tag>C/C++</tag>
-        <tag>并发编程</tag>
       </tags>
   </entry>
   <entry>
@@ -720,25 +739,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 内存管理</title>
-    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
-<a id="more"></a>
-
-<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
-
-<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
-<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
-
-<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++ 基础入门总结</title>
     <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
@@ -821,50 +821,21 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>TCP/IP 详解</title>
-    <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
+    <title>Linux 网络编程</title>
+    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
-<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>通常所说的TCP/IP协议族代表的是一组不同的协议组合在一起构成的，更精确的名称为Internet协议族（Internet Protocol Suite）。TCP 和 IP 只是此协议族其中两种协议。</p>
-<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><p>网络协议的分层主要作用是解耦，每一层不需要关心相邻层的细节。</p>
-<h3 id="OSI-七层网络模型（理论模型）"><a href="#OSI-七层网络模型（理论模型）" class="headerlink" title="OSI 七层网络模型（理论模型）"></a>OSI 七层网络模型（理论模型）</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3><h1 id="TCP-特性"><a href="#TCP-特性" class="headerlink" title="TCP 特性"></a>TCP 特性</h1><h3 id="1-面向连接"><a href="#1-面向连接" class="headerlink" title="1.面向连接"></a>1.面向连接</h3><p>三次握手与四次挥手</p>
-<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="2.可靠性"></a>2.可靠性</h3><p>确认机制与超时重传机制</p>
-<blockquote>
-<p>TTL时间算法</p>
-</blockquote>
-<h3 id="3-保证顺序"><a href="#3-保证顺序" class="headerlink" title="3.保证顺序"></a>3.保证顺序</h3><p>数据分节排序</p>
-<h3 id="4-流量控制"><a href="#4-流量控制" class="headerlink" title="4.流量控制"></a>4.流量控制</h3><p>滑动窗口机制</p>
-<h3 id="5-拥塞控制"><a href="#5-拥塞控制" class="headerlink" title="5.拥塞控制"></a>5.拥塞控制</h3><p>慢启动机制</p>
-<h1 id="命令相关"><a href="#命令相关" class="headerlink" title="命令相关"></a>命令相关</h1><h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig localhost</span><br></pre></td></tr></table></figure>
 
 
-
-<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -<span class="keyword">in</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -e</span><br><span class="line">tcpdump -n</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">traceroute</span><br></pre></td></tr></table></figure>
-
-]]></content>
+<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="阻塞式-I-O"><a href="#阻塞式-I-O" class="headerlink" title="阻塞式 I/O"></a>阻塞式 I/O</h2><h2 id="非阻塞式-I-O"><a href="#非阻塞式-I-O" class="headerlink" title="非阻塞式 I/O"></a>非阻塞式 I/O</h2><h2 id="I-O-复用（select，poll，epoll）"><a href="#I-O-复用（select，poll，epoll）" class="headerlink" title="I/O 复用（select，poll，epoll）"></a>I/O 复用（select，poll，epoll）</h2><h2 id="信号驱动式-I-O（SIGIO）"><a href="#信号驱动式-I-O（SIGIO）" class="headerlink" title="信号驱动式 I/O（SIGIO）"></a>信号驱动式 I/O（SIGIO）</h2><p>信号驱动式 I/O 是指进程预先告知内核，使得当某个描述符上发生某事时，内核使用信号通知相关进程。</p>
+<h2 id="异步-I-O（POSIX的aio-xx系列函数）"><a href="#异步-I-O（POSIX的aio-xx系列函数）" class="headerlink" title="异步 I/O（POSIX的aio_xx系列函数）"></a>异步 I/O（POSIX的aio_xx系列函数）</h2><h2 id="各种-I-O-模型的比较"><a href="#各种-I-O-模型的比较" class="headerlink" title="各种 I/O 模型的比较"></a>各种 I/O 模型的比较</h2>]]></content>
       <categories>
         <category>Linux</category>
       </categories>
       <tags>
         <tag>Linux</tag>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
@@ -978,111 +949,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </categories>
       <tags>
         <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 网络编程</title>
-    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
-<a id="more"></a>
-
-
-
-<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="阻塞式-I-O"><a href="#阻塞式-I-O" class="headerlink" title="阻塞式 I/O"></a>阻塞式 I/O</h2><h2 id="非阻塞式-I-O"><a href="#非阻塞式-I-O" class="headerlink" title="非阻塞式 I/O"></a>非阻塞式 I/O</h2><h2 id="I-O-复用（select，poll，epoll）"><a href="#I-O-复用（select，poll，epoll）" class="headerlink" title="I/O 复用（select，poll，epoll）"></a>I/O 复用（select，poll，epoll）</h2><h2 id="信号驱动式-I-O（SIGIO）"><a href="#信号驱动式-I-O（SIGIO）" class="headerlink" title="信号驱动式 I/O（SIGIO）"></a>信号驱动式 I/O（SIGIO）</h2><p>信号驱动式 I/O 是指进程预先告知内核，使得当某个描述符上发生某事时，内核使用信号通知相关进程。</p>
-<h2 id="异步-I-O（POSIX的aio-xx系列函数）"><a href="#异步-I-O（POSIX的aio-xx系列函数）" class="headerlink" title="异步 I/O（POSIX的aio_xx系列函数）"></a>异步 I/O（POSIX的aio_xx系列函数）</h2><h2 id="各种-I-O-模型的比较"><a href="#各种-I-O-模型的比较" class="headerlink" title="各种 I/O 模型的比较"></a>各种 I/O 模型的比较</h2>]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Python 基础</title>
-    <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<p><img src="/buckets/images/guido.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="Python-基础入门"><a href="#Python-基础入门" class="headerlink" title="Python 基础入门"></a>Python 基础入门</h1><h2 id="01-算数运算符"><a href="#01-算数运算符" class="headerlink" title="01. 算数运算符"></a>01. 算数运算符</h2><table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">描述</th>
-<th align="left">示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+</td>
-<td align="left">加</td>
-<td align="left">10 + 20 = 30</td>
-</tr>
-<tr>
-<td align="left">-</td>
-<td align="left">减</td>
-<td align="left">10 - 20 = -10</td>
-</tr>
-<tr>
-<td align="left">*</td>
-<td align="left">乘</td>
-<td align="left">10 * 20 = 200</td>
-</tr>
-<tr>
-<td align="left">/</td>
-<td align="left">除</td>
-<td align="left">10 / 3 = 3.3333333333333335</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">求模</td>
-<td align="left">10 % 3 = 1</td>
-</tr>
-<tr>
-<td align="left">//</td>
-<td align="left">整除</td>
-<td align="left">10 // 3 = 3</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂运算</td>
-<td align="left">10 ** 3 = 1000</td>
-</tr>
-</tbody></table>
-<!-- more -->
-
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = <span class="string">"小明"</span></span><br><span class="line">age = <span class="number">18</span></span><br><span class="line">print(<span class="string">"姓名："</span>, name, <span class="string">" 年龄："</span>, age)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="python-变量类型"><a href="#python-变量类型" class="headerlink" title="python 变量类型"></a>python 变量类型</h2><ul>
-<li>数值型<ul>
-<li>整型</li>
-<li>浮点型</li>
-<li>布尔型</li>
-</ul>
-</li>
-<li>非数值型<ul>
-<li>字符串</li>
-<li>元组</li>
-<li>列表</li>
-<li>字典</li>
-</ul>
-</li>
-</ul>
-<h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> list:</span><br><span class="line">    statment</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> condeation:</span><br><span class="line">    statment <span class="comment"># 语句</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">while</span> condeation:</span><br><span class="line">    statment</span><br></pre></td></tr></table></figure>
-
-
-
-
-
-<h1 id="Python-面向对象"><a href="#Python-面向对象" class="headerlink" title="Python 面向对象"></a>Python 面向对象</h1><p>面向对象编程 —— <code>Object Oriented Programming</code> ，简称 OOP。</p>
-]]></content>
-      <categories>
-        <category>Python</category>
-      </categories>
-      <tags>
-        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
@@ -1287,6 +1153,53 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
+    <title>TCP/IP 详解</title>
+    <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
+<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>通常所说的TCP/IP协议族代表的是一组不同的协议组合在一起构成的，更精确的名称为Internet协议族（Internet Protocol Suite）。TCP 和 IP 只是此协议族其中两种协议。</p>
+<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><p>网络协议的分层主要作用是解耦，每一层不需要关心相邻层的细节。</p>
+<h3 id="OSI-七层网络模型（理论模型）"><a href="#OSI-七层网络模型（理论模型）" class="headerlink" title="OSI 七层网络模型（理论模型）"></a>OSI 七层网络模型（理论模型）</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3><h1 id="TCP-特性"><a href="#TCP-特性" class="headerlink" title="TCP 特性"></a>TCP 特性</h1><h3 id="1-面向连接"><a href="#1-面向连接" class="headerlink" title="1.面向连接"></a>1.面向连接</h3><p>三次握手与四次挥手</p>
+<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="2.可靠性"></a>2.可靠性</h3><p>确认机制与超时重传机制</p>
+<blockquote>
+<p>TTL时间算法</p>
+</blockquote>
+<h3 id="3-保证顺序"><a href="#3-保证顺序" class="headerlink" title="3.保证顺序"></a>3.保证顺序</h3><p>数据分节排序</p>
+<h3 id="4-流量控制"><a href="#4-流量控制" class="headerlink" title="4.流量控制"></a>4.流量控制</h3><p>滑动窗口机制</p>
+<h3 id="5-拥塞控制"><a href="#5-拥塞控制" class="headerlink" title="5.拥塞控制"></a>5.拥塞控制</h3><p>慢启动机制</p>
+<h1 id="命令相关"><a href="#命令相关" class="headerlink" title="命令相关"></a>命令相关</h1><h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig localhost</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -<span class="keyword">in</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -e</span><br><span class="line">tcpdump -n</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">traceroute</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>2020.09.08 - 软通动力</title>
     <url>/2020/09/10/interviews/2020.09.08%20-%20%E8%BD%AF%E9%80%9A%E5%8A%A8%E5%8A%9B/</url>
     <content><![CDATA[<p><img src="/buckets/images/400.jpg" alt=""></p>
@@ -1318,7 +1231,94 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>Python 基础</title>
+    <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p><img src="/buckets/images/guido.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="Python-基础入门"><a href="#Python-基础入门" class="headerlink" title="Python 基础入门"></a>Python 基础入门</h1><h2 id="01-算数运算符"><a href="#01-算数运算符" class="headerlink" title="01. 算数运算符"></a>01. 算数运算符</h2><table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+</td>
+<td align="left">加</td>
+<td align="left">10 + 20 = 30</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">减</td>
+<td align="left">10 - 20 = -10</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">乘</td>
+<td align="left">10 * 20 = 200</td>
+</tr>
+<tr>
+<td align="left">/</td>
+<td align="left">除</td>
+<td align="left">10 / 3 = 3.3333333333333335</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">求模</td>
+<td align="left">10 % 3 = 1</td>
+</tr>
+<tr>
+<td align="left">//</td>
+<td align="left">整除</td>
+<td align="left">10 // 3 = 3</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂运算</td>
+<td align="left">10 ** 3 = 1000</td>
+</tr>
+</tbody></table>
+<!-- more -->
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = <span class="string">"小明"</span></span><br><span class="line">age = <span class="number">18</span></span><br><span class="line">print(<span class="string">"姓名："</span>, name, <span class="string">" 年龄："</span>, age)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="python-变量类型"><a href="#python-变量类型" class="headerlink" title="python 变量类型"></a>python 变量类型</h2><ul>
+<li>数值型<ul>
+<li>整型</li>
+<li>浮点型</li>
+<li>布尔型</li>
+</ul>
+</li>
+<li>非数值型<ul>
+<li>字符串</li>
+<li>元组</li>
+<li>列表</li>
+<li>字典</li>
+</ul>
+</li>
+</ul>
+<h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> list:</span><br><span class="line">    statment</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> condeation:</span><br><span class="line">    statment <span class="comment"># 语句</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">while</span> condeation:</span><br><span class="line">    statment</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Python-面向对象"><a href="#Python-面向对象" class="headerlink" title="Python 面向对象"></a>Python 面向对象</h1><p>面向对象编程 —— <code>Object Oriented Programming</code> ，简称 OOP。</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式简介</title>
     <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/1.C++%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1334,23 +1334,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/22/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/13.%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
+    <title>构建器</title>
     <url>/2017/09/21/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/11.%E6%9E%84%E5%BB%BA%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1366,7 +1350,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>原型模式</title>
     <url>/2017/09/20/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/10.%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1382,7 +1366,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>单件模式</title>
     <url>/2017/09/22/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/12.%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1398,7 +1382,23 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>享元模式</title>
+    <url>/2017/09/22/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/13.%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>门面模式</title>
     <url>/2017/09/23/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/14.%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1414,39 +1414,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/24/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/15.%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/25/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/17.%E4%B8%AD%E4%BB%8B%E8%80%85/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="中介者"><a href="#中介者" class="headerlink" title="中介者"></a>中介者</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
+    <title>适配器</title>
     <url>/2017/09/25/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/16.%E9%80%82%E9%85%8D%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1462,7 +1430,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>状态模式</title>
     <url>/2017/09/26/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/18.%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1478,12 +1446,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/13/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/2.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
+    <title>代理模式</title>
+    <url>/2017/09/24/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/15.%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h1>]]></content>
+<h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1494,7 +1462,23 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>中介者</title>
+    <url>/2017/09/25/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/17.%E4%B8%AD%E4%BB%8B%E8%80%85/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="中介者"><a href="#中介者" class="headerlink" title="中介者"></a>中介者</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>备忘录</title>
     <url>/2017/09/27/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/19.%E5%A4%87%E5%BF%98%E5%BD%95/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1510,12 +1494,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/29/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/21.%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
+    <title>面向对象设计原则</title>
+    <url>/2017/09/13/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/2.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1>]]></content>
+<h1 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1526,71 +1510,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/28/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/20.%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
-    <url>/2017/10/10/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/24.%E8%AE%BF%E9%97%AE%E5%99%A8/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="访问器"><a href="#访问器" class="headerlink" title="访问器"></a>访问器</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
-    <url>/2017/10/03/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/22.%E8%81%8C%E8%B4%A3%E9%93%BE/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="职责链"><a href="#职责链" class="headerlink" title="职责链"></a>职责链</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
-    <url>/2017/10/11/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/25.%E8%A7%A3%E6%9E%90%E5%99%A8/</url>
-    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="解析器"><a href="#解析器" class="headerlink" title="解析器"></a>解析器</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-        <tag>设计模式</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++设计模式</title>
+    <title>命令模式</title>
     <url>/2017/10/05/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/23.%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1606,12 +1526,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/14/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/3.%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/</url>
+    <title>迭代器</title>
+    <url>/2017/09/29/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/21.%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h1>]]></content>
+<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1622,7 +1542,55 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>组合模式</title>
+    <url>/2017/09/28/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/20.%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>职责链</title>
+    <url>/2017/10/03/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/22.%E8%81%8C%E8%B4%A3%E9%93%BE/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="职责链"><a href="#职责链" class="headerlink" title="职责链"></a>职责链</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>访问器</title>
+    <url>/2017/10/10/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/24.%E8%AE%BF%E9%97%AE%E5%99%A8/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="访问器"><a href="#访问器" class="headerlink" title="访问器"></a>访问器</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>设计模式总结</title>
     <url>/2017/10/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/26.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1639,12 +1607,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/15/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/5.%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <title>解析器</title>
+    <url>/2017/10/11/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/25.%E8%A7%A3%E6%9E%90%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1>]]></content>
+<h1 id="解析器"><a href="#解析器" class="headerlink" title="解析器"></a>解析器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1655,12 +1623,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/16/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/6.%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/</url>
+    <title>模板方法</title>
+    <url>/2017/09/14/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/3.%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h1>]]></content>
+<h1 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1671,7 +1639,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>策略模式</title>
     <url>/2017/09/15/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/4.%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1687,12 +1655,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
-    <url>/2017/09/19/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/9.%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/</url>
+    <title>装饰模式</title>
+    <url>/2017/09/16/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/6.%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h1>]]></content>
+<h1 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1703,7 +1671,7 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>工厂方法</title>
     <url>/2017/09/18/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/8.%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
@@ -1719,12 +1687,44 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++设计模式</title>
+    <title>观察者模式</title>
+    <url>/2017/09/15/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/5.%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>桥模式</title>
     <url>/2017/09/17/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/7.%E6%A1%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
 <h1 id="桥模式"><a href="#桥模式" class="headerlink" title="桥模式"></a>桥模式</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+        <tag>设计模式</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>抽象工厂</title>
+    <url>/2017/09/19/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/9.%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/</url>
+    <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
