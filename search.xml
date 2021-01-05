@@ -1,318 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Dynamic Programming</title>
-    <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
+    <title>C++ 2.0 并发编程</title>
+    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
 <a id="more"></a>
 
-<p align="right"><font size="4">—— (DP, Dynamic Programming)</font></p>
-
-<h1 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h1><p>曾几何时，听到很多同学说“动态规划很难”，“不是搞算法的一般人根本学不会”。。。导致很久很久我对这个算法是望而却步，迟迟没敢上手！但即使作为一名算法渣还真就不信这个邪！于是下定决心啃下来！！！其实只要下功夫，没有什么是能难得倒你的，有句话叫做“你把时间花在哪里，岁月就会在哪里留下记号！”，与你共勉！😄😄😄</p>
-<p>另外提一下，DP在国外算是入门级算法，包括DFS、BFS等，从某个角度来看，DP像是在执行DFS的sort过程，下文将会提到。</p>
-<p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
-<h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
-<p>ok！以一个简单的例子开始！</p>
-<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><blockquote>
-<p> 测试程序：</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-无脑递归（Naive-recursive-algorithm）"><a href="#1-无脑递归（Naive-recursive-algorithm）" class="headerlink" title="1. 无脑递归（Naive recursive algorithm）"></a>1. 无脑递归（Naive recursive algorithm）</h3><p><font color=#44FF><em>recursion：</em>递归存在的最大问题在于递归过程中会出现大量“重叠子问题”（overlap subproblem）</font></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Recursive</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
+<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
+<table>
+<thead>
+<tr>
+<th align="right"><thread></th>
+<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">default (1)</td>
+<td><code>thread() noexcept;</code></td>
+</tr>
+<tr>
+<td align="right">initialization (2)</td>
+<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
+</tr>
+<tr>
+<td align="right">copy [deleted] (3)</td>
+<td><code>thread( const thread&amp; ) = delete;</code></td>
+</tr>
+<tr>
+<td align="right">move (4)</td>
+<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
+</tr>
+</tbody></table>
 <blockquote>
-<p>复杂度分析：</p>
-<p>时间复杂度：O(n²)</p>
-<p>空间复杂度：O(1)</p>
+<p><strong>(1).默认构造函数</strong></p>
+<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
+<p><strong>(2).初始化构造函数</strong></p>
+<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
+<p><strong>(3).拷贝构造函数</strong></p>
+<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
+<p><strong>(4).移动构造函数</strong></p>
+<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
 </blockquote>
-<h3 id="2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><a href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）" class="headerlink" title="2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）"></a>2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</h3><blockquote>
-<p><font color=#FFBB>DP ≈ *”careful brute force”* ———— 仔细的蛮力</font></p>
-<p><font color=#CAEF0F>DP ≈ <em>recursion + memoization + guessing</em></font></p>
-</blockquote>
-<p>这种方式是在递归过程中将每个子问题的结果保存起来，在以后遇到相同子问题时直接拿去用，而不用去重复调用产生没必要的开销。事实上此方法只是阻止了“重复计算”，而未阻止“重复调用”。此方法依然会执行函数的递归调用，也就必然会产生函数调用的额外开销。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo; <span class="comment">// 内部递归调用，此变量必须是外部变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">CarefulBruteForce</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo.<span class="built_in">find</span>(n) != memo.<span class="built_in">end</span>()) &#123; <span class="comment">// <span class="doctag">NOTE:</span> 1 # guessing</span></span><br><span class="line">        <span class="keyword">return</span> memo[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        f = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 看似递归，实际上忽略了递归“计算”（<span class="doctag">NOTE:</span> 1）</span></span><br><span class="line">        f = CarefulBruteForce(n - <span class="number">1</span>) + CarefulBruteForce(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    memo[n] = f;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>复杂度分析：</p>
-<p>时间复杂度：O(n)</p>
-<p>空间复杂度：O(n)</p>
-</blockquote>
-<h3 id="3-Bottom-up-（自下而上）-——-DP-完全体"><a href="#3-Bottom-up-（自下而上）-——-DP-完全体" class="headerlink" title="3. Bottom-up （自下而上） —— DP 完全体"></a>3. Bottom-up （自下而上） —— DP 完全体</h3><blockquote>
-<p><font color=#F211FF>DP ≈ <em>subproblems + “reuse”</em> ———— 解决问题将其拆分为*<u>子问题</u><em>，然后将</em><u>解决方案</u><em>重复用于</em><u>子问题</u>*</font></p>
-</blockquote>
-<p>自下而上的方案是真正意义上去除递归的方式，摒弃了函数内部的递归调用；回顾程序代码运行逻辑，程序在运行时代码是逐行顺序执行，在遇到函数调用时会进入被调函数内部继续执行代码，完成后返回主调函数，其本质就是一个栈的操作过程。事实上编译器在遇到函数调用的时候会为函数开辟内存空间（也就是分配栈），目的是为了保存寄存器指针等（恢复现场用）。去除递归调用以后就没有了函数切换的开销，我们知道 —— 函数切换的开销也是影响程序性能的问题之一，所以我们一般会将 DP 写成循环的方式。</p>
-<p>那么什么叫自下而上？其实自下而上我认为是正向思考的过程，反而递归才是反向思考的过程。就这道题来说，如果是递归，它的逻辑过程是从后往前计算，而此处则是从前往后计算。要求第N个斐波那契数，那N应该为<strong>上</strong>，而斐波那契数从1开始，所以1为<strong>下</strong>。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BottomUp_dp</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            f = memo[i - <span class="number">1</span>] + memo[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        memo[i] = f;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>复杂度分析：</p>
-<p>时间复杂度：O(n)</p>
-<p>空间复杂度：O(n)</p>
-</blockquote>
-<h3 id="4-初步总结"><a href="#4-初步总结" class="headerlink" title="4. 初步总结"></a>4. 初步总结</h3><h2 id="例二：Shortest-paths"><a href="#例二：Shortest-paths" class="headerlink" title="例二：Shortest paths"></a>例二：Shortest paths</h2><h2 id="例三：文本对齐"><a href="#例三：文本对齐" class="headerlink" title="例三：文本对齐"></a>例三：文本对齐</h2><h2 id="例四：21点"><a href="#例四：21点" class="headerlink" title="例四：21点"></a>例四：21点</h2><h2 id="例五：括号"><a href="#例五：括号" class="headerlink" title="例五：括号"></a>例五：括号</h2><h2 id="例六：编辑距离"><a href="#例六：编辑距离" class="headerlink" title="例六：编辑距离"></a>例六：编辑距离</h2><h2 id="例七：背包"><a href="#例七：背包" class="headerlink" title="例七：背包"></a>例七：背包</h2><h2 id="例八：钢琴-吉他指法"><a href="#例八：钢琴-吉他指法" class="headerlink" title="例八：钢琴/吉他指法"></a>例八：钢琴/吉他指法</h2><h2 id="例九：俄罗斯方块"><a href="#例九：俄罗斯方块" class="headerlink" title="例九：俄罗斯方块"></a>例九：俄罗斯方块</h2><h2 id="例十：超级马里奥兄弟"><a href="#例十：超级马里奥兄弟" class="headerlink" title="例十：超级马里奥兄弟"></a>例十：超级马里奥兄弟</h2><h2 id="例十一：Longest-common-subsequece"><a href="#例十一：Longest-common-subsequece" class="headerlink" title="例十一：Longest common subsequece"></a>例十一：Longest common subsequece</h2><h1 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h1><h1 id="动态规划解题套路"><a href="#动态规划解题套路" class="headerlink" title="动态规划解题套路"></a>动态规划解题套路</h1><h2 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h2><h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>建议大家不要看中文作者写的技术书籍，以及中文培训机构的视频，不是崇洋媚外，因为即便中文作者技术很好，也未必能表达清楚技术观点。我认为学习技术需要有一个思维转化过程，你看中文作者写的书你会感觉东一头西一头的瞎扯，貌似全是重点，但又毫无重点，因为他根本讲不清楚原理；技术源于国外，所以建议大家多关注国外的教材，你看老外写的书，很容易会被作者带入他的思维里，你会不由自主跟着他的思维一步步掌握核心关键点。最后说一下中文培训机构，大多数培训机构都是总结好了和盘托出，关键部分一笔带过，他们不会明白“授人以鱼不如授人以渔”的道理。</p>
-<p>关于 DP 的参考资料有很多，我比较倾向 “看书 + 视频教程” 的方式结合学习，因为本人算法基础比较菜，直接上手看《算法导论》+ 《算法》有些吃力，以下是我在学习 DP 过程中的一些参考资源。</p>
-<hr>
+<p><em>示例：</em></p>
 <ul>
-<li>视频教程</li>
+<li><p>普通函数</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可调用对象</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
 </ul>
-<p><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/" target="_blank" rel="noopener" title="MIT 公开课">MIT 算法简介课程-2011年秋季 - p19~p22</a> —— 免费（B站上有中文翻译版本，但是翻译质量只能呵呵了。。。）</p>
-<p><a href=""p15"">MIT 算法导论课程 - p15</a> —— 免费（《算法导论》作者授课，权威性不言而喻）</p>
-<p><a href="https://www.coursera.org/learn/algorithmic-toolbox/home/welcome" target="_blank" rel="noopener" title="Coursera 数据结构与算法">Coursera 数据结构与算法 - 第5周~第六周</a> —— 免费试用一周，之后会收取相关费用，不过有一些策略可以越过收费，自己研究</p>
-<p><a href="https://www.coursera.org/learn/algorithms-greedy" target="_blank" rel="noopener" title="Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划">Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划</a> —— 免费试用7天</p>
-<ul>
-<li>书籍推荐</li>
-</ul>
-<p>《算法导论》第三版</p>
-<p>《算法》第四版</p>
-<h1 id="轻松一刻"><a href="#轻松一刻" class="headerlink" title="轻松一刻"></a>轻松一刻</h1><video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
-      <source id="mp4" src="https://media.githubusercontent.com/media/WinnieVivi/test/master/WishYouWereHere.mp4" type="video/mp4">
-      </video>
-
-<h3 id="star"><a href="#star" class="headerlink" title="star"></a>star</h3><iframe
-style="margin-left: 2px; margin-bottom:-5px;"
-frameborder="0" scrolling="0" width="100px" height="20px"
-src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.io&type=star&count=true" >
-</iframe>
 ]]></content>
       <categories>
-        <category>Algorithm-beginner</category>
-      </categories>
-      <tags>
-        <tag>Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 网络编程</title>
-    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
-<a id="more"></a>
-
-
-
-<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="阻塞式-I-O"><a href="#阻塞式-I-O" class="headerlink" title="阻塞式 I/O"></a>阻塞式 I/O</h2><h2 id="非阻塞式-I-O"><a href="#非阻塞式-I-O" class="headerlink" title="非阻塞式 I/O"></a>非阻塞式 I/O</h2><h2 id="I-O-复用（select，poll，epoll）"><a href="#I-O-复用（select，poll，epoll）" class="headerlink" title="I/O 复用（select，poll，epoll）"></a>I/O 复用（select，poll，epoll）</h2><h2 id="信号驱动式-I-O（SIGIO）"><a href="#信号驱动式-I-O（SIGIO）" class="headerlink" title="信号驱动式 I/O（SIGIO）"></a>信号驱动式 I/O（SIGIO）</h2><p>信号驱动式 I/O 是指进程预先告知内核，使得当某个描述符上发生某事时，内核使用信号通知相关进程。</p>
-<h2 id="异步-I-O（POSIX的aio-xx系列函数）"><a href="#异步-I-O（POSIX的aio-xx系列函数）" class="headerlink" title="异步 I/O（POSIX的aio_xx系列函数）"></a>异步 I/O（POSIX的aio_xx系列函数）</h2><h2 id="各种-I-O-模型的比较"><a href="#各种-I-O-模型的比较" class="headerlink" title="各种 I/O 模型的比较"></a>各种 I/O 模型的比较</h2>]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Linux 系统编程</title>
-    <url>/2016/03/18/Linux%20Notes/Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw6.png" alt=""></p>
-<a id="more"></a>
-
-<h2 id="终端常用命令"><a href="#终端常用命令" class="headerlink" title="终端常用命令"></a>终端常用命令</h2><p><kbd>Tab</kbd>                 自动命令补全 </p>
-<p><kbd>Ctrl</kbd> + <kbd>c</kbd>      中断正在运行的进程或命令</p>
-<p><kbd>Ctrl</kbd> + <kbd>z</kbd>      将正在运行的程序送到后台</p>
-<p><kbd>Ctrl</kbd> + <kbd>d</kbd>      退出当前终端</p>
-<!-- more -->
-
-<p><kbd>Ctrl</kbd> + <kbd>l</kbd>      清空终端屏幕</p>
-<p><kbd>Ctrl</kbd> + <kbd>a</kbd>      将光标移动到行首</p>
-<p><kbd>Ctrl</kbd> + <kbd>e</kbd>      将光标移动到行尾</p>
-<p><kbd>Ctrl</kbd> + <kbd>u</kbd>      擦除从当前光标位置到<strong>行首</strong>的全部内容</p>
-<p><kbd>Ctrl</kbd> + <kbd>k</kbd>      擦除从当前光标位置到<strong>行尾</strong>的全部内容</p>
-<p><kbd>Ctrl</kbd> + <kbd>w</kbd>      擦除光标位置前的单词，如果光标在一个单词本身上，它将擦除从光标位置到词首的全部字母</p>
-<p><kbd>Ctrl</kbd> + <kbd>y</kbd>      粘贴使用 <kbd>Ctrl + w</kbd>、<kbd>Ctrl + u</kbd> 和 <kbd>Ctrl + k</kbd> 快捷键擦除的文本</p>
-<p><kbd>Ctrl</kbd> + <kbd>p</kbd>      查看上一个命令</p>
-<p><kbd>Ctrl</kbd> + <kbd>n</kbd>      查看下一个命令</p>
-<p><kbd>Ctrl</kbd> + <kbd>r</kbd>      搜索历史命令</p>
-<h2 id="压缩包管理"><a href="#压缩包管理" class="headerlink" title="压缩包管理"></a>压缩包管理</h2><h3 id="tar（说明：打包是把压缩好的文件进行归档）"><a href="#tar（说明：打包是把压缩好的文件进行归档）" class="headerlink" title="tar（说明：打包是把压缩好的文件进行归档）"></a>tar（说明：打包是把压缩好的文件进行归档）</h3><ul>
-<li><p>主选项：（主选项是互斥的，一条命令只能出现一个）</p>
-<ul>
-<li><code>c</code> 创建新的档案文件，如果用户想备份一个目录或是一些文件，就要选择这个选项</li>
-<li><code>r</code> 把要存档的文件追加到档案文件末尾</li>
-<li><code>t</code> 列出档案文件的内容，查看已经备份了哪些文件</li>
-<li><code>u</code> 更新文件，用新增的文件取代原备份文件，如果在备份文件中找不到要更新的文件，则把它追加到备份文件的最后</li>
-<li><code>x</code> 从档案文件中释放文件（常用）</li>
-</ul>
-</li>
-<li><p>辅选项：</p>
-<ul>
-<li><p><code>f</code> 使用档案文件或设备，这个选项通常是必选的（常用）</p>
-</li>
-<li><p><code>k</code> 保存已经存在的文件</p>
-</li>
-<li><p><code>m</code> 在还原文件时，把所有文件的修改时间设定为现在</p>
-</li>
-<li><p><code>M</code> 创建多卷的档案文件，以便在几个磁盘中存放</p>
-</li>
-<li><p><code>v</code> 详细报告 tar 处理的文件信息，如无此选项，tar 不报告文件信息（常用）</p>
-</li>
-<li><p><code>w</code> 每一步都要求确认</p>
-</li>
-<li><p><code>z</code> 用 <strong>gzip</strong> 来压缩/解压缩文件，加上该选项后可以将档案文件进行压缩（常用）</p>
-</li>
-<li><p><code>j</code> 用 <strong>bzip2</strong> 来压缩/解压缩文件，加上该选项后可以将档案文件进行压缩（常用）</p>
-<blockquote>
-<p><em>Note：</em></p>
-<p>​        <em>gizp出现较早，在压缩较小文件有优势，bzip2是gzip的升级版，压缩较大文件有优势</em></p>
-</blockquote>
-</li>
-</ul>
-</li>
-</ul>
-<h3 id="常用示例"><a href="#常用示例" class="headerlink" title="常用示例"></a>常用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 打包 / 解包：</span></span><br><span class="line">tar cvf dir.tar dir</span><br><span class="line">tar xvf dir.tar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打gz压缩包 / 解gz压缩包：</span></span><br><span class="line">tar zcvf dir.tar.gz dir</span><br><span class="line">tar zxvf dir.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打bz2压缩包 / 解bz2压缩包：</span></span><br><span class="line">tar jcvf dir.tar.bz2 dir</span><br><span class="line">tar jxvf dir.tar.bz2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定解压目录：</span></span><br><span class="line">tar zxvf dir.tar.gz -C ../target.dir</span><br></pre></td></tr></table></figure>
-
-<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
-<li><p><code>who</code> 查看当前在线上的用户情况</p>
-</li>
-<li><p><code>ps</code> 查看后台进程运行状况</p>
-<ul>
-<li><code>-e</code> 显示所有进程</li>
-<li><code>-f</code> 全格式</li>
-<li><code>-h</code> 不显示标题</li>
-<li><code>-l</code> 长格式</li>
-<li><code>-w</code> 宽输出</li>
-<li><code>-r</code> 只显示正在运行的进程</li>
-<li><code>-a</code> 即 all，查看当前系统所有用户的所有进程</li>
-<li><code>-u</code> 查看进程所有者及其他一些详细信息</li>
-<li><code>-x</code> 显示没有控制终端的进程</li>
-</ul>
-</li>
-<li><p><code>jobs</code> 查看当前shell下正在运行的进程</p>
-</li>
-<li><p><code>fg %workno</code> 把指定的后台作业或挂起的作业移动到前台运行，workno 为作业号</p>
-</li>
-<li><p><code>bg %workno</code> 把被挂起的进程提到后台运行，workno 为作业号</p>
-</li>
-<li><p><code>kill</code> 发送信号给指定进程</p>
-</li>
-<li><p><code>env</code> 查看当前进程环境变量</p>
-</li>
-<li><p><code>top</code> / <code>htop</code> 查看当前正在运行的进程的资源占用情况</p>
-</li>
-</ul>
-<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
-<li><p><code>ifconfig</code> 查看网卡信息</p>
-  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 关闭网卡：</span></span><br><span class="line">sudo ifconfig eth0 down</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启网卡：</span></span><br><span class="line">sudo ifconfig eth0 up</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给 eth0 配置临时IP</span></span><br><span class="line">sudo ifconfig eth0 IP</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>ping</code> 查看网络上的主机是否在工作</p>
-</li>
-<li><p><code>netstat</code> 显示网络连接、路由表合网口信息</p>
-</li>
-<li><p><code>nslookup</code> 查询一台机器额 IP 和其对应的域名解析器</p>
-</li>
-</ul>
-<h2 id="常用服务器构建"><a href="#常用服务器构建" class="headerlink" title="常用服务器构建"></a>常用服务器构建</h2><h3 id="ftp-服务"><a href="#ftp-服务" class="headerlink" title="ftp 服务"></a>ftp 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 vsftpd 服务器</span></span><br><span class="line">sudo apt install vsftpd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置 vsftpd.conf 文件</span></span><br><span class="line">sudo vim /etc/vsftpd.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改或添加如下配置：</span></span><br><span class="line">anonymous_enable=YES</span><br><span class="line">anon_root=/home/itcast/ftp</span><br><span class="line">no_anon_password=YES</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_umask=0022</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启 vsftpd 服务器，重新加载配置文件</span></span><br><span class="line">sudo systemd start vsftpd.service 或 sudo service vsftpd start</span><br></pre></td></tr></table></figure>
-
-<h4 id="ftp-服务的使用："><a href="#ftp-服务的使用：" class="headerlink" title="ftp 服务的使用："></a>ftp 服务的使用：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">get file</span><br><span class="line">put file</span><br></pre></td></tr></table></figure>
-
-<h3 id="ssh-服务"><a href="#ssh-服务" class="headerlink" title="ssh 服务"></a>ssh 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 ssh 服务器</span></span><br><span class="line">sudo apt install openssh-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># ssh 远程登录</span></span><br><span class="line">ssh 用户名@IP</span><br><span class="line"></span><br><span class="line"><span class="comment"># scp 使用格式</span></span><br><span class="line">scp -r 目标用户名@目标主机IP地址:/目标文件的绝对路径 /保存到本机的路径</span><br></pre></td></tr></table></figure>
-
-<h2 id="Linux-基础开发工具"><a href="#Linux-基础开发工具" class="headerlink" title="Linux 基础开发工具"></a>Linux 基础开发工具</h2><h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><h3 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h3><h3 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h3><h2 id="动态库与静态库"><a href="#动态库与静态库" class="headerlink" title="动态库与静态库"></a>动态库与静态库</h2>]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>POSIX 多线程编程</title>
-    <url>/2014/10/18/Linux%20Notes/POSIX%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/pla1.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="文章概述"><a href="#文章概述" class="headerlink" title="文章概述"></a>文章概述</h1><h1 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h1><blockquote>
-<p>《POSIX 多线程程序设计》</p>
-</blockquote>
-<h1 id="经典の故事"><a href="#经典の故事" class="headerlink" title="经典の故事"></a>经典の故事</h1><blockquote>
-<p>舀水的程序员</p>
-<p>三个程序员乘同一艘小船出海，他们尽情享受着阳光和海风，离岸越来越远。一会儿，天色变暗，暴风雨降临，小船在狂风骇浪中颠簸，当暴风雨终于减缓的时候，他们已经失去了桅杆和帆，而且小船也裂了一个小缝。他们看不到陆地的影子。</p>
-<p>小船上配备了食物、水、浆和一个水桶。程序员们开始工作。一个人划船、监视船舱渗水情况，其他两个人则可能去睡觉、检测水位、寻找陆地或者其他船只。</p>
-<p>空闲的程序员可能看到水位上升，开始用桶舀水。当两个程序员都醒来的时候，可能同时发现了水位的上升，都要去拿水桶。显然只有一个人首先拿到水桶，而另一个人则不得不等待。</p>
-<p>如果两个人都睡着了，而划船的人认为该舀水的时候，通常他会推醒其中一个人而让另一个人继续睡觉。但是，如果划船的人心情不好，则可能大声喊叫，将两个人全都吵醒。在让其中一个继续该做的工作时，另一个可以继续睡觉。</p>
-<p>当划船的人疲劳时，他可以唤醒其中一个接替他的工作，然后马上睡觉，知道他被再次唤醒。这样，三个程序员就可以坚持他们的旅程了。</p>
-</blockquote>
-<h1 id="线程介绍"><a href="#线程介绍" class="headerlink" title="线程介绍"></a>线程介绍</h1><h2 id="线程の特点"><a href="#线程の特点" class="headerlink" title="线程の特点"></a>线程の特点</h2><h2 id="常用の术语"><a href="#常用の术语" class="headerlink" title="常用の术语"></a>常用の术语</h2><ul>
-<li>异步</li>
-</ul>
-<blockquote>
-<p>任何两个彼此独立运行的操作是异步的。</p>
-</blockquote>
-<ul>
-<li>并发</li>
-</ul>
-<blockquote>
-<p>宏观并行，微观串行。</p>
-</blockquote>
-<ul>
-<li>并行</li>
-</ul>
-<blockquote>
-<p>并发序列同时执行。</p>
-</blockquote>
-<ul>
-<li>并发</li>
-</ul>
-<blockquote>
-</blockquote>
-<h1 id="POSIX-线程相关API"><a href="#POSIX-线程相关API" class="headerlink" title="POSIX 线程相关API"></a>POSIX 线程相关API</h1><h1 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h1><h2 id="互斥量（mutex）"><a href="#互斥量（mutex）" class="headerlink" title="互斥量（mutex）"></a>互斥量（mutex）</h2><h3 id="相关API"><a href="#相关API" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 互斥量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_mutex_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_MUTEX_T];</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_mutex_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line">pthread_mutex_init(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">pthread_mutexattr_t</span> *attr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁互斥量</span></span><br><span class="line">pthread_mutex_destory(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加锁互斥量</span></span><br><span class="line">pthread_mutex_lock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁互斥量（非阻塞）</span></span><br><span class="line">pthread_mutex_trylock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解锁互斥量</span></span><br><span class="line">pthread_mutex_unlock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br></pre></td></tr></table></figure>
-
-<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><h3 id="相关API-1"><a href="#相关API-1" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 条件变量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_cond_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_COND_T];</span><br><span class="line">    __extension__ <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_cond_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_cond_t</span> con = PTHREAD_COND_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_init</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_condattr_t</span> *condattr)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_destory</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_wait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 超时等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_timewait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex, struct timespec *expiration)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 唤醒条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_signal</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 广播条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_broadcast</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-        <category>并发编程</category>
         <category>C/C++</category>
       </categories>
       <tags>
-        <tag>Linux</tag>
         <tag>C/C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>TCP/IP 详解</title>
-    <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
-<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>通常所说的TCP/IP协议族代表的是一组不同的协议组合在一起构成的，更精确的名称为Internet协议族（Internet Protocol Suite）。TCP 和 IP 只是此协议族其中两种协议。</p>
-<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><p>网络协议的分层主要作用是解耦，每一层不需要关心相邻层的细节。</p>
-<h3 id="OSI-七层网络模型（理论模型）"><a href="#OSI-七层网络模型（理论模型）" class="headerlink" title="OSI 七层网络模型（理论模型）"></a>OSI 七层网络模型（理论模型）</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3><h1 id="TCP-特性"><a href="#TCP-特性" class="headerlink" title="TCP 特性"></a>TCP 特性</h1><h3 id="1-面向连接"><a href="#1-面向连接" class="headerlink" title="1.面向连接"></a>1.面向连接</h3><p>三次握手与四次挥手</p>
-<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="2.可靠性"></a>2.可靠性</h3><p>确认机制与超时重传机制</p>
-<blockquote>
-<p>TTL时间算法</p>
-</blockquote>
-<h3 id="3-保证顺序"><a href="#3-保证顺序" class="headerlink" title="3.保证顺序"></a>3.保证顺序</h3><p>数据分节排序</p>
-<h3 id="4-流量控制"><a href="#4-流量控制" class="headerlink" title="4.流量控制"></a>4.流量控制</h3><p>滑动窗口机制</p>
-<h3 id="5-拥塞控制"><a href="#5-拥塞控制" class="headerlink" title="5.拥塞控制"></a>5.拥塞控制</h3><p>慢启动机制</p>
-<h1 id="命令相关"><a href="#命令相关" class="headerlink" title="命令相关"></a>命令相关</h1><h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig localhost</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -<span class="keyword">in</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -e</span><br><span class="line">tcpdump -n</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">traceroute</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
+        <tag>并发编程</tag>
       </tags>
   </entry>
   <entry>
@@ -387,56 +133,23 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 2.0 并发编程</title>
-    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
+    <title>C++ 基础入门总结</title>
+    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
 <a id="more"></a>
 
-<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
-<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
-<table>
-<thead>
-<tr>
-<th align="right"><thread></th>
-<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="right">default (1)</td>
-<td><code>thread() noexcept;</code></td>
-</tr>
-<tr>
-<td align="right">initialization (2)</td>
-<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
-</tr>
-<tr>
-<td align="right">copy [deleted] (3)</td>
-<td><code>thread( const thread&amp; ) = delete;</code></td>
-</tr>
-<tr>
-<td align="right">move (4)</td>
-<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>(1).默认构造函数</strong></p>
-<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
-<p><strong>(2).初始化构造函数</strong></p>
-<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
-<p><strong>(3).拷贝构造函数</strong></p>
-<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
-<p><strong>(4).移动构造函数</strong></p>
-<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
+<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
+<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
 </blockquote>
-<p><em>示例：</em></p>
-<ul>
-<li><p>普通函数</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
+<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
+<li><p><code>class</code> 的声明： </p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
 </li>
-<li><p>可调用对象</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
+<li><p><code>return by reference</code> 语法分析：</p>
+<blockquote>
+<p>传递者无需知道接收者是以reference形式接收</p>
+</blockquote>
 </li>
-<li></li>
 </ul>
 ]]></content>
       <categories>
@@ -444,7 +157,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </categories>
       <tags>
         <tag>C/C++</tag>
-        <tag>并发编程</tag>
       </tags>
   </entry>
   <entry>
@@ -953,6 +665,174 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
+    <title>C++ 面向对象程序设计</title>
+    <url>/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p><img src="/buckets/images/tjhttp.jpg" alt=""></p>
+<a id="more"></a>
+
+<h2 id="基于对象-Object-Based"><a href="#基于对象-Object-Based" class="headerlink" title="基于对象 (Object Based)"></a>基于对象 (<code>Object Based</code>)</h2><p>面对的是单一 <code>class</code> 的设计</p>
+<h3 id="C-class-的两种分类："><a href="#C-class-的两种分类：" class="headerlink" title="C++ class 的两种分类："></a><code>C++ class</code> 的两种分类：</h3><ol>
+<li><code>class without pointer members</code></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">complex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">complex</span>(<span class="keyword">double</span> r = <span class="number">0</span>, <span class="keyword">double</span> i = <span class="number">0</span>)</span><br><span class="line">        : re(r), im(i)</span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">complex</span>&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">real</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> re; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">imag</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> im; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> re, im;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">friend</span> <span class="built_in">complex</span>&amp; __doapl(<span class="built_in">complex</span>*, <span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参数传递：<code>pass by value vs. pass by reference(to const)</code>  </p>
+</blockquote>
+<blockquote>
+<p>返回值传递：<code>return by value vs. return by reference(to const)</code></p>
+</blockquote>
+<ol start="2">
+<li><code>class with pointer members</code>  </li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">char</span>* c_str = <span class="number">0</span>); <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝构造</span></span><br><span class="line">    <span class="built_in">string</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝赋值</span></span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">string</span>(); <span class="comment">// 析构函数</span></span><br><span class="line">    <span class="function"><span class="keyword">char</span>* <span class="title">c_str</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> m_data; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* m_data;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="面向对象-Object-Oriented"><a href="#面向对象-Object-Oriented" class="headerlink" title="面向对象 (Object Oriented)"></a>面向对象 (<code>Object Oriented</code>)</h2><p>面对的是多重 <code>classes</code> 的设计，<code>classes</code> 之间具有某种关系</p>
+<h3 id="C-class-之间的关系"><a href="#C-class-之间的关系" class="headerlink" title="C++ class 之间的关系"></a><code>C++ class</code> 之间的关系</h3><ol>
+<li>继承 (<code>inheritance</code>) — 表示 <code>is-a</code></li>
+</ol>
+<ol start="2">
+<li>复合 (<code>composition</code>) — 表示 <code>has-a</code></li>
+</ol>
+<ol start="3">
+<li>委托 (<code>delegation</code>)</li>
+</ol>
+<h4 id="C-学习资料推荐："><a href="#C-学习资料推荐：" class="headerlink" title="C++ 学习资料推荐："></a>C++ 学习资料推荐：</h4><ul>
+<li>C++ Primer (fifth Edition) — Stanley B.Lippman</li>
+<li>The C++ Programming Language (Fourth Edition) — Bjarne Stroustrup</li>
+<li>Effective C++ (Third Edition) — Scott Meyers</li>
+<li>More Effective C++ — Scott Meyers</li>
+<li>Inside The C++ Object Model — Stanley B.Lippman</li>
+<li><font color=#FF88AA>Modern C++ Design — Scott Meyers</font></li>
+<li>The C++ Standard Library (Second Edition) — Nicolai M. Josuttis</li>
+<li>STL 源码剖析 — 侯捷<blockquote>
+<p>能够把以上这些书籍全部啃完，然后通过工作实践应用，就足够了</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 系统编程</title>
+    <url>/2016/03/18/Linux%20Notes/Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw6.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="终端常用命令"><a href="#终端常用命令" class="headerlink" title="终端常用命令"></a>终端常用命令</h2><p><kbd>Tab</kbd>                 自动命令补全 </p>
+<p><kbd>Ctrl</kbd> + <kbd>c</kbd>      中断正在运行的进程或命令</p>
+<p><kbd>Ctrl</kbd> + <kbd>z</kbd>      将正在运行的程序送到后台</p>
+<p><kbd>Ctrl</kbd> + <kbd>d</kbd>      退出当前终端</p>
+<!-- more -->
+
+<p><kbd>Ctrl</kbd> + <kbd>l</kbd>      清空终端屏幕</p>
+<p><kbd>Ctrl</kbd> + <kbd>a</kbd>      将光标移动到行首</p>
+<p><kbd>Ctrl</kbd> + <kbd>e</kbd>      将光标移动到行尾</p>
+<p><kbd>Ctrl</kbd> + <kbd>u</kbd>      擦除从当前光标位置到<strong>行首</strong>的全部内容</p>
+<p><kbd>Ctrl</kbd> + <kbd>k</kbd>      擦除从当前光标位置到<strong>行尾</strong>的全部内容</p>
+<p><kbd>Ctrl</kbd> + <kbd>w</kbd>      擦除光标位置前的单词，如果光标在一个单词本身上，它将擦除从光标位置到词首的全部字母</p>
+<p><kbd>Ctrl</kbd> + <kbd>y</kbd>      粘贴使用 <kbd>Ctrl + w</kbd>、<kbd>Ctrl + u</kbd> 和 <kbd>Ctrl + k</kbd> 快捷键擦除的文本</p>
+<p><kbd>Ctrl</kbd> + <kbd>p</kbd>      查看上一个命令</p>
+<p><kbd>Ctrl</kbd> + <kbd>n</kbd>      查看下一个命令</p>
+<p><kbd>Ctrl</kbd> + <kbd>r</kbd>      搜索历史命令</p>
+<h2 id="压缩包管理"><a href="#压缩包管理" class="headerlink" title="压缩包管理"></a>压缩包管理</h2><h3 id="tar（说明：打包是把压缩好的文件进行归档）"><a href="#tar（说明：打包是把压缩好的文件进行归档）" class="headerlink" title="tar（说明：打包是把压缩好的文件进行归档）"></a>tar（说明：打包是把压缩好的文件进行归档）</h3><ul>
+<li><p>主选项：（主选项是互斥的，一条命令只能出现一个）</p>
+<ul>
+<li><code>c</code> 创建新的档案文件，如果用户想备份一个目录或是一些文件，就要选择这个选项</li>
+<li><code>r</code> 把要存档的文件追加到档案文件末尾</li>
+<li><code>t</code> 列出档案文件的内容，查看已经备份了哪些文件</li>
+<li><code>u</code> 更新文件，用新增的文件取代原备份文件，如果在备份文件中找不到要更新的文件，则把它追加到备份文件的最后</li>
+<li><code>x</code> 从档案文件中释放文件（常用）</li>
+</ul>
+</li>
+<li><p>辅选项：</p>
+<ul>
+<li><p><code>f</code> 使用档案文件或设备，这个选项通常是必选的（常用）</p>
+</li>
+<li><p><code>k</code> 保存已经存在的文件</p>
+</li>
+<li><p><code>m</code> 在还原文件时，把所有文件的修改时间设定为现在</p>
+</li>
+<li><p><code>M</code> 创建多卷的档案文件，以便在几个磁盘中存放</p>
+</li>
+<li><p><code>v</code> 详细报告 tar 处理的文件信息，如无此选项，tar 不报告文件信息（常用）</p>
+</li>
+<li><p><code>w</code> 每一步都要求确认</p>
+</li>
+<li><p><code>z</code> 用 <strong>gzip</strong> 来压缩/解压缩文件，加上该选项后可以将档案文件进行压缩（常用）</p>
+</li>
+<li><p><code>j</code> 用 <strong>bzip2</strong> 来压缩/解压缩文件，加上该选项后可以将档案文件进行压缩（常用）</p>
+<blockquote>
+<p><em>Note：</em></p>
+<p>​        <em>gizp出现较早，在压缩较小文件有优势，bzip2是gzip的升级版，压缩较大文件有优势</em></p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="常用示例"><a href="#常用示例" class="headerlink" title="常用示例"></a>常用示例</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 打包 / 解包：</span></span><br><span class="line">tar cvf dir.tar dir</span><br><span class="line">tar xvf dir.tar</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打gz压缩包 / 解gz压缩包：</span></span><br><span class="line">tar zcvf dir.tar.gz dir</span><br><span class="line">tar zxvf dir.tar.gz</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打bz2压缩包 / 解bz2压缩包：</span></span><br><span class="line">tar jcvf dir.tar.bz2 dir</span><br><span class="line">tar jxvf dir.tar.bz2</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定解压目录：</span></span><br><span class="line">tar zxvf dir.tar.gz -C ../target.dir</span><br></pre></td></tr></table></figure>
+
+<h2 id="进程管理"><a href="#进程管理" class="headerlink" title="进程管理"></a>进程管理</h2><h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><p><code>who</code> 查看当前在线上的用户情况</p>
+</li>
+<li><p><code>ps</code> 查看后台进程运行状况</p>
+<ul>
+<li><code>-e</code> 显示所有进程</li>
+<li><code>-f</code> 全格式</li>
+<li><code>-h</code> 不显示标题</li>
+<li><code>-l</code> 长格式</li>
+<li><code>-w</code> 宽输出</li>
+<li><code>-r</code> 只显示正在运行的进程</li>
+<li><code>-a</code> 即 all，查看当前系统所有用户的所有进程</li>
+<li><code>-u</code> 查看进程所有者及其他一些详细信息</li>
+<li><code>-x</code> 显示没有控制终端的进程</li>
+</ul>
+</li>
+<li><p><code>jobs</code> 查看当前shell下正在运行的进程</p>
+</li>
+<li><p><code>fg %workno</code> 把指定的后台作业或挂起的作业移动到前台运行，workno 为作业号</p>
+</li>
+<li><p><code>bg %workno</code> 把被挂起的进程提到后台运行，workno 为作业号</p>
+</li>
+<li><p><code>kill</code> 发送信号给指定进程</p>
+</li>
+<li><p><code>env</code> 查看当前进程环境变量</p>
+</li>
+<li><p><code>top</code> / <code>htop</code> 查看当前正在运行的进程的资源占用情况</p>
+</li>
+</ul>
+<h2 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h2><h3 id="常用命令-1"><a href="#常用命令-1" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
+<li><p><code>ifconfig</code> 查看网卡信息</p>
+  <figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 关闭网卡：</span></span><br><span class="line">sudo ifconfig eth0 down</span><br><span class="line"></span><br><span class="line"><span class="comment"># 开启网卡：</span></span><br><span class="line">sudo ifconfig eth0 up</span><br><span class="line"></span><br><span class="line"><span class="comment"># 给 eth0 配置临时IP</span></span><br><span class="line">sudo ifconfig eth0 IP</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>ping</code> 查看网络上的主机是否在工作</p>
+</li>
+<li><p><code>netstat</code> 显示网络连接、路由表合网口信息</p>
+</li>
+<li><p><code>nslookup</code> 查询一台机器额 IP 和其对应的域名解析器</p>
+</li>
+</ul>
+<h2 id="常用服务器构建"><a href="#常用服务器构建" class="headerlink" title="常用服务器构建"></a>常用服务器构建</h2><h3 id="ftp-服务"><a href="#ftp-服务" class="headerlink" title="ftp 服务"></a>ftp 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 vsftpd 服务器</span></span><br><span class="line">sudo apt install vsftpd</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置 vsftpd.conf 文件</span></span><br><span class="line">sudo vim /etc/vsftpd.conf</span><br><span class="line"></span><br><span class="line"><span class="comment"># 修改或添加如下配置：</span></span><br><span class="line">anonymous_enable=YES</span><br><span class="line">anon_root=/home/itcast/ftp</span><br><span class="line">no_anon_password=YES</span><br><span class="line">write_enable=YES</span><br><span class="line">anon_upload_enable=YES</span><br><span class="line">anon_mkdir_write_enable=YES</span><br><span class="line">anon_umask=0022</span><br><span class="line"></span><br><span class="line"><span class="comment"># 重启 vsftpd 服务器，重新加载配置文件</span></span><br><span class="line">sudo systemd start vsftpd.service 或 sudo service vsftpd start</span><br></pre></td></tr></table></figure>
+
+<h4 id="ftp-服务的使用："><a href="#ftp-服务的使用：" class="headerlink" title="ftp 服务的使用："></a>ftp 服务的使用：</h4><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">get file</span><br><span class="line">put file</span><br></pre></td></tr></table></figure>
+
+<h3 id="ssh-服务"><a href="#ssh-服务" class="headerlink" title="ssh 服务"></a>ssh 服务</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 安装 ssh 服务器</span></span><br><span class="line">sudo apt install openssh-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># ssh 远程登录</span></span><br><span class="line">ssh 用户名@IP</span><br><span class="line"></span><br><span class="line"><span class="comment"># scp 使用格式</span></span><br><span class="line">scp -r 目标用户名@目标主机IP地址:/目标文件的绝对路径 /保存到本机的路径</span><br></pre></td></tr></table></figure>
+
+<h2 id="Linux-基础开发工具"><a href="#Linux-基础开发工具" class="headerlink" title="Linux 基础开发工具"></a>Linux 基础开发工具</h2><h3 id="vim"><a href="#vim" class="headerlink" title="vim"></a>vim</h3><h3 id="gcc"><a href="#gcc" class="headerlink" title="gcc"></a>gcc</h3><h3 id="gdb"><a href="#gdb" class="headerlink" title="gdb"></a>gdb</h3><h3 id="makefile"><a href="#makefile" class="headerlink" title="makefile"></a>makefile</h3><h2 id="动态库与静态库"><a href="#动态库与静态库" class="headerlink" title="动态库与静态库"></a>动态库与静态库</h2>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++ 内存管理</title>
     <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
     <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
@@ -972,30 +852,68 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 基础入门总结</title>
-    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
+    <title>Linux 网络编程</title>
+    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
 <a id="more"></a>
 
-<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
-<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
-</blockquote>
-<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
-<li><p><code>class</code> 的声明： </p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>return by reference</code> 语法分析：</p>
-<blockquote>
-<p>传递者无需知道接收者是以reference形式接收</p>
-</blockquote>
-</li>
-</ul>
-]]></content>
+
+
+<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="阻塞式-I-O"><a href="#阻塞式-I-O" class="headerlink" title="阻塞式 I/O"></a>阻塞式 I/O</h2><h2 id="非阻塞式-I-O"><a href="#非阻塞式-I-O" class="headerlink" title="非阻塞式 I/O"></a>非阻塞式 I/O</h2><h2 id="I-O-复用（select，poll，epoll）"><a href="#I-O-复用（select，poll，epoll）" class="headerlink" title="I/O 复用（select，poll，epoll）"></a>I/O 复用（select，poll，epoll）</h2><h2 id="信号驱动式-I-O（SIGIO）"><a href="#信号驱动式-I-O（SIGIO）" class="headerlink" title="信号驱动式 I/O（SIGIO）"></a>信号驱动式 I/O（SIGIO）</h2><p>信号驱动式 I/O 是指进程预先告知内核，使得当某个描述符上发生某事时，内核使用信号通知相关进程。</p>
+<h2 id="异步-I-O（POSIX的aio-xx系列函数）"><a href="#异步-I-O（POSIX的aio-xx系列函数）" class="headerlink" title="异步 I/O（POSIX的aio_xx系列函数）"></a>异步 I/O（POSIX的aio_xx系列函数）</h2><h2 id="各种-I-O-模型的比较"><a href="#各种-I-O-模型的比较" class="headerlink" title="各种 I/O 模型的比较"></a>各种 I/O 模型的比较</h2>]]></content>
       <categories>
-        <category>C/C++</category>
+        <category>Linux</category>
       </categories>
       <tags>
-        <tag>C/C++</tag>
+        <tag>Linux</tag>
+        <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TCP/IP 详解</title>
+    <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
+<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>通常所说的TCP/IP协议族代表的是一组不同的协议组合在一起构成的，更精确的名称为Internet协议族（Internet Protocol Suite）。TCP 和 IP 只是此协议族其中两种协议。</p>
+<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><p>网络协议的分层主要作用是解耦，每一层不需要关心相邻层的细节。</p>
+<h3 id="OSI-七层网络模型（理论模型）"><a href="#OSI-七层网络模型（理论模型）" class="headerlink" title="OSI 七层网络模型（理论模型）"></a>OSI 七层网络模型（理论模型）</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3><h1 id="TCP-特性"><a href="#TCP-特性" class="headerlink" title="TCP 特性"></a>TCP 特性</h1><h3 id="1-面向连接"><a href="#1-面向连接" class="headerlink" title="1.面向连接"></a>1.面向连接</h3><p>三次握手与四次挥手</p>
+<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="2.可靠性"></a>2.可靠性</h3><p>确认机制与超时重传机制</p>
+<blockquote>
+<p>TTL时间算法</p>
+</blockquote>
+<h3 id="3-保证顺序"><a href="#3-保证顺序" class="headerlink" title="3.保证顺序"></a>3.保证顺序</h3><p>数据分节排序</p>
+<h3 id="4-流量控制"><a href="#4-流量控制" class="headerlink" title="4.流量控制"></a>4.流量控制</h3><p>滑动窗口机制</p>
+<h3 id="5-拥塞控制"><a href="#5-拥塞控制" class="headerlink" title="5.拥塞控制"></a>5.拥塞控制</h3><p>慢启动机制</p>
+<h1 id="命令相关"><a href="#命令相关" class="headerlink" title="命令相关"></a>命令相关</h1><h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig localhost</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -<span class="keyword">in</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -e</span><br><span class="line">tcpdump -n</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">traceroute</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1145,92 +1063,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 面向对象程序设计</title>
-    <url>/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</url>
-    <content><![CDATA[<p><img src="/buckets/images/tjhttp.jpg" alt=""></p>
-<a id="more"></a>
-
-<h2 id="基于对象-Object-Based"><a href="#基于对象-Object-Based" class="headerlink" title="基于对象 (Object Based)"></a>基于对象 (<code>Object Based</code>)</h2><p>面对的是单一 <code>class</code> 的设计</p>
-<h3 id="C-class-的两种分类："><a href="#C-class-的两种分类：" class="headerlink" title="C++ class 的两种分类："></a><code>C++ class</code> 的两种分类：</h3><ol>
-<li><code>class without pointer members</code></li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">complex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">complex</span>(<span class="keyword">double</span> r = <span class="number">0</span>, <span class="keyword">double</span> i = <span class="number">0</span>)</span><br><span class="line">        : re(r), im(i)</span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">complex</span>&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">real</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> re; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">imag</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> im; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> re, im;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">friend</span> <span class="built_in">complex</span>&amp; __doapl(<span class="built_in">complex</span>*, <span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>参数传递：<code>pass by value vs. pass by reference(to const)</code>  </p>
-</blockquote>
-<blockquote>
-<p>返回值传递：<code>return by value vs. return by reference(to const)</code></p>
-</blockquote>
-<ol start="2">
-<li><code>class with pointer members</code>  </li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">char</span>* c_str = <span class="number">0</span>); <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝构造</span></span><br><span class="line">    <span class="built_in">string</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝赋值</span></span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">string</span>(); <span class="comment">// 析构函数</span></span><br><span class="line">    <span class="function"><span class="keyword">char</span>* <span class="title">c_str</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> m_data; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* m_data;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="面向对象-Object-Oriented"><a href="#面向对象-Object-Oriented" class="headerlink" title="面向对象 (Object Oriented)"></a>面向对象 (<code>Object Oriented</code>)</h2><p>面对的是多重 <code>classes</code> 的设计，<code>classes</code> 之间具有某种关系</p>
-<h3 id="C-class-之间的关系"><a href="#C-class-之间的关系" class="headerlink" title="C++ class 之间的关系"></a><code>C++ class</code> 之间的关系</h3><ol>
-<li>继承 (<code>inheritance</code>) — 表示 <code>is-a</code></li>
-</ol>
-<ol start="2">
-<li>复合 (<code>composition</code>) — 表示 <code>has-a</code></li>
-</ol>
-<ol start="3">
-<li>委托 (<code>delegation</code>)</li>
-</ol>
-<h4 id="C-学习资料推荐："><a href="#C-学习资料推荐：" class="headerlink" title="C++ 学习资料推荐："></a>C++ 学习资料推荐：</h4><ul>
-<li>C++ Primer (fifth Edition) — Stanley B.Lippman</li>
-<li>The C++ Programming Language (Fourth Edition) — Bjarne Stroustrup</li>
-<li>Effective C++ (Third Edition) — Scott Meyers</li>
-<li>More Effective C++ — Scott Meyers</li>
-<li>Inside The C++ Object Model — Stanley B.Lippman</li>
-<li><font color=#FF88AA>Modern C++ Design — Scott Meyers</font></li>
-<li>The C++ Standard Library (Second Edition) — Nicolai M. Josuttis</li>
-<li>STL 源码剖析 — 侯捷<blockquote>
-<p>能够把以上这些书籍全部啃完，然后通过工作实践应用，就足够了</p>
-</blockquote>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2020.09.08 - 软通动力</title>
-    <url>/2020/09/10/interviews/2020.09.08%20-%20%E8%BD%AF%E9%80%9A%E5%8A%A8%E5%8A%9B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/400.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="软通动力面试"><a href="#软通动力面试" class="headerlink" title="软通动力面试"></a>软通动力面试</h1><p>·</p>
-<h2 id="1-介绍一下Nginx"><a href="#1-介绍一下Nginx" class="headerlink" title="1.介绍一下Nginx"></a>1.介绍一下Nginx</h2><h2 id="2-upstream模块"><a href="#2-upstream模块" class="headerlink" title="2.upstream模块"></a>2.upstream模块</h2><h2 id="3-C-指针和引用的区别"><a href="#3-C-指针和引用的区别" class="headerlink" title="3.C++指针和引用的区别"></a>3.C++指针和引用的区别</h2><p>指针本身是一个变量，只不过这个变量存储的是一个地址，这个地址指向一个内存单元。而引用跟原来的变量实质上是一个东西，可以把引用理解为变量的别名。</p>
-<p>区别：</p>
-<p>指针可以为空值，引用不可以为空，也就是说声明引用必须有初值。</p>
-<h2 id="4-指针具体指什么"><a href="#4-指针具体指什么" class="headerlink" title="4.指针具体指什么"></a>4.指针具体指什么</h2><p>指针实际上就是指向一个内存块的地址</p>
-<h2 id="5-C-堆和栈"><a href="#5-C-堆和栈" class="headerlink" title="5.C++ 堆和栈"></a>5.C++ 堆和栈</h2><p>堆是操作系统提供的一块儿全局内存空间，并且允许程序员手动管理，也就是我们常说的动态内存空间（标准术语：free store）。</p>
-<p>栈是操作系统管理的一块儿内存空间，栈上的变量被称为自动变量，在离开作用域之后会自动销毁，也就是操作系统负责释放内存空间，在C++中，如果变量是object，系统会自动调用析构函数。</p>
-<h2 id="6-C-多态"><a href="#6-C-多态" class="headerlink" title="6.C++多态"></a>6.C++多态</h2><p>多态是C++最重要的特性，多态是通过虚函数+继承实现的特性。通过父类指针指向不同的子类对象，调用同一函数产生不一样的结果。</p>
-<p>多态的关键在于虚函数，在一个类中如果定义一个虚函数，我们就认为这个类为虚基类，也就是说可以被继承，虚函数可以被（override）；编译器会为这个类生成一个虚函数表（virtual table），虚函数表中存在的都是函数的地址。继承相对于函数是继承调用权，如果子类有覆写父类虚函数，编译器也会相应的覆盖虚表中对应的函数地址。</p>
-<h2 id="7-简单工厂模式"><a href="#7-简单工厂模式" class="headerlink" title="7.简单工厂模式"></a>7.简单工厂模式</h2><p>简单工厂其实也被称为静态工厂，使用简单工厂就可以把消费和生产完全分离（其实也就是解耦）。消费者只需要知道自己需要什么产品，产品的生产全部交给工厂。一般来说工厂是根据传进来的参数生产好产品供消费者使用。这种模式有利于扩展，当有新产品加入时，只需要定义好新产品并再工厂中完成新产品的生产就可以了。</p>
-<ul>
-<li>优点：客户端与产品的创建分离，客户端不需要知道产品创建的逻辑，只需要消费该产品即可。</li>
-<li>缺点：工厂类集成了所有产品的创建逻辑，当工厂类出现问题，所有产品都会出现问题；还有当新增加产品都会修改工厂类，违背开闭原则</li>
-</ul>
-<h2 id="8-单例模式和使用场景"><a href="#8-单例模式和使用场景" class="headerlink" title="8.单例模式和使用场景"></a>8.单例模式和使用场景</h2><p>单例模式是指某一类对象必须保证在系统中只有一个实例存在。常见的实现方式：在多线程下，使用双检查锁（内存reorder），C++11之后的原子变量实现。</p>
-<p>使用场景：</p>
-<p>连接池、线程池、配置管理器。。。</p>
-<h2 id="9-说一下你的有点和缺点"><a href="#9-说一下你的有点和缺点" class="headerlink" title="9.说一下你的有点和缺点"></a>9.说一下你的有点和缺点</h2>]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>interviews</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python 基础</title>
     <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p><img src="/buckets/images/guido.jpg" alt=""></p>
@@ -1315,6 +1147,174 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </categories>
       <tags>
         <tag>Python</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>POSIX 多线程编程</title>
+    <url>/2014/10/18/Linux%20Notes/POSIX%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/pla1.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="文章概述"><a href="#文章概述" class="headerlink" title="文章概述"></a>文章概述</h1><h1 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h1><blockquote>
+<p>《POSIX 多线程程序设计》</p>
+</blockquote>
+<h1 id="经典の故事"><a href="#经典の故事" class="headerlink" title="经典の故事"></a>经典の故事</h1><blockquote>
+<p>舀水的程序员</p>
+<p>三个程序员乘同一艘小船出海，他们尽情享受着阳光和海风，离岸越来越远。一会儿，天色变暗，暴风雨降临，小船在狂风骇浪中颠簸，当暴风雨终于减缓的时候，他们已经失去了桅杆和帆，而且小船也裂了一个小缝。他们看不到陆地的影子。</p>
+<p>小船上配备了食物、水、浆和一个水桶。程序员们开始工作。一个人划船、监视船舱渗水情况，其他两个人则可能去睡觉、检测水位、寻找陆地或者其他船只。</p>
+<p>空闲的程序员可能看到水位上升，开始用桶舀水。当两个程序员都醒来的时候，可能同时发现了水位的上升，都要去拿水桶。显然只有一个人首先拿到水桶，而另一个人则不得不等待。</p>
+<p>如果两个人都睡着了，而划船的人认为该舀水的时候，通常他会推醒其中一个人而让另一个人继续睡觉。但是，如果划船的人心情不好，则可能大声喊叫，将两个人全都吵醒。在让其中一个继续该做的工作时，另一个可以继续睡觉。</p>
+<p>当划船的人疲劳时，他可以唤醒其中一个接替他的工作，然后马上睡觉，知道他被再次唤醒。这样，三个程序员就可以坚持他们的旅程了。</p>
+</blockquote>
+<h1 id="线程介绍"><a href="#线程介绍" class="headerlink" title="线程介绍"></a>线程介绍</h1><h2 id="线程の特点"><a href="#线程の特点" class="headerlink" title="线程の特点"></a>线程の特点</h2><h2 id="常用の术语"><a href="#常用の术语" class="headerlink" title="常用の术语"></a>常用の术语</h2><ul>
+<li>异步</li>
+</ul>
+<blockquote>
+<p>任何两个彼此独立运行的操作是异步的。</p>
+</blockquote>
+<ul>
+<li>并发</li>
+</ul>
+<blockquote>
+<p>宏观并行，微观串行。</p>
+</blockquote>
+<ul>
+<li>并行</li>
+</ul>
+<blockquote>
+<p>并发序列同时执行。</p>
+</blockquote>
+<ul>
+<li>并发</li>
+</ul>
+<blockquote>
+</blockquote>
+<h1 id="POSIX-线程相关API"><a href="#POSIX-线程相关API" class="headerlink" title="POSIX 线程相关API"></a>POSIX 线程相关API</h1><h1 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h1><h2 id="互斥量（mutex）"><a href="#互斥量（mutex）" class="headerlink" title="互斥量（mutex）"></a>互斥量（mutex）</h2><h3 id="相关API"><a href="#相关API" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 互斥量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_mutex_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_MUTEX_T];</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_mutex_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line">pthread_mutex_init(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">pthread_mutexattr_t</span> *attr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁互斥量</span></span><br><span class="line">pthread_mutex_destory(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加锁互斥量</span></span><br><span class="line">pthread_mutex_lock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁互斥量（非阻塞）</span></span><br><span class="line">pthread_mutex_trylock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解锁互斥量</span></span><br><span class="line">pthread_mutex_unlock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br></pre></td></tr></table></figure>
+
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><h3 id="相关API-1"><a href="#相关API-1" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 条件变量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_cond_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_COND_T];</span><br><span class="line">    __extension__ <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_cond_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_cond_t</span> con = PTHREAD_COND_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_init</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_condattr_t</span> *condattr)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_destory</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_wait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 超时等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_timewait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex, struct timespec *expiration)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 唤醒条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_signal</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 广播条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_broadcast</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+        <category>并发编程</category>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>2020.09.08 - 软通动力</title>
+    <url>/2020/09/10/interviews/2020.09.08%20-%20%E8%BD%AF%E9%80%9A%E5%8A%A8%E5%8A%9B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/400.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="软通动力面试"><a href="#软通动力面试" class="headerlink" title="软通动力面试"></a>软通动力面试</h1><p>·</p>
+<h2 id="1-介绍一下Nginx"><a href="#1-介绍一下Nginx" class="headerlink" title="1.介绍一下Nginx"></a>1.介绍一下Nginx</h2><h2 id="2-upstream模块"><a href="#2-upstream模块" class="headerlink" title="2.upstream模块"></a>2.upstream模块</h2><h2 id="3-C-指针和引用的区别"><a href="#3-C-指针和引用的区别" class="headerlink" title="3.C++指针和引用的区别"></a>3.C++指针和引用的区别</h2><p>指针本身是一个变量，只不过这个变量存储的是一个地址，这个地址指向一个内存单元。而引用跟原来的变量实质上是一个东西，可以把引用理解为变量的别名。</p>
+<p>区别：</p>
+<p>指针可以为空值，引用不可以为空，也就是说声明引用必须有初值。</p>
+<h2 id="4-指针具体指什么"><a href="#4-指针具体指什么" class="headerlink" title="4.指针具体指什么"></a>4.指针具体指什么</h2><p>指针实际上就是指向一个内存块的地址</p>
+<h2 id="5-C-堆和栈"><a href="#5-C-堆和栈" class="headerlink" title="5.C++ 堆和栈"></a>5.C++ 堆和栈</h2><p>堆是操作系统提供的一块儿全局内存空间，并且允许程序员手动管理，也就是我们常说的动态内存空间（标准术语：free store）。</p>
+<p>栈是操作系统管理的一块儿内存空间，栈上的变量被称为自动变量，在离开作用域之后会自动销毁，也就是操作系统负责释放内存空间，在C++中，如果变量是object，系统会自动调用析构函数。</p>
+<h2 id="6-C-多态"><a href="#6-C-多态" class="headerlink" title="6.C++多态"></a>6.C++多态</h2><p>多态是C++最重要的特性，多态是通过虚函数+继承实现的特性。通过父类指针指向不同的子类对象，调用同一函数产生不一样的结果。</p>
+<p>多态的关键在于虚函数，在一个类中如果定义一个虚函数，我们就认为这个类为虚基类，也就是说可以被继承，虚函数可以被（override）；编译器会为这个类生成一个虚函数表（virtual table），虚函数表中存在的都是函数的地址。继承相对于函数是继承调用权，如果子类有覆写父类虚函数，编译器也会相应的覆盖虚表中对应的函数地址。</p>
+<h2 id="7-简单工厂模式"><a href="#7-简单工厂模式" class="headerlink" title="7.简单工厂模式"></a>7.简单工厂模式</h2><p>简单工厂其实也被称为静态工厂，使用简单工厂就可以把消费和生产完全分离（其实也就是解耦）。消费者只需要知道自己需要什么产品，产品的生产全部交给工厂。一般来说工厂是根据传进来的参数生产好产品供消费者使用。这种模式有利于扩展，当有新产品加入时，只需要定义好新产品并再工厂中完成新产品的生产就可以了。</p>
+<ul>
+<li>优点：客户端与产品的创建分离，客户端不需要知道产品创建的逻辑，只需要消费该产品即可。</li>
+<li>缺点：工厂类集成了所有产品的创建逻辑，当工厂类出现问题，所有产品都会出现问题；还有当新增加产品都会修改工厂类，违背开闭原则</li>
+</ul>
+<h2 id="8-单例模式和使用场景"><a href="#8-单例模式和使用场景" class="headerlink" title="8.单例模式和使用场景"></a>8.单例模式和使用场景</h2><p>单例模式是指某一类对象必须保证在系统中只有一个实例存在。常见的实现方式：在多线程下，使用双检查锁（内存reorder），C++11之后的原子变量实现。</p>
+<p>使用场景：</p>
+<p>连接池、线程池、配置管理器。。。</p>
+<h2 id="9-说一下你的有点和缺点"><a href="#9-说一下你的有点和缺点" class="headerlink" title="9.说一下你的有点和缺点"></a>9.说一下你的有点和缺点</h2>]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>interviews</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Dynamic Programming</title>
+    <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
+<a id="more"></a>
+
+<p align="right"><font size="4">—— (DP, Dynamic Programming)</font></p>
+
+<h1 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h1><p>曾几何时，听到很多同学说“动态规划很难”，“不是搞算法的一般人根本学不会”。。。导致很久很久我对这个算法是望而却步，迟迟没敢上手！但即使作为一名算法渣还真就不信这个邪！于是下定决心啃下来！！！其实只要下功夫，没有什么是能难得倒你的，有句话叫做“你把时间花在哪里，岁月就会在哪里留下记号！”，与你共勉！😄😄😄</p>
+<p>另外提一下，DP在国外算是入门级算法，包括DFS、BFS等，从某个角度来看，DP像是在执行DFS的sort过程，下文将会提到。</p>
+<p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
+<h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
+<p>ok！以一个简单的例子开始！</p>
+<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><blockquote>
+<p> 测试程序：</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-无脑递归（Naive-recursive-algorithm）"><a href="#1-无脑递归（Naive-recursive-algorithm）" class="headerlink" title="1. 无脑递归（Naive recursive algorithm）"></a>1. 无脑递归（Naive recursive algorithm）</h3><p><font color=#44FF><em>recursion：</em>递归存在的最大问题在于递归过程中会出现大量“重叠子问题”（overlap subproblem）</font></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Recursive</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n²)</p>
+<p>空间复杂度：O(1)</p>
+</blockquote>
+<h3 id="2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><a href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）" class="headerlink" title="2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）"></a>2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</h3><blockquote>
+<p><font color=#FFBB>DP ≈ *”careful brute force”* ———— 仔细的蛮力</font></p>
+<p><font color=#CAEF0F>DP ≈ <em>recursion + memoization + guessing</em></font></p>
+</blockquote>
+<p>这种方式是在递归过程中将每个子问题的结果保存起来，在以后遇到相同子问题时直接拿去用，而不用去重复调用产生没必要的开销。事实上此方法只是阻止了“重复计算”，而未阻止“重复调用”。此方法依然会执行函数的递归调用，也就必然会产生函数调用的额外开销。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo; <span class="comment">// 内部递归调用，此变量必须是外部变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">CarefulBruteForce</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo.<span class="built_in">find</span>(n) != memo.<span class="built_in">end</span>()) &#123; <span class="comment">// <span class="doctag">NOTE:</span> 1 # guessing</span></span><br><span class="line">        <span class="keyword">return</span> memo[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        f = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 看似递归，实际上忽略了递归“计算”（<span class="doctag">NOTE:</span> 1）</span></span><br><span class="line">        f = CarefulBruteForce(n - <span class="number">1</span>) + CarefulBruteForce(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    memo[n] = f;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="3-Bottom-up-（自下而上）-——-DP-完全体"><a href="#3-Bottom-up-（自下而上）-——-DP-完全体" class="headerlink" title="3. Bottom-up （自下而上） —— DP 完全体"></a>3. Bottom-up （自下而上） —— DP 完全体</h3><blockquote>
+<p><font color=#F211FF>DP ≈ <em>subproblems + “reuse”</em> ———— 解决问题将其拆分为*<u>子问题</u><em>，然后将</em><u>解决方案</u><em>重复用于</em><u>子问题</u>*</font></p>
+</blockquote>
+<p>自下而上的方案是真正意义上去除递归的方式，摒弃了函数内部的递归调用；回顾程序代码运行逻辑，程序在运行时代码是逐行顺序执行，在遇到函数调用时会进入被调函数内部继续执行代码，完成后返回主调函数，其本质就是一个栈的操作过程。事实上编译器在遇到函数调用的时候会为函数开辟内存空间（也就是分配栈），目的是为了保存寄存器指针等（恢复现场用）。去除递归调用以后就没有了函数切换的开销，我们知道 —— 函数切换的开销也是影响程序性能的问题之一，所以我们一般会将 DP 写成循环的方式。</p>
+<p>那么什么叫自下而上？其实自下而上我认为是正向思考的过程，反而递归才是反向思考的过程。就这道题来说，如果是递归，它的逻辑过程是从后往前计算，而此处则是从前往后计算。要求第N个斐波那契数，那N应该为<strong>上</strong>，而斐波那契数从1开始，所以1为<strong>下</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BottomUp_dp</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            f = memo[i - <span class="number">1</span>] + memo[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        memo[i] = f;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="4-初步总结"><a href="#4-初步总结" class="headerlink" title="4. 初步总结"></a>4. 初步总结</h3><h2 id="例二：Shortest-paths"><a href="#例二：Shortest-paths" class="headerlink" title="例二：Shortest paths"></a>例二：Shortest paths</h2><h2 id="例三：文本对齐"><a href="#例三：文本对齐" class="headerlink" title="例三：文本对齐"></a>例三：文本对齐</h2><h2 id="例四：21点"><a href="#例四：21点" class="headerlink" title="例四：21点"></a>例四：21点</h2><h2 id="例五：括号"><a href="#例五：括号" class="headerlink" title="例五：括号"></a>例五：括号</h2><h2 id="例六：编辑距离"><a href="#例六：编辑距离" class="headerlink" title="例六：编辑距离"></a>例六：编辑距离</h2><h2 id="例七：背包"><a href="#例七：背包" class="headerlink" title="例七：背包"></a>例七：背包</h2><h2 id="例八：钢琴-吉他指法"><a href="#例八：钢琴-吉他指法" class="headerlink" title="例八：钢琴/吉他指法"></a>例八：钢琴/吉他指法</h2><h2 id="例九：俄罗斯方块"><a href="#例九：俄罗斯方块" class="headerlink" title="例九：俄罗斯方块"></a>例九：俄罗斯方块</h2><h2 id="例十：超级马里奥兄弟"><a href="#例十：超级马里奥兄弟" class="headerlink" title="例十：超级马里奥兄弟"></a>例十：超级马里奥兄弟</h2><h2 id="例十一：Longest-common-subsequece"><a href="#例十一：Longest-common-subsequece" class="headerlink" title="例十一：Longest common subsequece"></a>例十一：Longest common subsequece</h2><h1 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h1><h1 id="动态规划解题套路"><a href="#动态规划解题套路" class="headerlink" title="动态规划解题套路"></a>动态规划解题套路</h1><h2 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h2><h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>建议大家不要看中文作者写的技术书籍，以及中文培训机构的视频，不是崇洋媚外，因为即便中文作者技术很好，也未必能表达清楚技术观点。我认为学习技术需要有一个思维转化过程，你看中文作者写的书你会感觉东一头西一头的瞎扯，貌似全是重点，但又毫无重点，因为他根本讲不清楚原理；技术源于国外，所以建议大家多关注国外的教材，你看老外写的书，很容易会被作者带入他的思维里，你会不由自主跟着他的思维一步步掌握核心关键点。最后说一下中文培训机构，大多数培训机构都是总结好了和盘托出，关键部分一笔带过，他们不会明白“授人以鱼不如授人以渔”的道理。</p>
+<p>关于 DP 的参考资料有很多，我比较倾向 “看书 + 视频教程” 的方式结合学习，因为本人算法基础比较菜，直接上手看《算法导论》+ 《算法》有些吃力，以下是我在学习 DP 过程中的一些参考资源。</p>
+<hr>
+<ul>
+<li>视频教程</li>
+</ul>
+<p><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/" target="_blank" rel="noopener" title="MIT 公开课">MIT 算法简介课程-2011年秋季 - p19~p22</a> —— 免费（B站上有中文翻译版本，但是翻译质量只能呵呵了。。。）</p>
+<p><a href=""p15"">MIT 算法导论课程 - p15</a> —— 免费（《算法导论》作者授课，权威性不言而喻）</p>
+<p><a href="https://www.coursera.org/learn/algorithmic-toolbox/home/welcome" target="_blank" rel="noopener" title="Coursera 数据结构与算法">Coursera 数据结构与算法 - 第5周~第六周</a> —— 免费试用一周，之后会收取相关费用，不过有一些策略可以越过收费，自己研究</p>
+<p><a href="https://www.coursera.org/learn/algorithms-greedy" target="_blank" rel="noopener" title="Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划">Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划</a> —— 免费试用7天</p>
+<ul>
+<li>书籍推荐</li>
+</ul>
+<p>《算法导论》第三版</p>
+<p>《算法》第四版</p>
+<h1 id="轻松一刻"><a href="#轻松一刻" class="headerlink" title="轻松一刻"></a>轻松一刻</h1><video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
+      <source id="mp4" src="https://media.githubusercontent.com/media/WinnieVivi/test/master/WishYouWereHere.mp4" type="video/mp4">
+      </video>
+
+<h3 id="star"><a href="#star" class="headerlink" title="star"></a>star</h3><iframe
+style="margin-left: 2px; margin-bottom:-5px;"
+frameborder="0" scrolling="0" width="100px" height="20px"
+src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.io&type=star&count=true" >
+</iframe>
+]]></content>
+      <categories>
+        <category>Algorithm-beginner</category>
+      </categories>
+      <tags>
+        <tag>Algorithm</tag>
       </tags>
   </entry>
 </search>
