@@ -1,88 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Dynamic Programming</title>
-    <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
-<a id="more"></a>
-
-<p align="right"><font size="4">—— (DP, Dynamic Programming)</font></p>
-
-<h1 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h1><p>曾几何时，听到很多同学说“动态规划很难”，“不是搞算法的一般人根本学不会”。。。导致很久很久我对这个算法是望而却步，迟迟没敢上手！但即使作为一名算法渣还真就不信这个邪！于是下定决心啃下来！！！其实只要下功夫，没有什么是能难得倒你的，有句话叫做“你把时间花在哪里，岁月就会在哪里留下记号！”，与你共勉！😄😄😄</p>
-<p>另外提一下，DP在国外算是入门级算法，包括DFS、BFS等，从某个角度来看，DP像是在执行DFS的sort过程，下文将会提到。</p>
-<p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
-<h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
-<p>ok！以一个简单的例子开始！</p>
-<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><blockquote>
-<p> 测试程序：</p>
-</blockquote>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h3 id="1-无脑递归（Naive-recursive-algorithm）"><a href="#1-无脑递归（Naive-recursive-algorithm）" class="headerlink" title="1. 无脑递归（Naive recursive algorithm）"></a>1. 无脑递归（Naive recursive algorithm）</h3><p><font color=#44FF><em>recursion：</em>递归存在的最大问题在于递归过程中会出现大量“重叠子问题”（overlap subproblem）</font></p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Recursive</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>复杂度分析：</p>
-<p>时间复杂度：O(n²)</p>
-<p>空间复杂度：O(1)</p>
-</blockquote>
-<h3 id="2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><a href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）" class="headerlink" title="2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）"></a>2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</h3><blockquote>
-<p><font color=#FFBB>DP ≈ *”careful brute force”* ———— 仔细的蛮力</font></p>
-<p><font color=#CAEF0F>DP ≈ <em>recursion + memoization + guessing</em></font></p>
-</blockquote>
-<p>这种方式是在递归过程中将每个子问题的结果保存起来，在以后遇到相同子问题时直接拿去用，而不用去重复调用产生没必要的开销。事实上此方法只是阻止了“重复计算”，而未阻止“重复调用”。此方法依然会执行函数的递归调用，也就必然会产生函数调用的额外开销。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo; <span class="comment">// 内部递归调用，此变量必须是外部变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">CarefulBruteForce</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo.<span class="built_in">find</span>(n) != memo.<span class="built_in">end</span>()) &#123; <span class="comment">// <span class="doctag">NOTE:</span> 1 # guessing</span></span><br><span class="line">        <span class="keyword">return</span> memo[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        f = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 看似递归，实际上忽略了递归“计算”（<span class="doctag">NOTE:</span> 1）</span></span><br><span class="line">        f = CarefulBruteForce(n - <span class="number">1</span>) + CarefulBruteForce(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    memo[n] = f;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>复杂度分析：</p>
-<p>时间复杂度：O(n)</p>
-<p>空间复杂度：O(n)</p>
-</blockquote>
-<h3 id="3-Bottom-up-（自下而上）-——-DP-完全体"><a href="#3-Bottom-up-（自下而上）-——-DP-完全体" class="headerlink" title="3. Bottom-up （自下而上） —— DP 完全体"></a>3. Bottom-up （自下而上） —— DP 完全体</h3><blockquote>
-<p><font color=#F211FF>DP ≈ <em>subproblems + “reuse”</em> ———— 解决问题将其拆分为*<u>子问题</u><em>，然后将</em><u>解决方案</u><em>重复用于</em><u>子问题</u>*</font></p>
-</blockquote>
-<p>自下而上的方案是真正意义上去除递归的方式，摒弃了函数内部的递归调用；回顾程序代码运行逻辑，程序在运行时代码是逐行顺序执行，在遇到函数调用时会进入被调函数内部继续执行代码，完成后返回主调函数，其本质就是一个栈的操作过程。事实上编译器在遇到函数调用的时候会为函数开辟内存空间（也就是分配栈），目的是为了保存寄存器指针等（恢复现场用）。去除递归调用以后就没有了函数切换的开销，我们知道 —— 函数切换的开销也是影响程序性能的问题之一，所以我们一般会将 DP 写成循环的方式。</p>
-<p>那么什么叫自下而上？其实自下而上我认为是正向思考的过程，反而递归才是反向思考的过程。就这道题来说，如果是递归，它的逻辑过程是从后往前计算，而此处则是从前往后计算。要求第N个斐波那契数，那N应该为<strong>上</strong>，而斐波那契数从1开始，所以1为<strong>下</strong>。</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BottomUp_dp</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            f = memo[i - <span class="number">1</span>] + memo[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        memo[i] = f;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>复杂度分析：</p>
-<p>时间复杂度：O(n)</p>
-<p>空间复杂度：O(n)</p>
-</blockquote>
-<h3 id="4-初步总结"><a href="#4-初步总结" class="headerlink" title="4. 初步总结"></a>4. 初步总结</h3><h2 id="例二：Shortest-paths"><a href="#例二：Shortest-paths" class="headerlink" title="例二：Shortest paths"></a>例二：Shortest paths</h2><h2 id="例三：文本对齐"><a href="#例三：文本对齐" class="headerlink" title="例三：文本对齐"></a>例三：文本对齐</h2><h2 id="例四：21点"><a href="#例四：21点" class="headerlink" title="例四：21点"></a>例四：21点</h2><h2 id="例五：括号"><a href="#例五：括号" class="headerlink" title="例五：括号"></a>例五：括号</h2><h2 id="例六：编辑距离"><a href="#例六：编辑距离" class="headerlink" title="例六：编辑距离"></a>例六：编辑距离</h2><h2 id="例七：背包"><a href="#例七：背包" class="headerlink" title="例七：背包"></a>例七：背包</h2><h2 id="例八：钢琴-吉他指法"><a href="#例八：钢琴-吉他指法" class="headerlink" title="例八：钢琴/吉他指法"></a>例八：钢琴/吉他指法</h2><h2 id="例九：俄罗斯方块"><a href="#例九：俄罗斯方块" class="headerlink" title="例九：俄罗斯方块"></a>例九：俄罗斯方块</h2><h2 id="例十：超级马里奥兄弟"><a href="#例十：超级马里奥兄弟" class="headerlink" title="例十：超级马里奥兄弟"></a>例十：超级马里奥兄弟</h2><h2 id="例十一：Longest-common-subsequece"><a href="#例十一：Longest-common-subsequece" class="headerlink" title="例十一：Longest common subsequece"></a>例十一：Longest common subsequece</h2><h1 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h1><h1 id="动态规划解题套路"><a href="#动态规划解题套路" class="headerlink" title="动态规划解题套路"></a>动态规划解题套路</h1><h2 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h2><h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>建议大家不要看中文作者写的技术书籍，以及中文培训机构的视频，不是崇洋媚外，因为即便中文作者技术很好，也未必能表达清楚技术观点。我认为学习技术需要有一个思维转化过程，你看中文作者写的书你会感觉东一头西一头的瞎扯，貌似全是重点，但又毫无重点，因为他根本讲不清楚原理；技术源于国外，所以建议大家多关注国外的教材，你看老外写的书，很容易会被作者带入他的思维里，你会不由自主跟着他的思维一步步掌握核心关键点。最后说一下中文培训机构，大多数培训机构都是总结好了和盘托出，关键部分一笔带过，他们不会明白“授人以鱼不如授人以渔”的道理。</p>
-<p>关于 DP 的参考资料有很多，我比较倾向 “看书 + 视频教程” 的方式结合学习，因为本人算法基础比较菜，直接上手看《算法导论》+ 《算法》有些吃力，以下是我在学习 DP 过程中的一些参考资源。</p>
-<hr>
-<ul>
-<li>视频教程</li>
-</ul>
-<p><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/" target="_blank" rel="noopener" title="MIT 公开课">MIT 算法简介课程-2011年秋季 - p19~p22</a> —— 免费（B站上有中文翻译版本，但是翻译质量只能呵呵了。。。）</p>
-<p><a href=""p15"">MIT 算法导论课程 - p15</a> —— 免费（《算法导论》作者授课，权威性不言而喻）</p>
-<p><a href="https://www.coursera.org/learn/algorithmic-toolbox/home/welcome" target="_blank" rel="noopener" title="Coursera 数据结构与算法">Coursera 数据结构与算法 - 第5周~第六周</a> —— 免费试用一周，之后会收取相关费用，不过有一些策略可以越过收费，自己研究</p>
-<p><a href="https://www.coursera.org/learn/algorithms-greedy" target="_blank" rel="noopener" title="Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划">Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划</a> —— 免费试用7天</p>
-<ul>
-<li>书籍推荐</li>
-</ul>
-<p>《算法导论》第三版</p>
-<p>《算法》第四版</p>
-<h1 id="轻松一刻"><a href="#轻松一刻" class="headerlink" title="轻松一刻"></a>轻松一刻</h1><video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
-      <source id="mp4" src="https://media.githubusercontent.com/media/WinnieVivi/test/master/WishYouWereHere.mp4" type="video/mp4">
-      </video>
-
-<h3 id="star"><a href="#star" class="headerlink" title="star"></a>star</h3><iframe
-style="margin-left: 2px; margin-bottom:-5px;"
-frameborder="0" scrolling="0" width="100px" height="20px"
-src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.io&type=star&count=true" >
-</iframe>
-]]></content>
-      <categories>
-        <category>Algorithm-beginner</category>
-      </categories>
-      <tags>
-        <tag>Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++ 2.0 并发编程</title>
     <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
@@ -144,25 +62,17 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 基础入门总结</title>
-    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
+    <title>C++ 内存管理</title>
+    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
 <a id="more"></a>
 
-<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
-<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
-</blockquote>
-<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
-<li><p><code>class</code> 的声明： </p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>return by reference</code> 语法分析：</p>
-<blockquote>
-<p>传递者无需知道接收者是以reference形式接收</p>
-</blockquote>
-</li>
-</ul>
-]]></content>
+<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
+
+<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
+<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
+
+<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -747,17 +657,25 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 内存管理</title>
-    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
+    <title>C++ 基础入门总结</title>
+    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
 <a id="more"></a>
 
-<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
-
-<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
-<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
-
-<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
+<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
+<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
+</blockquote>
+<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
+<li><p><code>class</code> 的声明： </p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>return by reference</code> 语法分析：</p>
+<blockquote>
+<p>传递者无需知道接收者是以reference形式接收</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -934,58 +852,85 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>POSIX 多线程编程</title>
-    <url>/2014/10/18/Linux%20Notes/POSIX%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/pla1.jpg" alt=""></p>
+    <title>Dynamic Programming</title>
+    <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="文章概述"><a href="#文章概述" class="headerlink" title="文章概述"></a>文章概述</h1><h1 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h1><blockquote>
-<p>《POSIX 多线程程序设计》</p>
-</blockquote>
-<h1 id="经典の故事"><a href="#经典の故事" class="headerlink" title="经典の故事"></a>经典の故事</h1><blockquote>
-<p>舀水的程序员</p>
-<p>三个程序员乘同一艘小船出海，他们尽情享受着阳光和海风，离岸越来越远。一会儿，天色变暗，暴风雨降临，小船在狂风骇浪中颠簸，当暴风雨终于减缓的时候，他们已经失去了桅杆和帆，而且小船也裂了一个小缝。他们看不到陆地的影子。</p>
-<p>小船上配备了食物、水、浆和一个水桶。程序员们开始工作。一个人划船、监视船舱渗水情况，其他两个人则可能去睡觉、检测水位、寻找陆地或者其他船只。</p>
-<p>空闲的程序员可能看到水位上升，开始用桶舀水。当两个程序员都醒来的时候，可能同时发现了水位的上升，都要去拿水桶。显然只有一个人首先拿到水桶，而另一个人则不得不等待。</p>
-<p>如果两个人都睡着了，而划船的人认为该舀水的时候，通常他会推醒其中一个人而让另一个人继续睡觉。但是，如果划船的人心情不好，则可能大声喊叫，将两个人全都吵醒。在让其中一个继续该做的工作时，另一个可以继续睡觉。</p>
-<p>当划船的人疲劳时，他可以唤醒其中一个接替他的工作，然后马上睡觉，知道他被再次唤醒。这样，三个程序员就可以坚持他们的旅程了。</p>
-</blockquote>
-<h1 id="线程介绍"><a href="#线程介绍" class="headerlink" title="线程介绍"></a>线程介绍</h1><h2 id="线程の特点"><a href="#线程の特点" class="headerlink" title="线程の特点"></a>线程の特点</h2><h2 id="常用の术语"><a href="#常用の术语" class="headerlink" title="常用の术语"></a>常用の术语</h2><ul>
-<li>异步</li>
-</ul>
-<blockquote>
-<p>任何两个彼此独立运行的操作是异步的。</p>
-</blockquote>
-<ul>
-<li>并发</li>
-</ul>
-<blockquote>
-<p>宏观并行，微观串行。</p>
-</blockquote>
-<ul>
-<li>并行</li>
-</ul>
-<blockquote>
-<p>并发序列同时执行。</p>
-</blockquote>
-<ul>
-<li>并发</li>
-</ul>
-<blockquote>
-</blockquote>
-<h1 id="POSIX-线程相关API"><a href="#POSIX-线程相关API" class="headerlink" title="POSIX 线程相关API"></a>POSIX 线程相关API</h1><h1 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h1><h2 id="互斥量（mutex）"><a href="#互斥量（mutex）" class="headerlink" title="互斥量（mutex）"></a>互斥量（mutex）</h2><h3 id="相关API"><a href="#相关API" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 互斥量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_mutex_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_MUTEX_T];</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_mutex_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line">pthread_mutex_init(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">pthread_mutexattr_t</span> *attr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁互斥量</span></span><br><span class="line">pthread_mutex_destory(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加锁互斥量</span></span><br><span class="line">pthread_mutex_lock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁互斥量（非阻塞）</span></span><br><span class="line">pthread_mutex_trylock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解锁互斥量</span></span><br><span class="line">pthread_mutex_unlock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br></pre></td></tr></table></figure>
+<p align="right"><font size="4">—— (DP, Dynamic Programming)</font></p>
 
-<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><h3 id="相关API-1"><a href="#相关API-1" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 条件变量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_cond_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_COND_T];</span><br><span class="line">    __extension__ <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_cond_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_cond_t</span> con = PTHREAD_COND_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_init</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_condattr_t</span> *condattr)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_destory</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_wait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 超时等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_timewait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex, struct timespec *expiration)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 唤醒条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_signal</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 广播条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_broadcast</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br></pre></td></tr></table></figure>
+<h1 id="老生常谈"><a href="#老生常谈" class="headerlink" title="老生常谈"></a>老生常谈</h1><p>曾几何时，听到很多同学说“动态规划很难”，“不是搞算法的一般人根本学不会”。。。导致很久很久我对这个算法是望而却步，迟迟没敢上手！但即使作为一名算法渣还真就不信这个邪！于是下定决心啃下来！！！其实只要下功夫，没有什么是能难得倒你的，有句话叫做“你把时间花在哪里，岁月就会在哪里留下记号！”，与你共勉！😄😄😄</p>
+<p>另外提一下，DP在国外算是入门级算法，包括DFS、BFS等，从某个角度来看，DP像是在执行DFS的sort过程，下文将会提到。</p>
+<p>此篇文章记录了本人学习动态规划的一些思路、方式，以及为此所作的较全面的总结，并不一定很完善，有不同意见的欢迎指出。</p>
+<h1 id="什么是动态规划？"><a href="#什么是动态规划？" class="headerlink" title="什么是动态规划？"></a>什么是动态规划？</h1><p>简单来说 <strong>动态规划就是一种设计的技巧</strong>。类似于分而治之，它是解决一类问题的方法，而不是某种特定的算法。</p>
+<p>ok！以一个简单的例子开始！</p>
+<h2 id="例一：Fibonacci-numbers"><a href="#例一：Fibonacci-numbers" class="headerlink" title="例一：Fibonacci numbers"></a>例一：Fibonacci numbers</h2><blockquote>
+<p> 测试程序：</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> num = <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">do</span> &#123;</span><br><span class="line">        <span class="built_in">cout</span> &lt;&lt; <span class="string">"请输入你要找的第N个fib数："</span>;</span><br><span class="line">        <span class="built_in">cin</span> &gt;&gt; num;</span><br><span class="line">        <span class="keyword">if</span> (num) &#123;</span><br><span class="line">            <span class="built_in">cout</span> &lt;&lt; <span class="string">"第"</span> &lt;&lt; num &lt;&lt; <span class="string">"个fib数是："</span> &lt;&lt; fib(num) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">while</span> (num);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+<h3 id="1-无脑递归（Naive-recursive-algorithm）"><a href="#1-无脑递归（Naive-recursive-algorithm）" class="headerlink" title="1. 无脑递归（Naive recursive algorithm）"></a>1. 无脑递归（Naive recursive algorithm）</h3><p><font color=#44FF><em>recursion：</em>递归存在的最大问题在于递归过程中会出现大量“重叠子问题”（overlap subproblem）</font></p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">Recursive</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> fib(n - <span class="number">1</span>) + fib(n - <span class="number">2</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n²)</p>
+<p>空间复杂度：O(1)</p>
+</blockquote>
+<h3 id="2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）"><a href="#2-给递归插上翅膀-——-聪明的递归（Careful-brute-force）" class="headerlink" title="2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）"></a>2. 给递归插上翅膀 —— 聪明的递归（Careful brute force）</h3><blockquote>
+<p><font color=#FFBB>DP ≈ *”careful brute force”* ———— 仔细的蛮力</font></p>
+<p><font color=#CAEF0F>DP ≈ <em>recursion + memoization + guessing</em></font></p>
+</blockquote>
+<p>这种方式是在递归过程中将每个子问题的结果保存起来，在以后遇到相同子问题时直接拿去用，而不用去重复调用产生没必要的开销。事实上此方法只是阻止了“重复计算”，而未阻止“重复调用”。此方法依然会执行函数的递归调用，也就必然会产生函数调用的额外开销。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo; <span class="comment">// 内部递归调用，此变量必须是外部变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">CarefulBruteForce</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span> (memo.<span class="built_in">find</span>(n) != memo.<span class="built_in">end</span>()) &#123; <span class="comment">// <span class="doctag">NOTE:</span> 1 # guessing</span></span><br><span class="line">        <span class="keyword">return</span> memo[n];</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> (n &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">        f = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 看似递归，实际上忽略了递归“计算”（<span class="doctag">NOTE:</span> 1）</span></span><br><span class="line">        f = CarefulBruteForce(n - <span class="number">1</span>) + CarefulBruteForce(n - <span class="number">2</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    memo[n] = f;</span><br><span class="line">    <span class="keyword">return</span> f;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="3-Bottom-up-（自下而上）-——-DP-完全体"><a href="#3-Bottom-up-（自下而上）-——-DP-完全体" class="headerlink" title="3. Bottom-up （自下而上） —— DP 完全体"></a>3. Bottom-up （自下而上） —— DP 完全体</h3><blockquote>
+<p><font color=#F211FF>DP ≈ <em>subproblems + “reuse”</em> ———— 解决问题将其拆分为*<u>子问题</u><em>，然后将</em><u>解决方案</u><em>重复用于</em><u>子问题</u>*</font></p>
+</blockquote>
+<p>自下而上的方案是真正意义上去除递归的方式，摒弃了函数内部的递归调用；回顾程序代码运行逻辑，程序在运行时代码是逐行顺序执行，在遇到函数调用时会进入被调函数内部继续执行代码，完成后返回主调函数，其本质就是一个栈的操作过程。事实上编译器在遇到函数调用的时候会为函数开辟内存空间（也就是分配栈），目的是为了保存寄存器指针等（恢复现场用）。去除递归调用以后就没有了函数切换的开销，我们知道 —— 函数切换的开销也是影响程序性能的问题之一，所以我们一般会将 DP 写成循环的方式。</p>
+<p>那么什么叫自下而上？其实自下而上我认为是正向思考的过程，反而递归才是反向思考的过程。就这道题来说，如果是递归，它的逻辑过程是从后往前计算，而此处则是从前往后计算。要求第N个斐波那契数，那N应该为<strong>上</strong>，而斐波那契数从1开始，所以1为<strong>下</strong>。</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">BottomUp_dp</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">map</span>&lt;<span class="keyword">int</span>, <span class="keyword">int</span>&gt; memo;</span><br><span class="line">    <span class="keyword">int</span> f = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= n; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (i &lt;= <span class="number">2</span>) &#123;</span><br><span class="line">            f = <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            f = memo[i - <span class="number">1</span>] + memo[i - <span class="number">2</span>];</span><br><span class="line">        &#125;</span><br><span class="line">        memo[i] = f;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> memo[n];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>复杂度分析：</p>
+<p>时间复杂度：O(n)</p>
+<p>空间复杂度：O(n)</p>
+</blockquote>
+<h3 id="4-初步总结"><a href="#4-初步总结" class="headerlink" title="4. 初步总结"></a>4. 初步总结</h3><h2 id="例二：Shortest-paths"><a href="#例二：Shortest-paths" class="headerlink" title="例二：Shortest paths"></a>例二：Shortest paths</h2><h2 id="例三：文本对齐"><a href="#例三：文本对齐" class="headerlink" title="例三：文本对齐"></a>例三：文本对齐</h2><h2 id="例四：21点"><a href="#例四：21点" class="headerlink" title="例四：21点"></a>例四：21点</h2><h2 id="例五：括号"><a href="#例五：括号" class="headerlink" title="例五：括号"></a>例五：括号</h2><h2 id="例六：编辑距离"><a href="#例六：编辑距离" class="headerlink" title="例六：编辑距离"></a>例六：编辑距离</h2><h2 id="例七：背包"><a href="#例七：背包" class="headerlink" title="例七：背包"></a>例七：背包</h2><h2 id="例八：钢琴-吉他指法"><a href="#例八：钢琴-吉他指法" class="headerlink" title="例八：钢琴/吉他指法"></a>例八：钢琴/吉他指法</h2><h2 id="例九：俄罗斯方块"><a href="#例九：俄罗斯方块" class="headerlink" title="例九：俄罗斯方块"></a>例九：俄罗斯方块</h2><h2 id="例十：超级马里奥兄弟"><a href="#例十：超级马里奥兄弟" class="headerlink" title="例十：超级马里奥兄弟"></a>例十：超级马里奥兄弟</h2><h2 id="例十一：Longest-common-subsequece"><a href="#例十一：Longest-common-subsequece" class="headerlink" title="例十一：Longest common subsequece"></a>例十一：Longest common subsequece</h2><h1 id="动态规划的本质"><a href="#动态规划的本质" class="headerlink" title="动态规划的本质"></a>动态规划的本质</h1><h1 id="动态规划解题套路"><a href="#动态规划解题套路" class="headerlink" title="动态规划解题套路"></a>动态规划解题套路</h1><h2 id="滚动数组"><a href="#滚动数组" class="headerlink" title="滚动数组"></a>滚动数组</h2><h1 id="练习"><a href="#练习" class="headerlink" title="练习"></a>练习</h1><h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p>建议大家不要看中文作者写的技术书籍，以及中文培训机构的视频，不是崇洋媚外，因为即便中文作者技术很好，也未必能表达清楚技术观点。我认为学习技术需要有一个思维转化过程，你看中文作者写的书你会感觉东一头西一头的瞎扯，貌似全是重点，但又毫无重点，因为他根本讲不清楚原理；技术源于国外，所以建议大家多关注国外的教材，你看老外写的书，很容易会被作者带入他的思维里，你会不由自主跟着他的思维一步步掌握核心关键点。最后说一下中文培训机构，大多数培训机构都是总结好了和盘托出，关键部分一笔带过，他们不会明白“授人以鱼不如授人以渔”的道理。</p>
+<p>关于 DP 的参考资料有很多，我比较倾向 “看书 + 视频教程” 的方式结合学习，因为本人算法基础比较菜，直接上手看《算法导论》+ 《算法》有些吃力，以下是我在学习 DP 过程中的一些参考资源。</p>
+<hr>
+<ul>
+<li>视频教程</li>
+</ul>
+<p><a href="https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-006-introduction-to-algorithms-fall-2011/" target="_blank" rel="noopener" title="MIT 公开课">MIT 算法简介课程-2011年秋季 - p19~p22</a> —— 免费（B站上有中文翻译版本，但是翻译质量只能呵呵了。。。）</p>
+<p><a href=""p15"">MIT 算法导论课程 - p15</a> —— 免费（《算法导论》作者授课，权威性不言而喻）</p>
+<p><a href="https://www.coursera.org/learn/algorithmic-toolbox/home/welcome" target="_blank" rel="noopener" title="Coursera 数据结构与算法">Coursera 数据结构与算法 - 第5周~第六周</a> —— 免费试用一周，之后会收取相关费用，不过有一些策略可以越过收费，自己研究</p>
+<p><a href="https://www.coursera.org/learn/algorithms-greedy" target="_blank" rel="noopener" title="Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划">Coursera 斯坦福算法专项课程 - 贪婪算法，最小生成树和动态规划</a> —— 免费试用7天</p>
+<ul>
+<li>书籍推荐</li>
+</ul>
+<p>《算法导论》第三版</p>
+<p>《算法》第四版</p>
+<h1 id="轻松一刻"><a href="#轻松一刻" class="headerlink" title="轻松一刻"></a>轻松一刻</h1><video id="video" controls="" preload="none" poster="http://img.blog.fandong.me/2017-08-26-Markdown-Advance-Video.jpg">
+      <source id="mp4" src="https://media.githubusercontent.com/media/WinnieVivi/test/master/WishYouWereHere.mp4" type="video/mp4">
+      </video>
+
+<h3 id="star"><a href="#star" class="headerlink" title="star"></a>star</h3><iframe
+style="margin-left: 2px; margin-bottom:-5px;"
+frameborder="0" scrolling="0" width="100px" height="20px"
+src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.io&type=star&count=true" >
+</iframe>
 ]]></content>
       <categories>
-        <category>Linux</category>
-        <category>并发编程</category>
-        <category>C/C++</category>
+        <category>Algorithm-beginner</category>
       </categories>
       <tags>
-        <tag>C/C++</tag>
-        <tag>Linux</tag>
+        <tag>Algorithm</tag>
       </tags>
   </entry>
   <entry>
@@ -1054,90 +999,58 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>Python 基础</title>
-    <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
-    <content><![CDATA[<p><img src="/buckets/images/guido.jpg" alt=""></p>
+    <title>POSIX 多线程编程</title>
+    <url>/2014/10/18/Linux%20Notes/POSIX%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/pla1.jpg" alt=""></p>
 <a id="more"></a>
 
-<h1 id="Python-基础入门"><a href="#Python-基础入门" class="headerlink" title="Python 基础入门"></a>Python 基础入门</h1><h2 id="01-算数运算符"><a href="#01-算数运算符" class="headerlink" title="01. 算数运算符"></a>01. 算数运算符</h2><table>
-<thead>
-<tr>
-<th align="left">运算符</th>
-<th align="left">描述</th>
-<th align="left">示例</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="left">+</td>
-<td align="left">加</td>
-<td align="left">10 + 20 = 30</td>
-</tr>
-<tr>
-<td align="left">-</td>
-<td align="left">减</td>
-<td align="left">10 - 20 = -10</td>
-</tr>
-<tr>
-<td align="left">*</td>
-<td align="left">乘</td>
-<td align="left">10 * 20 = 200</td>
-</tr>
-<tr>
-<td align="left">/</td>
-<td align="left">除</td>
-<td align="left">10 / 3 = 3.3333333333333335</td>
-</tr>
-<tr>
-<td align="left">%</td>
-<td align="left">求模</td>
-<td align="left">10 % 3 = 1</td>
-</tr>
-<tr>
-<td align="left">//</td>
-<td align="left">整除</td>
-<td align="left">10 // 3 = 3</td>
-</tr>
-<tr>
-<td align="left">**</td>
-<td align="left">幂运算</td>
-<td align="left">10 ** 3 = 1000</td>
-</tr>
-</tbody></table>
-<!-- more -->
-
-
-<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = <span class="string">"小明"</span></span><br><span class="line">age = <span class="number">18</span></span><br><span class="line">print(<span class="string">"姓名："</span>, name, <span class="string">" 年龄："</span>, age)</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="python-变量类型"><a href="#python-变量类型" class="headerlink" title="python 变量类型"></a>python 变量类型</h2><ul>
-<li>数值型<ul>
-<li>整型</li>
-<li>浮点型</li>
-<li>布尔型</li>
+<h1 id="文章概述"><a href="#文章概述" class="headerlink" title="文章概述"></a>文章概述</h1><h1 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h1><blockquote>
+<p>《POSIX 多线程程序设计》</p>
+</blockquote>
+<h1 id="经典の故事"><a href="#经典の故事" class="headerlink" title="经典の故事"></a>经典の故事</h1><blockquote>
+<p>舀水的程序员</p>
+<p>三个程序员乘同一艘小船出海，他们尽情享受着阳光和海风，离岸越来越远。一会儿，天色变暗，暴风雨降临，小船在狂风骇浪中颠簸，当暴风雨终于减缓的时候，他们已经失去了桅杆和帆，而且小船也裂了一个小缝。他们看不到陆地的影子。</p>
+<p>小船上配备了食物、水、浆和一个水桶。程序员们开始工作。一个人划船、监视船舱渗水情况，其他两个人则可能去睡觉、检测水位、寻找陆地或者其他船只。</p>
+<p>空闲的程序员可能看到水位上升，开始用桶舀水。当两个程序员都醒来的时候，可能同时发现了水位的上升，都要去拿水桶。显然只有一个人首先拿到水桶，而另一个人则不得不等待。</p>
+<p>如果两个人都睡着了，而划船的人认为该舀水的时候，通常他会推醒其中一个人而让另一个人继续睡觉。但是，如果划船的人心情不好，则可能大声喊叫，将两个人全都吵醒。在让其中一个继续该做的工作时，另一个可以继续睡觉。</p>
+<p>当划船的人疲劳时，他可以唤醒其中一个接替他的工作，然后马上睡觉，知道他被再次唤醒。这样，三个程序员就可以坚持他们的旅程了。</p>
+</blockquote>
+<h1 id="线程介绍"><a href="#线程介绍" class="headerlink" title="线程介绍"></a>线程介绍</h1><h2 id="线程の特点"><a href="#线程の特点" class="headerlink" title="线程の特点"></a>线程の特点</h2><h2 id="常用の术语"><a href="#常用の术语" class="headerlink" title="常用の术语"></a>常用の术语</h2><ul>
+<li>异步</li>
 </ul>
-</li>
-<li>非数值型<ul>
-<li>字符串</li>
-<li>元组</li>
-<li>列表</li>
-<li>字典</li>
+<blockquote>
+<p>任何两个彼此独立运行的操作是异步的。</p>
+</blockquote>
+<ul>
+<li>并发</li>
 </ul>
-</li>
+<blockquote>
+<p>宏观并行，微观串行。</p>
+</blockquote>
+<ul>
+<li>并行</li>
 </ul>
-<h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> list:</span><br><span class="line">    statment</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> condeation:</span><br><span class="line">    statment <span class="comment"># 语句</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">while</span> condeation:</span><br><span class="line">    statment</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>并发序列同时执行。</p>
+</blockquote>
+<ul>
+<li>并发</li>
+</ul>
+<blockquote>
+</blockquote>
+<h1 id="POSIX-线程相关API"><a href="#POSIX-线程相关API" class="headerlink" title="POSIX 线程相关API"></a>POSIX 线程相关API</h1><h1 id="同步"><a href="#同步" class="headerlink" title="同步"></a>同步</h1><h2 id="互斥量（mutex）"><a href="#互斥量（mutex）" class="headerlink" title="互斥量（mutex）"></a>互斥量（mutex）</h2><h3 id="相关API"><a href="#相关API" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 互斥量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_mutex_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_MUTEX_T];</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_mutex_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_mutex_t</span> mutex = PTHREAD_MUTEX_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line">pthread_mutex_init(<span class="keyword">pthread_mutex_t</span> *mutex, <span class="keyword">pthread_mutexattr_t</span> *attr);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁互斥量</span></span><br><span class="line">pthread_mutex_destory(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 加锁互斥量</span></span><br><span class="line">pthread_mutex_lock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 尝试加锁互斥量（非阻塞）</span></span><br><span class="line">pthread_mutex_trylock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 解锁互斥量</span></span><br><span class="line">pthread_mutex_unlock(<span class="keyword">pthread_mutex_t</span> *mutex);</span><br></pre></td></tr></table></figure>
 
+<h2 id="条件变量"><a href="#条件变量" class="headerlink" title="条件变量"></a>条件变量</h2><h3 id="相关API-1"><a href="#相关API-1" class="headerlink" title="相关API"></a>相关API</h3><figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="comment">// 条件变量类型</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">union</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="class"><span class="keyword">struct</span> __<span class="title">pthread_cond_s</span> __<span class="title">data</span>;</span></span><br><span class="line">    <span class="keyword">char</span> __size[__SIZEOF_PTHREAD_COND_T];</span><br><span class="line">    __extension__ <span class="keyword">long</span> <span class="keyword">long</span> <span class="keyword">int</span> __align;</span><br><span class="line">&#125; <span class="keyword">pthread_cond_t</span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 静态初始化</span></span><br><span class="line"><span class="keyword">pthread_cond_t</span> con = PTHREAD_COND_INITIALIZER;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 动态初始化</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_init</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_condattr_t</span> *condattr)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 销毁条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_destory</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_wait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 超时等待条件变量</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cont_timewait</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond, <span class="keyword">pthread_mutex_t</span> *mutex, struct timespec *expiration)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 唤醒条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_signal</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 广播条件变量等待线程</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">pthread_cond_broadcast</span><span class="params">(<span class="keyword">pthread_cond_t</span> *cond)</span></span>;</span><br></pre></td></tr></table></figure>
 
-
-
-
-<h1 id="Python-面向对象"><a href="#Python-面向对象" class="headerlink" title="Python 面向对象"></a>Python 面向对象</h1><p>面向对象编程 —— <code>Object Oriented Programming</code> ，简称 OOP。</p>
 ]]></content>
       <categories>
-        <category>Python</category>
+        <category>Linux</category>
+        <category>并发编程</category>
+        <category>C/C++</category>
       </categories>
       <tags>
-        <tag>Python</tag>
+        <tag>C/C++</tag>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1284,6 +1197,93 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       <tags>
         <tag>C/C++</tag>
         <tag>Google-Glog</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Python 基础</title>
+    <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
+    <content><![CDATA[<p><img src="/buckets/images/guido.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="Python-基础入门"><a href="#Python-基础入门" class="headerlink" title="Python 基础入门"></a>Python 基础入门</h1><h2 id="01-算数运算符"><a href="#01-算数运算符" class="headerlink" title="01. 算数运算符"></a>01. 算数运算符</h2><table>
+<thead>
+<tr>
+<th align="left">运算符</th>
+<th align="left">描述</th>
+<th align="left">示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">+</td>
+<td align="left">加</td>
+<td align="left">10 + 20 = 30</td>
+</tr>
+<tr>
+<td align="left">-</td>
+<td align="left">减</td>
+<td align="left">10 - 20 = -10</td>
+</tr>
+<tr>
+<td align="left">*</td>
+<td align="left">乘</td>
+<td align="left">10 * 20 = 200</td>
+</tr>
+<tr>
+<td align="left">/</td>
+<td align="left">除</td>
+<td align="left">10 / 3 = 3.3333333333333335</td>
+</tr>
+<tr>
+<td align="left">%</td>
+<td align="left">求模</td>
+<td align="left">10 % 3 = 1</td>
+</tr>
+<tr>
+<td align="left">//</td>
+<td align="left">整除</td>
+<td align="left">10 // 3 = 3</td>
+</tr>
+<tr>
+<td align="left">**</td>
+<td align="left">幂运算</td>
+<td align="left">10 ** 3 = 1000</td>
+</tr>
+</tbody></table>
+<!-- more -->
+
+
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">name = <span class="string">"小明"</span></span><br><span class="line">age = <span class="number">18</span></span><br><span class="line">print(<span class="string">"姓名："</span>, name, <span class="string">" 年龄："</span>, age)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="python-变量类型"><a href="#python-变量类型" class="headerlink" title="python 变量类型"></a>python 变量类型</h2><ul>
+<li>数值型<ul>
+<li>整型</li>
+<li>浮点型</li>
+<li>布尔型</li>
+</ul>
+</li>
+<li>非数值型<ul>
+<li>字符串</li>
+<li>元组</li>
+<li>列表</li>
+<li>字典</li>
+</ul>
+</li>
+</ul>
+<h2 id="流程控制"><a href="#流程控制" class="headerlink" title="流程控制"></a>流程控制</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> element <span class="keyword">in</span> list:</span><br><span class="line">    statment</span><br><span class="line">    </span><br><span class="line"><span class="keyword">if</span> condeation:</span><br><span class="line">    statment <span class="comment"># 语句</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">while</span> condeation:</span><br><span class="line">    statment</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Python-面向对象"><a href="#Python-面向对象" class="headerlink" title="Python 面向对象"></a>Python 面向对象</h1><p>面向对象编程 —— <code>Object Oriented Programming</code> ，简称 OOP。</p>
+]]></content>
+      <categories>
+        <category>Python</category>
+      </categories>
+      <tags>
+        <tag>Python</tag>
       </tags>
   </entry>
   <entry>
