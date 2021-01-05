@@ -1,67 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>C++ 2.0 并发编程</title>
-    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
-<a id="more"></a>
-
-<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
-<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
-<table>
-<thead>
-<tr>
-<th align="right"><thread></th>
-<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="right">default (1)</td>
-<td><code>thread() noexcept;</code></td>
-</tr>
-<tr>
-<td align="right">initialization (2)</td>
-<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
-</tr>
-<tr>
-<td align="right">copy [deleted] (3)</td>
-<td><code>thread( const thread&amp; ) = delete;</code></td>
-</tr>
-<tr>
-<td align="right">move (4)</td>
-<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>(1).默认构造函数</strong></p>
-<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
-<p><strong>(2).初始化构造函数</strong></p>
-<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
-<p><strong>(3).拷贝构造函数</strong></p>
-<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
-<p><strong>(4).移动构造函数</strong></p>
-<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
-</blockquote>
-<p><em>示例：</em></p>
-<ul>
-<li><p>普通函数</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可调用对象</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li></li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>并发编程</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Dynamic Programming</title>
     <url>/2017/03/25/Algorithm%20Notes/Dynamic%20Programming/</url>
     <content><![CDATA[<p><img src="/buckets/images/a1.jpg" alt=""></p>
@@ -141,77 +80,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </categories>
       <tags>
         <tag>Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 2.0 新特性</title>
-    <url>/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a3.png" alt=""></p>
-<a id="more"></a>
-
-<p align="right">———— C++ 11/14          </p>
-
-<p>本文是基于侯捷老师的《C++11/14 新标准》课程所做的总结。非常感谢侯捷老师，我看过他很多课程和他的书籍，他是我在C++这条道路上的启蒙老师，是他让我真正的学会C++这门语言。侯捷老师的课程有很多，比如《C++ 面向对象高级开发》、《C++内存管理》、《C++ STL 与泛型编程》《C++ Startup 揭密：C++ 程序的生前和死后》……；当然侯捷老师的书籍也很多，例如《STL 源码剖析》，译作也很多，像 effective 那一系列的。如下：</p>
-<p>![侯捷老师课程列表](C:\Users\Administrator\Desktop\C++ Notes\images\1591459395(1).jpg)</p>
-<p>在此特别说明一下个人观点：我特别不喜欢看中文作者写的书，即使本人英文水平有限；我相信有很多像我一样的同学会有跟我一样的想法，因为中文作者写的书大多自己都表达不清楚，你看他写的书籍你常常会感觉在看天书，当然我说的是部分中文作者或者说是大部分。这不是崇洋媚外，如果你经常看老外写的书籍，你会很轻松的被作者带入他的思维模式，你会不由自主的跟着他的节奏和思维去掐到技术关键点。一些中文作者写的书完全是在误人子弟！看了都想吐…恶心！！！</p>
-<p>给大家推荐一个翻译器，一个比 google 做的还好的翻译机，国内的什么有道啦，百度翻译啦。。。纯属扯淡，你应该远离这些垃圾软件。</p>
-<p>OK，以下是总结！</p>
-<h1 id="C-Standard-的演化"><a href="#C-Standard-的演化" class="headerlink" title="C++ Standard 的演化"></a>C++ Standard 的演化</h1><ul>
-<li><font color=#FF0000><strong>C++ 98（1.0）</strong></font></li>
-<li>C++ 03（TR1, Technical Report 1）</li>
-<li><font color=#FF0000><strong>C++ 11（2.0）</strong></font></li>
-<li>C++ 14（对于11的小的补充）</li>
-<li>C++ 17</li>
-<li>C++ 20（协程支持等特性）</li>
-</ul>
-<p>由于C++从C++ 11版本开始算是一个里程碑式的更新，所以可以认为C++进入2.0时代。关于C++2.0的新特性可以分为语言部分和标准库部分。</p>
-<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><ul>
-<li><a href="http://www.stroustrup.com/C++11FAQ.html" target="_blank" rel="noopener" title="C++ 11 新标准完整列表">由 C++ 之父 Bjarne Stroustrup 撰写并维护的C++ 11 新标准的完整列表</a></li>
-<li><a href="http://www.cplusplus.com" target="_blank" rel="noopener" title="C++ 权威指南">C++ 权威指南</a></li>
-<li><a href="https://en.cppreference.com" target="_blank" rel="noopener" title="C++ 参考指南">C++ 参考指南</a></li>
-<li><a href="http://gcc.gnu.org" target="_blank" rel="noopener" title="GCC 官方参考">GCC 官方参考</a></li>
-</ul>
-<h2 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h2><ul>
-<li>The C++ Standard Library (Second Edition)</li>
-<li>C++ Primer (Fifth Edition)</li>
-<li>The C++ Programming Language (Fourth Edition)</li>
-<li><font color=#FF0000><strong>Effective Modern C++ (Scott Meyers)</strong></font></li>
-</ul>
-<h1 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h1><h2 id="第一步，确认支持C-11：macro-——-cplusplus"><a href="#第一步，确认支持C-11：macro-——-cplusplus" class="headerlink" title="第一步，确认支持C++ 11：macro ——__cplusplus"></a>第一步，确认支持C++ 11：macro ——<code>__cplusplus</code></h2><p>在C++ 2.0之前（C++ 98），<code>__cplusplus</code> 被定义为199711L，C++ 11开始，它将被设置为大于199711L（201103L）<br>这个宏可以用来判断编译器所支持C++标准的版本</p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; __cplusplus &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 验证编译器所支持的C++版本</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Variadic-Templates（可变参数模板）"><a href="#Variadic-Templates（可变参数模板）" class="headerlink" title="Variadic Templates（可变参数模板）"></a>Variadic Templates（可变参数模板）</h2><h3 id="语法定义"><a href="#语法定义" class="headerlink" title="语法定义"></a>语法定义</h3><h3 id="应用方向"><a href="#应用方向" class="headerlink" title="应用方向"></a>应用方向</h3><ul>
-<li>函数的递归调用</li>
-</ul>
-<ul>
-<li>类的递归继承</li>
-</ul>
-<h2 id="Initializer-lists（初始化列表）"><a href="#Initializer-lists（初始化列表）" class="headerlink" title="Initializer lists（初始化列表）"></a>Initializer lists（初始化列表）</h2><h2 id="Range－based-for-statement（基于范围的-for-语句）"><a href="#Range－based-for-statement（基于范围的-for-语句）" class="headerlink" title="Range－based for statement（基于范围的 for 语句）"></a>Range－based for statement（基于范围的 for 语句）</h2><blockquote>
-<p>官方解释：</p>
-<p>range for语句允许你在一个 “范围 “中进行迭代，它是任何你可以迭代的东西，就像一个由 <code>begin()</code> 和 <code>end()</code> 定义的STL序列。所有标准的容器都可以作为一个范围，<code>std::string</code> 、初始化器列表、数组以及任何你定义了 <code>begin()</code> 和 <code>end()</code> 的东西都可以作为一个范围，例如一个 <code>istream</code>。</p>
-</blockquote>
-<ul>
-<li>语法规则</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ( decl : coll ) &#123;</span><br><span class="line">	statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于：</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=coll.<span class="built_in">begin</span>(), _end=coll.<span class="built_in">end</span>(); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=<span class="built_in">begin</span>(coll), _end=<span class="built_in">end</span>(coll); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<ul>
-<li>示例</li>
-</ul>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i : &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合 auto 用法</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> elem : vec) &#123; <span class="comment">// 简化代码 --&gt; vector&lt;int&gt;::iterator iter</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> 注意要执行的操作是否是需要“写”</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; elem : vec) &#123;</span><br><span class="line">    elem *= <span class="number">3</span>; <span class="comment">// 如果需要改变值，上面的接收变量需要传引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="Control-of-defaults-default-and-delete"><a href="#Control-of-defaults-default-and-delete" class="headerlink" title="Control of defaults: default and delete"></a>Control of defaults: default and delete</h2><h1 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h1><h2 id="Rvalue-reference"><a href="#Rvalue-reference" class="headerlink" title="Rvalue reference"></a>Rvalue reference</h2><blockquote>
-<p>左值：</p>
-<p>右值：</p>
-</blockquote>
-<h3 id="Rvalue-reference-and-Move-Semantics"><a href="#Rvalue-reference-and-Move-Semantics" class="headerlink" title="Rvalue reference and Move Semantics"></a>Rvalue reference and Move Semantics</h3><h3 id="Perfect-Forwarding"><a href="#Perfect-Forwarding" class="headerlink" title="Perfect Forwarding"></a>Perfect Forwarding</h3><hr>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C++ 11/14</tag>
-        <tag>C++ 2.0</tag>
       </tags>
   </entry>
   <entry>
@@ -720,6 +588,184 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
+    <title>C++ 2.0 并发编程</title>
+    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
+<a id="more"></a>
+
+<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
+<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
+<table>
+<thead>
+<tr>
+<th align="right"><thread></th>
+<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">default (1)</td>
+<td><code>thread() noexcept;</code></td>
+</tr>
+<tr>
+<td align="right">initialization (2)</td>
+<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
+</tr>
+<tr>
+<td align="right">copy [deleted] (3)</td>
+<td><code>thread( const thread&amp; ) = delete;</code></td>
+</tr>
+<tr>
+<td align="right">move (4)</td>
+<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>(1).默认构造函数</strong></p>
+<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
+<p><strong>(2).初始化构造函数</strong></p>
+<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
+<p><strong>(3).拷贝构造函数</strong></p>
+<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
+<p><strong>(4).移动构造函数</strong></p>
+<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
+</blockquote>
+<p><em>示例：</em></p>
+<ul>
+<li><p>普通函数</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可调用对象</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>并发编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 2.0 新特性</title>
+    <url>/2014/08/13/C++%20Notes/C++%202.0%20%E6%96%B0%E7%89%B9%E6%80%A7/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a3.png" alt=""></p>
+<a id="more"></a>
+
+<p align="right">———— C++ 11/14          </p>
+
+<p>本文是基于侯捷老师的《C++11/14 新标准》课程所做的总结。非常感谢侯捷老师，我看过他很多课程和他的书籍，他是我在C++这条道路上的启蒙老师，是他让我真正的学会C++这门语言。侯捷老师的课程有很多，比如《C++ 面向对象高级开发》、《C++内存管理》、《C++ STL 与泛型编程》《C++ Startup 揭密：C++ 程序的生前和死后》……；当然侯捷老师的书籍也很多，例如《STL 源码剖析》，译作也很多，像 effective 那一系列的。如下：</p>
+<p>![侯捷老师课程列表](C:\Users\Administrator\Desktop\C++ Notes\images\1591459395(1).jpg)</p>
+<p>在此特别说明一下个人观点：我特别不喜欢看中文作者写的书，即使本人英文水平有限；我相信有很多像我一样的同学会有跟我一样的想法，因为中文作者写的书大多自己都表达不清楚，你看他写的书籍你常常会感觉在看天书，当然我说的是部分中文作者或者说是大部分。这不是崇洋媚外，如果你经常看老外写的书籍，你会很轻松的被作者带入他的思维模式，你会不由自主的跟着他的节奏和思维去掐到技术关键点。一些中文作者写的书完全是在误人子弟！看了都想吐…恶心！！！</p>
+<p>给大家推荐一个翻译器，一个比 google 做的还好的翻译机，国内的什么有道啦，百度翻译啦。。。纯属扯淡，你应该远离这些垃圾软件。</p>
+<p>OK，以下是总结！</p>
+<h1 id="C-Standard-的演化"><a href="#C-Standard-的演化" class="headerlink" title="C++ Standard 的演化"></a>C++ Standard 的演化</h1><ul>
+<li><font color=#FF0000><strong>C++ 98（1.0）</strong></font></li>
+<li>C++ 03（TR1, Technical Report 1）</li>
+<li><font color=#FF0000><strong>C++ 11（2.0）</strong></font></li>
+<li>C++ 14（对于11的小的补充）</li>
+<li>C++ 17</li>
+<li>C++ 20（协程支持等特性）</li>
+</ul>
+<p>由于C++从C++ 11版本开始算是一个里程碑式的更新，所以可以认为C++进入2.0时代。关于C++2.0的新特性可以分为语言部分和标准库部分。</p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><h2 id="网络资源"><a href="#网络资源" class="headerlink" title="网络资源"></a>网络资源</h2><ul>
+<li><a href="http://www.stroustrup.com/C++11FAQ.html" target="_blank" rel="noopener" title="C++ 11 新标准完整列表">由 C++ 之父 Bjarne Stroustrup 撰写并维护的C++ 11 新标准的完整列表</a></li>
+<li><a href="http://www.cplusplus.com" target="_blank" rel="noopener" title="C++ 权威指南">C++ 权威指南</a></li>
+<li><a href="https://en.cppreference.com" target="_blank" rel="noopener" title="C++ 参考指南">C++ 参考指南</a></li>
+<li><a href="http://gcc.gnu.org" target="_blank" rel="noopener" title="GCC 官方参考">GCC 官方参考</a></li>
+</ul>
+<h2 id="参考书籍"><a href="#参考书籍" class="headerlink" title="参考书籍"></a>参考书籍</h2><ul>
+<li>The C++ Standard Library (Second Edition)</li>
+<li>C++ Primer (Fifth Edition)</li>
+<li>The C++ Programming Language (Fourth Edition)</li>
+<li><font color=#FF0000><strong>Effective Modern C++ (Scott Meyers)</strong></font></li>
+</ul>
+<h1 id="语言"><a href="#语言" class="headerlink" title="语言"></a>语言</h1><h2 id="第一步，确认支持C-11：macro-——-cplusplus"><a href="#第一步，确认支持C-11：macro-——-cplusplus" class="headerlink" title="第一步，确认支持C++ 11：macro ——__cplusplus"></a>第一步，确认支持C++ 11：macro ——<code>__cplusplus</code></h2><p>在C++ 2.0之前（C++ 98），<code>__cplusplus</code> 被定义为199711L，C++ 11开始，它将被设置为大于199711L（201103L）<br>这个宏可以用来判断编译器所支持C++标准的版本</p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; __cplusplus &lt;&lt; <span class="built_in">endl</span>; <span class="comment">// 验证编译器所支持的C++版本</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Variadic-Templates（可变参数模板）"><a href="#Variadic-Templates（可变参数模板）" class="headerlink" title="Variadic Templates（可变参数模板）"></a>Variadic Templates（可变参数模板）</h2><h3 id="语法定义"><a href="#语法定义" class="headerlink" title="语法定义"></a>语法定义</h3><h3 id="应用方向"><a href="#应用方向" class="headerlink" title="应用方向"></a>应用方向</h3><ul>
+<li>函数的递归调用</li>
+</ul>
+<ul>
+<li>类的递归继承</li>
+</ul>
+<h2 id="Initializer-lists（初始化列表）"><a href="#Initializer-lists（初始化列表）" class="headerlink" title="Initializer lists（初始化列表）"></a>Initializer lists（初始化列表）</h2><h2 id="Range－based-for-statement（基于范围的-for-语句）"><a href="#Range－based-for-statement（基于范围的-for-语句）" class="headerlink" title="Range－based for statement（基于范围的 for 语句）"></a>Range－based for statement（基于范围的 for 语句）</h2><blockquote>
+<p>官方解释：</p>
+<p>range for语句允许你在一个 “范围 “中进行迭代，它是任何你可以迭代的东西，就像一个由 <code>begin()</code> 和 <code>end()</code> 定义的STL序列。所有标准的容器都可以作为一个范围，<code>std::string</code> 、初始化器列表、数组以及任何你定义了 <code>begin()</code> 和 <code>end()</code> 的东西都可以作为一个范围，例如一个 <code>istream</code>。</p>
+</blockquote>
+<ul>
+<li>语法规则</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> ( decl : coll ) &#123;</span><br><span class="line">	statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 相当于：</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=coll.<span class="built_in">begin</span>(), _end=coll.<span class="built_in">end</span>(); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// or</span></span><br><span class="line"><span class="keyword">for</span> ( <span class="keyword">auto</span> _pos=<span class="built_in">begin</span>(coll), _end=<span class="built_in">end</span>(coll); _pos!=_end; ++_pos) &#123;</span><br><span class="line">    decl = *_pos;</span><br><span class="line">    statement</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>示例</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i : &#123;<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>&#125;) &#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; i <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 结合 auto 用法</span></span><br><span class="line"><span class="built_in">vector</span>&lt;<span class="keyword">int</span>&gt; vec;</span><br><span class="line"><span class="comment">// ...</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> elem : vec) &#123; <span class="comment">// 简化代码 --&gt; vector&lt;int&gt;::iterator iter</span></span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; elem &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// <span class="doctag">NOTE:</span> 注意要执行的操作是否是需要“写”</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span>&amp; elem : vec) &#123;</span><br><span class="line">    elem *= <span class="number">3</span>; <span class="comment">// 如果需要改变值，上面的接收变量需要传引用</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Control-of-defaults-default-and-delete"><a href="#Control-of-defaults-default-and-delete" class="headerlink" title="Control of defaults: default and delete"></a>Control of defaults: default and delete</h2><h1 id="标准库"><a href="#标准库" class="headerlink" title="标准库"></a>标准库</h1><h2 id="Rvalue-reference"><a href="#Rvalue-reference" class="headerlink" title="Rvalue reference"></a>Rvalue reference</h2><blockquote>
+<p>左值：</p>
+<p>右值：</p>
+</blockquote>
+<h3 id="Rvalue-reference-and-Move-Semantics"><a href="#Rvalue-reference-and-Move-Semantics" class="headerlink" title="Rvalue reference and Move Semantics"></a>Rvalue reference and Move Semantics</h3><h3 id="Perfect-Forwarding"><a href="#Perfect-Forwarding" class="headerlink" title="Perfect Forwarding"></a>Perfect Forwarding</h3><hr>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C++ 11/14</tag>
+        <tag>C++ 2.0</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 内存管理</title>
+    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
+<a id="more"></a>
+
+<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
+
+<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
+<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
+
+<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 基础入门总结</title>
+    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
+<a id="more"></a>
+
+<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
+<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
+</blockquote>
+<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
+<li><p><code>class</code> 的声明： </p>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>return by reference</code> 语法分析：</p>
+<blockquote>
+<p>传递者无需知道接收者是以reference形式接收</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++ 面向对象程序设计</title>
     <url>/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</url>
     <content><![CDATA[<p><img src="/buckets/images/tjhttp.jpg" alt=""></p>
@@ -772,52 +818,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       <tags>
         <tag>C/C++</tag>
         <tag>OOP</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 基础入门总结</title>
-    <url>/2014/01/02/C++%20Notes/C++%20%E8%AF%AD%E6%B3%95%E5%A4%A7%E5%85%A8/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw3.png" alt=""></p>
-<a id="more"></a>
-
-<h2 id="C-关键字"><a href="#C-关键字" class="headerlink" title="C++ 关键字"></a>C++ 关键字</h2><blockquote>
-<p>int | char | double | float |<br>if | else | for | while | do-while | break | continue | </p>
-</blockquote>
-<h2 id="class"><a href="#class" class="headerlink" title="class"></a>class</h2><ul>
-<li><p><code>class</code> 的声明： </p>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Person</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Person(<span class="keyword">const</span> <span class="built_in">std</span>::<span class="built_in">string</span> &amp;_name = <span class="string">""</span>, <span class="keyword">const</span> <span class="keyword">int</span> _age = <span class="number">0</span>) <span class="comment">// default argument</span></span><br><span class="line">        : name(_name), age(_age) <span class="comment">// initialition list</span></span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">string</span> name;</span><br><span class="line">    <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line"><span class="keyword">protected</span>:</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>return by reference</code> 语法分析：</p>
-<blockquote>
-<p>传递者无需知道接收者是以reference形式接收</p>
-</blockquote>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 内存管理</title>
-    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
-<a id="more"></a>
-
-<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
-
-<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
-<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
-
-<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
       </tags>
   </entry>
   <entry>
@@ -949,6 +949,53 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       <tags>
         <tag>Linux</tag>
         <tag>网络编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>TCP/IP 详解</title>
+    <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
+    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
+<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>通常所说的TCP/IP协议族代表的是一组不同的协议组合在一起构成的，更精确的名称为Internet协议族（Internet Protocol Suite）。TCP 和 IP 只是此协议族其中两种协议。</p>
+<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><p>网络协议的分层主要作用是解耦，每一层不需要关心相邻层的细节。</p>
+<h3 id="OSI-七层网络模型（理论模型）"><a href="#OSI-七层网络模型（理论模型）" class="headerlink" title="OSI 七层网络模型（理论模型）"></a>OSI 七层网络模型（理论模型）</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3><h1 id="TCP-特性"><a href="#TCP-特性" class="headerlink" title="TCP 特性"></a>TCP 特性</h1><h3 id="1-面向连接"><a href="#1-面向连接" class="headerlink" title="1.面向连接"></a>1.面向连接</h3><p>三次握手与四次挥手</p>
+<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="2.可靠性"></a>2.可靠性</h3><p>确认机制与超时重传机制</p>
+<blockquote>
+<p>TTL时间算法</p>
+</blockquote>
+<h3 id="3-保证顺序"><a href="#3-保证顺序" class="headerlink" title="3.保证顺序"></a>3.保证顺序</h3><p>数据分节排序</p>
+<h3 id="4-流量控制"><a href="#4-流量控制" class="headerlink" title="4.流量控制"></a>4.流量控制</h3><p>滑动窗口机制</p>
+<h3 id="5-拥塞控制"><a href="#5-拥塞控制" class="headerlink" title="5.拥塞控制"></a>5.拥塞控制</h3><p>慢启动机制</p>
+<h1 id="命令相关"><a href="#命令相关" class="headerlink" title="命令相关"></a>命令相关</h1><h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig localhost</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -<span class="keyword">in</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -e</span><br><span class="line">tcpdump -n</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">traceroute</span><br></pre></td></tr></table></figure>
+
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
       </tags>
   </entry>
   <entry>
@@ -1153,84 +1200,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>TCP/IP 详解</title>
-    <url>/2016/03/18/Linux%20Notes/TCP-IP%E8%AF%A6%E8%A7%A3/</url>
-    <content><![CDATA[<p><img src="/buckets/images/mj.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>所谓协议就是通信双方需要相互遵循的一组规则，无论是通信还是某些操作，双方都必须遵循一些规则，否则谁也不认识谁如何通信？试想：你给我快递过来一个包裹，我怎么知道是炸药还是零食？显然我知道是零食的原因是我通过网购购买了零食并且我知道近期会有包裹寄过来，在收到快递时我能想象它大概率会时什么东西。所以协议就是双方在建立通信前提前设定好的公共条目，这些公共条目对于通信双方是公开的、透明的且双方都能理解的。</p>
-<h2 id="TCP-IP-协议族"><a href="#TCP-IP-协议族" class="headerlink" title="TCP/IP 协议族"></a>TCP/IP 协议族</h2><p>通常所说的TCP/IP协议族代表的是一组不同的协议组合在一起构成的，更精确的名称为Internet协议族（Internet Protocol Suite）。TCP 和 IP 只是此协议族其中两种协议。</p>
-<h2 id="分层模型"><a href="#分层模型" class="headerlink" title="分层模型"></a>分层模型</h2><p>网络协议的分层主要作用是解耦，每一层不需要关心相邻层的细节。</p>
-<h3 id="OSI-七层网络模型（理论模型）"><a href="#OSI-七层网络模型（理论模型）" class="headerlink" title="OSI 七层网络模型（理论模型）"></a>OSI 七层网络模型（理论模型）</h3><h3 id="TCP-IP-四层网络模型"><a href="#TCP-IP-四层网络模型" class="headerlink" title="TCP/IP 四层网络模型"></a>TCP/IP 四层网络模型</h3><h3 id="TCP-IP-通信过程"><a href="#TCP-IP-通信过程" class="headerlink" title="TCP/IP 通信过程"></a>TCP/IP 通信过程</h3><h1 id="TCP-特性"><a href="#TCP-特性" class="headerlink" title="TCP 特性"></a>TCP 特性</h1><h3 id="1-面向连接"><a href="#1-面向连接" class="headerlink" title="1.面向连接"></a>1.面向连接</h3><p>三次握手与四次挥手</p>
-<h3 id="2-可靠性"><a href="#2-可靠性" class="headerlink" title="2.可靠性"></a>2.可靠性</h3><p>确认机制与超时重传机制</p>
-<blockquote>
-<p>TTL时间算法</p>
-</blockquote>
-<h3 id="3-保证顺序"><a href="#3-保证顺序" class="headerlink" title="3.保证顺序"></a>3.保证顺序</h3><p>数据分节排序</p>
-<h3 id="4-流量控制"><a href="#4-流量控制" class="headerlink" title="4.流量控制"></a>4.流量控制</h3><p>滑动窗口机制</p>
-<h3 id="5-拥塞控制"><a href="#5-拥塞控制" class="headerlink" title="5.拥塞控制"></a>5.拥塞控制</h3><p>慢启动机制</p>
-<h1 id="命令相关"><a href="#命令相关" class="headerlink" title="命令相关"></a>命令相关</h1><h2 id="ifconfig"><a href="#ifconfig" class="headerlink" title="ifconfig"></a>ifconfig</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ifconfig localhost</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="netstat"><a href="#netstat" class="headerlink" title="netstat"></a>netstat</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">netstat -<span class="keyword">in</span></span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="arp"><a href="#arp" class="headerlink" title="arp"></a>arp</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">arp -a</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="tcpdump"><a href="#tcpdump" class="headerlink" title="tcpdump"></a>tcpdump</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">tcpdump -e</span><br><span class="line">tcpdump -n</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="ping"><a href="#ping" class="headerlink" title="ping"></a>ping</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ping</span><br></pre></td></tr></table></figure>
-
-
-
-<h2 id="traceroute"><a href="#traceroute" class="headerlink" title="traceroute"></a>traceroute</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">traceroute</span><br></pre></td></tr></table></figure>
-
-]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>2020.09.08 - 软通动力</title>
-    <url>/2020/09/10/interviews/2020.09.08%20-%20%E8%BD%AF%E9%80%9A%E5%8A%A8%E5%8A%9B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/400.jpg" alt=""></p>
-<a id="more"></a>
-
-<h1 id="软通动力面试"><a href="#软通动力面试" class="headerlink" title="软通动力面试"></a>软通动力面试</h1><p>·</p>
-<h2 id="1-介绍一下Nginx"><a href="#1-介绍一下Nginx" class="headerlink" title="1.介绍一下Nginx"></a>1.介绍一下Nginx</h2><h2 id="2-upstream模块"><a href="#2-upstream模块" class="headerlink" title="2.upstream模块"></a>2.upstream模块</h2><h2 id="3-C-指针和引用的区别"><a href="#3-C-指针和引用的区别" class="headerlink" title="3.C++指针和引用的区别"></a>3.C++指针和引用的区别</h2><p>指针本身是一个变量，只不过这个变量存储的是一个地址，这个地址指向一个内存单元。而引用跟原来的变量实质上是一个东西，可以把引用理解为变量的别名。</p>
-<p>区别：</p>
-<p>指针可以为空值，引用不可以为空，也就是说声明引用必须有初值。</p>
-<h2 id="4-指针具体指什么"><a href="#4-指针具体指什么" class="headerlink" title="4.指针具体指什么"></a>4.指针具体指什么</h2><p>指针实际上就是指向一个内存块的地址</p>
-<h2 id="5-C-堆和栈"><a href="#5-C-堆和栈" class="headerlink" title="5.C++ 堆和栈"></a>5.C++ 堆和栈</h2><p>堆是操作系统提供的一块儿全局内存空间，并且允许程序员手动管理，也就是我们常说的动态内存空间（标准术语：free store）。</p>
-<p>栈是操作系统管理的一块儿内存空间，栈上的变量被称为自动变量，在离开作用域之后会自动销毁，也就是操作系统负责释放内存空间，在C++中，如果变量是object，系统会自动调用析构函数。</p>
-<h2 id="6-C-多态"><a href="#6-C-多态" class="headerlink" title="6.C++多态"></a>6.C++多态</h2><p>多态是C++最重要的特性，多态是通过虚函数+继承实现的特性。通过父类指针指向不同的子类对象，调用同一函数产生不一样的结果。</p>
-<p>多态的关键在于虚函数，在一个类中如果定义一个虚函数，我们就认为这个类为虚基类，也就是说可以被继承，虚函数可以被（override）；编译器会为这个类生成一个虚函数表（virtual table），虚函数表中存在的都是函数的地址。继承相对于函数是继承调用权，如果子类有覆写父类虚函数，编译器也会相应的覆盖虚表中对应的函数地址。</p>
-<h2 id="7-简单工厂模式"><a href="#7-简单工厂模式" class="headerlink" title="7.简单工厂模式"></a>7.简单工厂模式</h2><p>简单工厂其实也被称为静态工厂，使用简单工厂就可以把消费和生产完全分离（其实也就是解耦）。消费者只需要知道自己需要什么产品，产品的生产全部交给工厂。一般来说工厂是根据传进来的参数生产好产品供消费者使用。这种模式有利于扩展，当有新产品加入时，只需要定义好新产品并再工厂中完成新产品的生产就可以了。</p>
-<ul>
-<li>优点：客户端与产品的创建分离，客户端不需要知道产品创建的逻辑，只需要消费该产品即可。</li>
-<li>缺点：工厂类集成了所有产品的创建逻辑，当工厂类出现问题，所有产品都会出现问题；还有当新增加产品都会修改工厂类，违背开闭原则</li>
-</ul>
-<h2 id="8-单例模式和使用场景"><a href="#8-单例模式和使用场景" class="headerlink" title="8.单例模式和使用场景"></a>8.单例模式和使用场景</h2><p>单例模式是指某一类对象必须保证在系统中只有一个实例存在。常见的实现方式：在多线程下，使用双检查锁（内存reorder），C++11之后的原子变量实现。</p>
-<p>使用场景：</p>
-<p>连接池、线程池、配置管理器。。。</p>
-<h2 id="9-说一下你的优点和缺点"><a href="#9-说一下你的优点和缺点" class="headerlink" title="9.说一下你的优点和缺点"></a>9.说一下你的优点和缺点</h2>]]></content>
-      <categories>
-        <category>C++</category>
-      </categories>
-      <tags>
-        <tag>interviews</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>Python 基础</title>
     <url>/2018/10/19/Python%20Notes/Python%20%E5%9F%BA%E7%A1%80/</url>
     <content><![CDATA[<p><img src="/buckets/images/guido.jpg" alt=""></p>
@@ -1318,19 +1287,43 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
+    <title>2020.09.08 - 软通动力</title>
+    <url>/2020/09/10/interviews/2020.09.08%20-%20%E8%BD%AF%E9%80%9A%E5%8A%A8%E5%8A%9B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/400.jpg" alt=""></p>
+<a id="more"></a>
+
+<h1 id="软通动力面试"><a href="#软通动力面试" class="headerlink" title="软通动力面试"></a>软通动力面试</h1><p>·</p>
+<h2 id="1-介绍一下Nginx"><a href="#1-介绍一下Nginx" class="headerlink" title="1.介绍一下Nginx"></a>1.介绍一下Nginx</h2><h2 id="2-upstream模块"><a href="#2-upstream模块" class="headerlink" title="2.upstream模块"></a>2.upstream模块</h2><h2 id="3-C-指针和引用的区别"><a href="#3-C-指针和引用的区别" class="headerlink" title="3.C++指针和引用的区别"></a>3.C++指针和引用的区别</h2><p>指针本身是一个变量，只不过这个变量存储的是一个地址，这个地址指向一个内存单元。而引用跟原来的变量实质上是一个东西，可以把引用理解为变量的别名。</p>
+<p>区别：</p>
+<p>指针可以为空值，引用不可以为空，也就是说声明引用必须有初值。</p>
+<h2 id="4-指针具体指什么"><a href="#4-指针具体指什么" class="headerlink" title="4.指针具体指什么"></a>4.指针具体指什么</h2><p>指针实际上就是指向一个内存块的地址</p>
+<h2 id="5-C-堆和栈"><a href="#5-C-堆和栈" class="headerlink" title="5.C++ 堆和栈"></a>5.C++ 堆和栈</h2><p>堆是操作系统提供的一块儿全局内存空间，并且允许程序员手动管理，也就是我们常说的动态内存空间（标准术语：free store）。</p>
+<p>栈是操作系统管理的一块儿内存空间，栈上的变量被称为自动变量，在离开作用域之后会自动销毁，也就是操作系统负责释放内存空间，在C++中，如果变量是object，系统会自动调用析构函数。</p>
+<h2 id="6-C-多态"><a href="#6-C-多态" class="headerlink" title="6.C++多态"></a>6.C++多态</h2><p>多态是C++最重要的特性，多态是通过虚函数+继承实现的特性。通过父类指针指向不同的子类对象，调用同一函数产生不一样的结果。</p>
+<p>多态的关键在于虚函数，在一个类中如果定义一个虚函数，我们就认为这个类为虚基类，也就是说可以被继承，虚函数可以被（override）；编译器会为这个类生成一个虚函数表（virtual table），虚函数表中存在的都是函数的地址。继承相对于函数是继承调用权，如果子类有覆写父类虚函数，编译器也会相应的覆盖虚表中对应的函数地址。</p>
+<h2 id="7-简单工厂模式"><a href="#7-简单工厂模式" class="headerlink" title="7.简单工厂模式"></a>7.简单工厂模式</h2><p>简单工厂其实也被称为静态工厂，使用简单工厂就可以把消费和生产完全分离（其实也就是解耦）。消费者只需要知道自己需要什么产品，产品的生产全部交给工厂。一般来说工厂是根据传进来的参数生产好产品供消费者使用。这种模式有利于扩展，当有新产品加入时，只需要定义好新产品并再工厂中完成新产品的生产就可以了。</p>
+<ul>
+<li>优点：客户端与产品的创建分离，客户端不需要知道产品创建的逻辑，只需要消费该产品即可。</li>
+<li>缺点：工厂类集成了所有产品的创建逻辑，当工厂类出现问题，所有产品都会出现问题；还有当新增加产品都会修改工厂类，违背开闭原则</li>
+</ul>
+<h2 id="8-单例模式和使用场景"><a href="#8-单例模式和使用场景" class="headerlink" title="8.单例模式和使用场景"></a>8.单例模式和使用场景</h2><p>单例模式是指某一类对象必须保证在系统中只有一个实例存在。常见的实现方式：在多线程下，使用双检查锁（内存reorder），C++11之后的原子变量实现。</p>
+<p>使用场景：</p>
+<p>连接池、线程池、配置管理器。。。</p>
+<h2 id="9-说一下你的优点和缺点"><a href="#9-说一下你的优点和缺点" class="headerlink" title="9.说一下你的优点和缺点"></a>9.说一下你的优点和缺点</h2>]]></content>
+      <categories>
+        <category>C++</category>
+      </categories>
+      <tags>
+        <tag>interviews</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>C++设计模式</title>
     <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/1.C++%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E7%AE%80%E4%BB%8B/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="设计模式简介"><a href="#设计模式简介" class="headerlink" title="设计模式简介"></a>设计模式简介</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1342,18 +1335,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/11.%E6%9E%84%E5%BB%BA%E5%99%A8/</url>
+    <url>/2017/09/22/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/12.%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="单件模式"><a href="#单件模式" class="headerlink" title="单件模式"></a>单件模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1365,18 +1351,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/10.%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/21/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/11.%E6%9E%84%E5%BB%BA%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="构建器"><a href="#构建器" class="headerlink" title="构建器"></a>构建器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1388,18 +1367,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/13.%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/23/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/14.%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="门面模式"><a href="#门面模式" class="headerlink" title="门面模式"></a>门面模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1411,18 +1383,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/14.%E9%97%A8%E9%9D%A2%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/22/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/13.%E4%BA%AB%E5%85%83%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1434,18 +1399,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/12.%E5%8D%95%E4%BB%B6%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/20/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/10.%E5%8E%9F%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="原型模式"><a href="#原型模式" class="headerlink" title="原型模式"></a>原型模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1457,18 +1415,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/15.%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/25/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/16.%E9%80%82%E9%85%8D%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="适配器"><a href="#适配器" class="headerlink" title="适配器"></a>适配器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1480,18 +1431,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/17.%E4%B8%AD%E4%BB%8B%E8%80%85/</url>
+    <url>/2017/09/24/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/15.%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1503,18 +1447,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/16.%E9%80%82%E9%85%8D%E5%99%A8/</url>
+    <url>/2017/09/25/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/17.%E4%B8%AD%E4%BB%8B%E8%80%85/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="中介者"><a href="#中介者" class="headerlink" title="中介者"></a>中介者</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1526,18 +1463,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/2.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
+    <url>/2017/09/27/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/19.%E5%A4%87%E5%BF%98%E5%BD%95/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="备忘录"><a href="#备忘录" class="headerlink" title="备忘录"></a>备忘录</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1549,18 +1479,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/18.%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/26/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/18.%E7%8A%B6%E6%80%81%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1572,18 +1495,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/19.%E5%A4%87%E5%BF%98%E5%BD%95/</url>
+    <url>/2017/09/13/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/2.%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%AE%BE%E8%AE%A1%E5%8E%9F%E5%88%99/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="面向对象设计原则"><a href="#面向对象设计原则" class="headerlink" title="面向对象设计原则"></a>面向对象设计原则</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1595,18 +1511,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/20.%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/28/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/20.%E7%BB%84%E5%90%88%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1618,18 +1527,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/22.%E8%81%8C%E8%B4%A3%E9%93%BE/</url>
+    <url>/2017/09/29/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/21.%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="迭代器"><a href="#迭代器" class="headerlink" title="迭代器"></a>迭代器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1641,18 +1543,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/21.%E8%BF%AD%E4%BB%A3%E5%99%A8/</url>
+    <url>/2017/10/05/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/23.%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1664,18 +1559,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/24.%E8%AE%BF%E9%97%AE%E5%99%A8/</url>
+    <url>/2017/10/10/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/24.%E8%AE%BF%E9%97%AE%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="访问器"><a href="#访问器" class="headerlink" title="访问器"></a>访问器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1687,18 +1575,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/23.%E5%91%BD%E4%BB%A4%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/10/03/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/22.%E8%81%8C%E8%B4%A3%E9%93%BE/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="职责链"><a href="#职责链" class="headerlink" title="职责链"></a>职责链</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1710,18 +1591,12 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/25.%E8%A7%A3%E6%9E%90%E5%99%A8/</url>
+    <url>/2017/10/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/26.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
 
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="设计模式总结"><a href="#设计模式总结" class="headerlink" title="设计模式总结"></a>设计模式总结</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1733,18 +1608,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/26.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E6%80%BB%E7%BB%93/</url>
+    <url>/2017/10/11/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/25.%E8%A7%A3%E6%9E%90%E5%99%A8/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="解析器"><a href="#解析器" class="headerlink" title="解析器"></a>解析器</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1756,18 +1624,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/3.%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/</url>
+    <url>/2017/09/14/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/3.%E6%A8%A1%E6%9D%BF%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="模板方法"><a href="#模板方法" class="headerlink" title="模板方法"></a>模板方法</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1779,18 +1640,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/4.%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/15/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/4.%E7%AD%96%E7%95%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1802,18 +1656,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/5.%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/16/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/6.%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1825,18 +1672,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/8.%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95/</url>
+    <url>/2017/09/15/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/5.%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1848,18 +1688,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/6.%E8%A3%85%E9%A5%B0%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/17/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/7.%E6%A1%A5%E6%A8%A1%E5%BC%8F/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="桥模式"><a href="#桥模式" class="headerlink" title="桥模式"></a>桥模式</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1871,18 +1704,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/9.%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/</url>
+    <url>/2017/09/18/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/8.%E5%B7%A5%E5%8E%82%E6%96%B9%E6%B3%95/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="工厂方法"><a href="#工厂方法" class="headerlink" title="工厂方法"></a>工厂方法</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
@@ -1894,18 +1720,11 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
   </entry>
   <entry>
     <title>C++设计模式</title>
-    <url>/2017/09/12/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/7.%E6%A1%A5%E6%A8%A1%E5%BC%8F/</url>
+    <url>/2017/09/19/C++%20Notes/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F%E4%B8%93%E9%A2%98/9.%E6%8A%BD%E8%B1%A1%E5%B7%A5%E5%8E%82/</url>
     <content><![CDATA[<p><img src="/buckets/images/n.jpg" alt=""></p>
 <a id="more"></a>
 
-
-<h1 id="C-设计模式"><a href="#C-设计模式" class="headerlink" title="C++设计模式"></a>C++设计模式</h1><h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><ul>
-<li>理解松耦合设计思想</li>
-<li>掌握面向对象设计原则</li>
-<li>掌握重构技法改善设计</li>
-<li>掌握GOF核心设计模式</li>
-</ul>
-]]></content>
+<h1 id="抽象工厂"><a href="#抽象工厂" class="headerlink" title="抽象工厂"></a>抽象工厂</h1>]]></content>
       <categories>
         <category>C/C++</category>
       </categories>
