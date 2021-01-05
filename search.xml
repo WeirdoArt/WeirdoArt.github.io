@@ -83,86 +83,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>C++ 2.0 并发编程</title>
-    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
-<a id="more"></a>
-
-<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
-<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
-<table>
-<thead>
-<tr>
-<th align="right"><thread></th>
-<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
-</tr>
-</thead>
-<tbody><tr>
-<td align="right">default (1)</td>
-<td><code>thread() noexcept;</code></td>
-</tr>
-<tr>
-<td align="right">initialization (2)</td>
-<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
-</tr>
-<tr>
-<td align="right">copy [deleted] (3)</td>
-<td><code>thread( const thread&amp; ) = delete;</code></td>
-</tr>
-<tr>
-<td align="right">move (4)</td>
-<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
-</tr>
-</tbody></table>
-<blockquote>
-<p><strong>(1).默认构造函数</strong></p>
-<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
-<p><strong>(2).初始化构造函数</strong></p>
-<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
-<p><strong>(3).拷贝构造函数</strong></p>
-<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
-<p><strong>(4).移动构造函数</strong></p>
-<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
-</blockquote>
-<p><em>示例：</em></p>
-<ul>
-<li><p>普通函数</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
-</li>
-<li><p>可调用对象</p>
-  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
-</li>
-<li></li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>并发编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 内存管理</title>
-    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
-<a id="more"></a>
-
-<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
-
-<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
-<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
-
-<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>C++ STL 泛型编程</title>
     <url>/2015/07/11/C++%20Notes/C++%20STL%20%E4%B8%8E%E6%B3%9B%E5%9E%8B%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p><img src="/buckets/images/paw4.png" alt=""></p>
@@ -766,6 +686,141 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
+    <title>C++ 2.0 并发编程</title>
+    <url>/2014/10/09/C++%20Notes/C++%202.0%20%E5%B9%B6%E5%8F%91%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/a2.png" alt=""></p>
+<a id="more"></a>
+
+<h1 id="线程管理"><a href="#线程管理" class="headerlink" title="线程管理"></a>线程管理</h1><h2 id="线程管理的基础"><a href="#线程管理的基础" class="headerlink" title="线程管理的基础"></a>线程管理的基础</h2><p>每个程序至少有一个线程，默认情况下  <code>main()</code> 函数作为第一个线程的入口函数，其他线程在 <code>main()</code> 函数中被激活，且与<code>main()</code> 函数同时运行。</p>
+<h3 id="启动线程"><a href="#启动线程" class="headerlink" title="启动线程"></a>启动线程</h3><p>在 C++ 中，启动一个线程需要构造 <code>std::thread</code> 对象，<code>std::thread</code> 构造函数有以下几个版本：</p>
+<table>
+<thead>
+<tr>
+<th align="right"><thread></th>
+<th>std::<a href="http://www.cplusplus.com/reference/thread/thread/" target="_blank" rel="noopener">thread</a>::thread</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="right">default (1)</td>
+<td><code>thread() noexcept;</code></td>
+</tr>
+<tr>
+<td align="right">initialization (2)</td>
+<td><code>template &lt; class Fn, class... Args &gt; explicit thread ( Fn&amp;&amp; fn, Args&amp;&amp;... args );</code></td>
+</tr>
+<tr>
+<td align="right">copy [deleted] (3)</td>
+<td><code>thread( const thread&amp; ) = delete;</code></td>
+</tr>
+<tr>
+<td align="right">move (4)</td>
+<td><code>thread( thread&amp;&amp; other ) noexcept;</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>(1).默认构造函数</strong></p>
+<p>​    只创建 <code>std::thread</code> 对象，并不代表任何执行线程，因为并没有为 <code>std::thread</code> 对象指定入口函数。</p>
+<p><strong>(2).初始化构造函数</strong></p>
+<p>​    构造一个新的 <code>std::thread</code> 对象，并与指定执行线程关联，新的线程将被自动执行。</p>
+<p><strong>(3).拷贝构造函数</strong></p>
+<p>​    拷贝构造函数被删除，因为没有两个 <code>std::thread</code> 对象可表示同一执行线程。</p>
+<p><strong>(4).移动构造函数</strong></p>
+<p>​    从一个已有的执行线程的 <code>std::thread</code> 对象接管所有权，原对象将不再拥有执行线程。</p>
+</blockquote>
+<p><em>示例：</em></p>
+<ul>
+<li><p>普通函数</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="keyword">int</span> n = <span class="number">0</span>;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">do_work</span><span class="params">(<span class="keyword">int</span> n)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t1</span><span class="params">(do_work, n + <span class="number">1</span>)</span></span>; <span class="comment">// pass by value</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t2</span><span class="params">(do_work, <span class="built_in">std</span>::ref(n + <span class="number">1</span>))</span></span>; <span class="comment">// pass by reference</span></span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">t3</span><span class="params">(<span class="built_in">std</span>::<span class="built_in">move</span>(t2))</span></span>; <span class="comment">// t2</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>可调用对象</p>
+  <figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">background_task</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">()</span> <span class="keyword">const</span></span></span><br><span class="line"><span class="function">	</span>&#123;</span><br><span class="line">		do_something();</span><br><span class="line">		do_something_else();</span><br><span class="line">	&#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">background_task f;</span><br><span class="line"><span class="function"><span class="built_in">std</span>::thread <span class="title">my_thread</span><span class="params">(f)</span></span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li></li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>并发编程</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 内存管理</title>
+    <url>/2016/03/26/C++%20Notes/C++%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw2.png" alt=""></p>
+<a id="more"></a>
+
+<p align="right"><font color=#A42AC4 size="4">—— 从平地到万丈高楼</font></p>
+
+<p align="center"><font color=#CB2AC4 size="5">万丈高楼平地起</font></p>
+<p align="center"><font color=#2F9AC4 size="5">源码面前，了无秘密</font></p>
+
+<h1 id="Part-I-Primitives"><a href="#Part-I-Primitives" class="headerlink" title="Part I Primitives"></a>Part I Primitives</h1><h1 id="Part-II-malloc-free"><a href="#Part-II-malloc-free" class="headerlink" title="Part II malloc/free"></a>Part II malloc/free</h1><h1 id="Part-III-std-allocator"><a href="#Part-III-std-allocator" class="headerlink" title="Part III std::allocator"></a>Part III std::allocator</h1><h1 id="Part-IV-other-allocators"><a href="#Part-IV-other-allocators" class="headerlink" title="Part IV other allocators"></a>Part IV other allocators</h1><h1 id="Part-V-loki-allocator"><a href="#Part-V-loki-allocator" class="headerlink" title="Part V loki::allocator"></a>Part V loki::allocator</h1>]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>C++ 面向对象程序设计</title>
+    <url>/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</url>
+    <content><![CDATA[<p><img src="/buckets/images/tjhttp.jpg" alt=""></p>
+<a id="more"></a>
+
+<h2 id="基于对象-Object-Based"><a href="#基于对象-Object-Based" class="headerlink" title="基于对象 (Object Based)"></a>基于对象 (<code>Object Based</code>)</h2><p>面对的是单一 <code>class</code> 的设计</p>
+<h3 id="C-class-的两种分类："><a href="#C-class-的两种分类：" class="headerlink" title="C++ class 的两种分类："></a><code>C++ class</code> 的两种分类：</h3><ol>
+<li><code>class without pointer members</code></li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">complex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">complex</span>(<span class="keyword">double</span> r = <span class="number">0</span>, <span class="keyword">double</span> i = <span class="number">0</span>)</span><br><span class="line">        : re(r), im(i)</span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">complex</span>&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">real</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> re; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">imag</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> im; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> re, im;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">friend</span> <span class="built_in">complex</span>&amp; __doapl(<span class="built_in">complex</span>*, <span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>参数传递：<code>pass by value vs. pass by reference(to const)</code>  </p>
+</blockquote>
+<blockquote>
+<p>返回值传递：<code>return by value vs. return by reference(to const)</code></p>
+</blockquote>
+<ol start="2">
+<li><code>class with pointer members</code>  </li>
+</ol>
+<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">char</span>* c_str = <span class="number">0</span>); <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝构造</span></span><br><span class="line">    <span class="built_in">string</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝赋值</span></span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">string</span>(); <span class="comment">// 析构函数</span></span><br><span class="line">    <span class="function"><span class="keyword">char</span>* <span class="title">c_str</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> m_data; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* m_data;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<h2 id="面向对象-Object-Oriented"><a href="#面向对象-Object-Oriented" class="headerlink" title="面向对象 (Object Oriented)"></a>面向对象 (<code>Object Oriented</code>)</h2><p>面对的是多重 <code>classes</code> 的设计，<code>classes</code> 之间具有某种关系</p>
+<h3 id="C-class-之间的关系"><a href="#C-class-之间的关系" class="headerlink" title="C++ class 之间的关系"></a><code>C++ class</code> 之间的关系</h3><ol>
+<li>继承 (<code>inheritance</code>) — 表示 <code>is-a</code></li>
+</ol>
+<ol start="2">
+<li>复合 (<code>composition</code>) — 表示 <code>has-a</code></li>
+</ol>
+<ol start="3">
+<li>委托 (<code>delegation</code>)</li>
+</ol>
+<h4 id="C-学习资料推荐："><a href="#C-学习资料推荐：" class="headerlink" title="C++ 学习资料推荐："></a>C++ 学习资料推荐：</h4><ul>
+<li>C++ Primer (fifth Edition) — Stanley B.Lippman</li>
+<li>The C++ Programming Language (Fourth Edition) — Bjarne Stroustrup</li>
+<li>Effective C++ (Third Edition) — Scott Meyers</li>
+<li>More Effective C++ — Scott Meyers</li>
+<li>Inside The C++ Object Model — Stanley B.Lippman</li>
+<li><font color=#FF88AA>Modern C++ Design — Scott Meyers</font></li>
+<li>The C++ Standard Library (Second Edition) — Nicolai M. Josuttis</li>
+<li>STL 源码剖析 — 侯捷<blockquote>
+<p>能够把以上这些书籍全部啃完，然后通过工作实践应用，就足够了</p>
+</blockquote>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>C/C++</category>
+      </categories>
+      <tags>
+        <tag>C/C++</tag>
+        <tag>OOP</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>Linux 系统编程</title>
     <url>/2016/03/18/Linux%20Notes/Linux%20%E7%B3%BB%E7%BB%9F%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p><img src="/buckets/images/paw6.png" alt=""></p>
@@ -879,79 +934,6 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       </tags>
   </entry>
   <entry>
-    <title>Linux 网络编程</title>
-    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
-    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
-<a id="more"></a>
-
-
-
-<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="阻塞式-I-O"><a href="#阻塞式-I-O" class="headerlink" title="阻塞式 I/O"></a>阻塞式 I/O</h2><h2 id="非阻塞式-I-O"><a href="#非阻塞式-I-O" class="headerlink" title="非阻塞式 I/O"></a>非阻塞式 I/O</h2><h2 id="I-O-复用（select，poll，epoll）"><a href="#I-O-复用（select，poll，epoll）" class="headerlink" title="I/O 复用（select，poll，epoll）"></a>I/O 复用（select，poll，epoll）</h2><h2 id="信号驱动式-I-O（SIGIO）"><a href="#信号驱动式-I-O（SIGIO）" class="headerlink" title="信号驱动式 I/O（SIGIO）"></a>信号驱动式 I/O（SIGIO）</h2><p>信号驱动式 I/O 是指进程预先告知内核，使得当某个描述符上发生某事时，内核使用信号通知相关进程。</p>
-<h2 id="异步-I-O（POSIX的aio-xx系列函数）"><a href="#异步-I-O（POSIX的aio-xx系列函数）" class="headerlink" title="异步 I/O（POSIX的aio_xx系列函数）"></a>异步 I/O（POSIX的aio_xx系列函数）</h2><h2 id="各种-I-O-模型的比较"><a href="#各种-I-O-模型的比较" class="headerlink" title="各种 I/O 模型的比较"></a>各种 I/O 模型的比较</h2>]]></content>
-      <categories>
-        <category>Linux</category>
-      </categories>
-      <tags>
-        <tag>Linux</tag>
-        <tag>网络编程</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>C++ 面向对象程序设计</title>
-    <url>/2015/05/20/C++%20Notes/C++%20%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1/</url>
-    <content><![CDATA[<p><img src="/buckets/images/tjhttp.jpg" alt=""></p>
-<a id="more"></a>
-
-<h2 id="基于对象-Object-Based"><a href="#基于对象-Object-Based" class="headerlink" title="基于对象 (Object Based)"></a>基于对象 (<code>Object Based</code>)</h2><p>面对的是单一 <code>class</code> 的设计</p>
-<h3 id="C-class-的两种分类："><a href="#C-class-的两种分类：" class="headerlink" title="C++ class 的两种分类："></a><code>C++ class</code> 的两种分类：</h3><ol>
-<li><code>class without pointer members</code></li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">complex</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">complex</span>(<span class="keyword">double</span> r = <span class="number">0</span>, <span class="keyword">double</span> i = <span class="number">0</span>)</span><br><span class="line">        : re(r), im(i)</span><br><span class="line">    &#123; &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">complex</span>&amp; <span class="keyword">operator</span> += (<span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">real</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> re; &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">imag</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> im; &#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">double</span> re, im;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">friend</span> <span class="built_in">complex</span>&amp; __doapl(<span class="built_in">complex</span>*, <span class="keyword">const</span> <span class="built_in">complex</span>&amp;);</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<blockquote>
-<p>参数传递：<code>pass by value vs. pass by reference(to const)</code>  </p>
-</blockquote>
-<blockquote>
-<p>返回值传递：<code>return by value vs. return by reference(to const)</code></p>
-</blockquote>
-<ol start="2">
-<li><code>class with pointer members</code>  </li>
-</ol>
-<figure class="highlight c++"><table><tr><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">string</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">char</span>* c_str = <span class="number">0</span>); <span class="comment">// 构造函数</span></span><br><span class="line">    <span class="built_in">string</span>(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝构造</span></span><br><span class="line">    <span class="built_in">string</span>&amp; <span class="keyword">operator</span>=(<span class="keyword">const</span> <span class="built_in">string</span>&amp; str); <span class="comment">// 拷贝赋值</span></span><br><span class="line"></span><br><span class="line">    ~<span class="built_in">string</span>(); <span class="comment">// 析构函数</span></span><br><span class="line">    <span class="function"><span class="keyword">char</span>* <span class="title">c_str</span><span class="params">()</span> <span class="keyword">const</span> </span>&#123; <span class="keyword">return</span> m_data; &#125;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">char</span>* m_data;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
-
-<h2 id="面向对象-Object-Oriented"><a href="#面向对象-Object-Oriented" class="headerlink" title="面向对象 (Object Oriented)"></a>面向对象 (<code>Object Oriented</code>)</h2><p>面对的是多重 <code>classes</code> 的设计，<code>classes</code> 之间具有某种关系</p>
-<h3 id="C-class-之间的关系"><a href="#C-class-之间的关系" class="headerlink" title="C++ class 之间的关系"></a><code>C++ class</code> 之间的关系</h3><ol>
-<li>继承 (<code>inheritance</code>) — 表示 <code>is-a</code></li>
-</ol>
-<ol start="2">
-<li>复合 (<code>composition</code>) — 表示 <code>has-a</code></li>
-</ol>
-<ol start="3">
-<li>委托 (<code>delegation</code>)</li>
-</ol>
-<h4 id="C-学习资料推荐："><a href="#C-学习资料推荐：" class="headerlink" title="C++ 学习资料推荐："></a>C++ 学习资料推荐：</h4><ul>
-<li>C++ Primer (fifth Edition) — Stanley B.Lippman</li>
-<li>The C++ Programming Language (Fourth Edition) — Bjarne Stroustrup</li>
-<li>Effective C++ (Third Edition) — Scott Meyers</li>
-<li>More Effective C++ — Scott Meyers</li>
-<li>Inside The C++ Object Model — Stanley B.Lippman</li>
-<li><font color=#FF88AA>Modern C++ Design — Scott Meyers</font></li>
-<li>The C++ Standard Library (Second Edition) — Nicolai M. Josuttis</li>
-<li>STL 源码剖析 — 侯捷<blockquote>
-<p>能够把以上这些书籍全部啃完，然后通过工作实践应用，就足够了</p>
-</blockquote>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>C/C++</category>
-      </categories>
-      <tags>
-        <tag>C/C++</tag>
-        <tag>OOP</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>POSIX 多线程编程</title>
     <url>/2014/10/18/Linux%20Notes/POSIX%20%E5%A4%9A%E7%BA%BF%E7%A8%8B%E7%BC%96%E7%A8%8B/</url>
     <content><![CDATA[<p><img src="/buckets/images/pla1.jpg" alt=""></p>
@@ -1004,6 +986,24 @@ src="https://ghbtns.com/github-btn.html?user=WinnieVivi&repo=WinnieVivi.github.i
       <tags>
         <tag>C/C++</tag>
         <tag>Linux</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>Linux 网络编程</title>
+    <url>/2016/06/08/Linux%20Notes/Linux%20%E7%BD%91%E7%BB%9C%E7%BC%96%E7%A8%8B/</url>
+    <content><![CDATA[<p><img src="/buckets/images/paw5.jpg" alt=""></p>
+<a id="more"></a>
+
+
+
+<h1 id="网络基础"><a href="#网络基础" class="headerlink" title="网络基础"></a>网络基础</h1><h1 id="I-O-模型"><a href="#I-O-模型" class="headerlink" title="I/O 模型"></a>I/O 模型</h1><h2 id="阻塞式-I-O"><a href="#阻塞式-I-O" class="headerlink" title="阻塞式 I/O"></a>阻塞式 I/O</h2><h2 id="非阻塞式-I-O"><a href="#非阻塞式-I-O" class="headerlink" title="非阻塞式 I/O"></a>非阻塞式 I/O</h2><h2 id="I-O-复用（select，poll，epoll）"><a href="#I-O-复用（select，poll，epoll）" class="headerlink" title="I/O 复用（select，poll，epoll）"></a>I/O 复用（select，poll，epoll）</h2><h2 id="信号驱动式-I-O（SIGIO）"><a href="#信号驱动式-I-O（SIGIO）" class="headerlink" title="信号驱动式 I/O（SIGIO）"></a>信号驱动式 I/O（SIGIO）</h2><p>信号驱动式 I/O 是指进程预先告知内核，使得当某个描述符上发生某事时，内核使用信号通知相关进程。</p>
+<h2 id="异步-I-O（POSIX的aio-xx系列函数）"><a href="#异步-I-O（POSIX的aio-xx系列函数）" class="headerlink" title="异步 I/O（POSIX的aio_xx系列函数）"></a>异步 I/O（POSIX的aio_xx系列函数）</h2><h2 id="各种-I-O-模型的比较"><a href="#各种-I-O-模型的比较" class="headerlink" title="各种 I/O 模型的比较"></a>各种 I/O 模型的比较</h2>]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>Linux</tag>
+        <tag>网络编程</tag>
       </tags>
   </entry>
   <entry>
